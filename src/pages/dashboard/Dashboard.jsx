@@ -146,7 +146,7 @@ const Dashboard = () => {
           <div className="navbar">
             <h4>Type: User</h4>
             <button onClick={handleOpenModal}>
-              <span>+</span>Add New Project
+              <span>+</span>Add New User
             </button>
           </div>
           <div style={{ margin: "24px" }}>
