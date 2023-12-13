@@ -99,7 +99,7 @@ const LoginRightColumn = styled.div`
 
     .input-message {
       margin-bottom: 32px;
-      color: #2753e8;
+      color: #721f4b;
       font-size: 12px;
       font-weight: 500;
       line-height: 28px; /* 233.333% */
@@ -137,11 +137,15 @@ const LoginRightColumn = styled.div`
     font-weight: 400;
     letter-spacing: 0.018px;
     justify-self: flex-end;
-    margin-bottom: 90px;
+    margin: 30px auto 30px auto;
 
     a {
       color: inherit;
       text-decoration-line: underline;
+    }
+
+    ${`@media only screen and ${devices.lg}`} {
+      margin: auto auto 90px auto;
     }
   }
 `;

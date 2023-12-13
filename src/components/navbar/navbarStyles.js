@@ -24,10 +24,11 @@ const NavbarStyle = styled.nav`
     display: flex;
     justify-content: start;
     align-items: center;
-    padding-left: 8%;
+    padding-left: 10%;
 
     ${`@media only screen and ${devices.lg}`} {
       background-color: #f8f4f6;
+      padding-left: 5%;
     }
   }
 
