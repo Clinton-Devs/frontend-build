@@ -3,7 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import DataTable from "react-data-table-component";
 
-import ModalComponent from "../../components/ModalComponent";
+import ModalComponent from "../../../components/ModalComponent";
 
 const data = [
   {

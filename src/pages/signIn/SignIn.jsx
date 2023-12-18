@@ -58,16 +58,18 @@ const SignIn = () => {
         setIsError(false);
       })
       .catch((error) => {
-        console.log(error.response.data);
+        // console.log(error.response.data);
         setIsLoadingOtp(false);
         setIsError(true);
-        setErrorMessage(error.response.data.message);
+        setErrorMessage(
+          error?.response?.data?.message ? error.response.data.message : "Error"
+        );
         setTimeout(() => {
           setIsError(false);
         }, 7000);
 
-        if (error.response.status === 400) {
-          setErrorMessage(error.response.data[0].errors.issues[0].message);
+        if (error?.response?.status === 400) {
+          setErrorMessage(error?.response?.data[0].errors?.issues[0].message);
         }
       });
   };
@@ -82,8 +84,13 @@ const SignIn = () => {
       .then((response) => {
         console.log(response.data.data);
         env.storeUser(response.data.data.token, response.data.data.user);
+        setIsLoggingIn(false);
 
-        navigate("/dashboard");
+        if (response.data.data.user.userType === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/user-dashboard");
+        }
       })
       .catch((error) => {
         console.log(error);
