@@ -9,7 +9,7 @@ import { dashboardTableSyles } from "../../utils/styles/tableStyles";
 
 import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 
-//move to services where you will fetch it from
+//move to services where you will feetch it from
 const data = [
   {
     id: "56789",
@@ -99,7 +99,7 @@ const UserDashboard = () => {
                     imgSrc={project.image}
                     tagInfo="10 Units"
                     location={project.location}
-                    link={`/projects/${project.id}`}
+                    link={`/projects/${project._id}`}
                   />
                 )
             )
