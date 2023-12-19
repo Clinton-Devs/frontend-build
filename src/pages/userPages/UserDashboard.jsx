@@ -3,12 +3,11 @@ import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
 import InfoCard from "../../components/dashboard/InfoCard";
 import InfoContainer from "../../components/InfoContainer";
-import houseImage from "../../assets/images/image_1.png";
-import houseImage2 from "../../assets/images/image_2.png";
-
 import DataTable from "react-data-table-component";
 import { CardsWrapper } from "./dashboardStyles";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
+
+import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 
 //move to services where you will fetch it from
 const data = [
@@ -39,6 +38,7 @@ const data = [
 ];
 
 const UserDashboard = () => {
+  const { loading, projectList } = useGetAllProjects();
   const columns = [
     {
       name: "",
@@ -69,32 +69,11 @@ const UserDashboard = () => {
       <DashboardNav />
       <Welcome>
         <h3>Welcome John</h3>
-        <p>You currently have (3) properties</p>
+        <p>You currently have (0) properties</p>
       </Welcome>
 
       <InfoContainer title="My Properties">
-        <CardsWrapper>
-          <InfoCard
-            imgSrc={houseImage}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-        </CardsWrapper>
+        <CardsWrapper></CardsWrapper>
       </InfoContainer>
 
       <InfoContainer title="Recent Transactions">
@@ -109,51 +88,22 @@ const UserDashboard = () => {
 
       <InfoContainer title="Ongoing Projects">
         <CardsWrapper>
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
-          <InfoCard
-            imgSrc={houseImage2}
-            tagInfo="10 Units"
-            link="/projects/:projectId"
-          />
+          {loading ? (
+            <h3>Loading</h3>
+          ) : (
+            projectList.map(
+              (project) =>
+                project.status === "ongoing" && (
+                  <InfoCard
+                    name={project.name}
+                    imgSrc={project.image}
+                    tagInfo="10 Units"
+                    location={project.location}
+                    link={`/projects/${project.id}`}
+                  />
+                )
+            )
+          )}
         </CardsWrapper>
         <br />
       </InfoContainer>

@@ -7,18 +7,26 @@ import InfoContainer from "../../components/InfoContainer";
 import InfoCard from "../../components/dashboard/InfoCard";
 import bed from "../../assets/dashboard/bed-icon.svg";
 
-import image3 from "../../assets/images/image_3.png";
-import image4 from "../../assets/images/image_4.png";
-import image5 from "../../assets/images/image_5.png";
-import image6 from "../../assets/images/image_6.png";
-import image3d_1 from "../../assets/images/3d_image_1.png";
-import image3d_2 from "../../assets/images/3d_image_2.png";
-import image3d_3 from "../../assets/images/3d_image_3.png";
+import useGetOneProject from "../../app/services/projects/useGetOneProject";
 
 import { CardsWrapper } from "./dashboardStyles";
 const ProjectDetail = () => {
   const navigate = useNavigate();
-  const { projectDetail } = useParams();
+  const { projectId } = useParams();
+  const {
+    loading,
+    projectDetail,
+    projectImages,
+    project3DImages,
+    projectUnits,
+  } = useGetOneProject(projectId);
+
+  const projectImagesUrl = projectImages.map((image) => {
+    return image.url;
+  });
+
+  const projectName = projectDetail[0]?.name;
+
   return (
     <>
       <DashboardNav />
@@ -44,154 +52,61 @@ const ProjectDetail = () => {
               </svg>
             </div>
 
-            <p>Project A</p>
+            <p>{loading ? "---" : projectName}</p>
           </Title>
         }
       >
         <ProjectMainImages>
-          <img src={image3} alt="" className="left" />
-          <img src={image4} alt="" className="right-top" />
-          <img src={image5} alt="" className="right-bottom" />
+          <img src={projectImagesUrl[0]} alt="" className="left" />
+          <img src={projectImagesUrl[1]} alt="" className="right-top" />
+          <img src={projectImagesUrl[2]} alt="" className="right-bottom" />
         </ProjectMainImages>
 
         <Description>
           <h3>Description</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-            deserunt est provident excepturi consequatur necessitatibus non,
-            iste cum voluptas amet. m ipsum dolor sit amet consectetur
-            adipisicing elit. Assumenda deserunt est provident excepturi
-            consequatur necessitatibus non, iste cum voluptas .
-          </p>
+          <p>{projectDetail[0]?.description}</p>
         </Description>
       </InfoContainer>
 
-      <InfoContainer title="Project A - 10 Units">
+      <InfoContainer
+        title={`${projectName} - ${projectUnits.length} Unit${
+          projectUnits.length > 1 ? "s" : ""
+        }`}
+      >
         <CardsWrapper>
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
-          <InfoCard
-            imgSrc={image6}
-            tagInfo={
-              <Tag>
-                <img src={bed} alt="" />3
-              </Tag>
-            }
-            link="/projects/unit-details"
-          />
+          {projectUnits.map((unit) => {
+            return (
+              <InfoCard
+                name={unit.name}
+                imgSrc={unit.image}
+                price={unit.price}
+                tagInfo={
+                  <Tag>
+                    <img src={bed} alt="" />
+                    {unit.numberOfRooms}
+                  </Tag>
+                }
+                link="/projects/units/:unitId"
+              />
+            );
+          })}
         </CardsWrapper>
       </InfoContainer>
 
       <InfoContainer title="3D Images">
         <CardsWrapper>
-          <div>
-            <img src={image3d_1} alt="" style={{ maxWidth: "100%" }} />
-          </div>
-          <div>
-            <img src={image3d_2} alt="" style={{ maxWidth: "100%" }} />
-          </div>
-          <div>
-            <img src={image3d_3} alt="" style={{ maxWidth: "100%" }} />
-          </div>
+          {project3DImages.map((image) => {
+            return (
+              <div>
+                <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
+              </div>
+            );
+          })}
         </CardsWrapper>
 
         <Description>
           <h3>Description</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-            deserunt est provident excepturi consequatur necessitatibus non,
-            iste cum voluptas amet. m ipsum dolor sit amet consectetur
-            adipisicing elit. Assumenda deserunt est provident excepturi
-            consequatur necessitatibus non, iste cum voluptas .
-          </p>
+          <p>{projectDetail[0]?.description}</p>
         </Description>
       </InfoContainer>
     </>

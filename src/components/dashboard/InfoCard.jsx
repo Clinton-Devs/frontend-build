@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import houseImage from "../../assets/images/image_1.png";
 import locationIcon from "../../assets/common/location-icon.svg";
 import messageButton from "../../assets/dashboard/message-cta.svg";
 import { Link } from "react-router-dom";
 
-const InfoCard = ({ imgSrc, tagInfo, link }) => {
+const InfoCard = ({ imgSrc, tagInfo, link, name, location, price }) => {
   return (
     <Link to={link}>
       <CardContainer>
@@ -15,15 +14,15 @@ const InfoCard = ({ imgSrc, tagInfo, link }) => {
         </div>
 
         <div className="name-and-price">
-          <h5>Minna Star Apartment</h5>
-          <p>1.2m</p>
+          <h5>{name}</h5>
+          <p>{price || "1.2m"}</p>
         </div>
 
         <p className="location">
           <span>
             <img src={locationIcon} alt="" style={{ marginTop: "5px" }} />
           </span>{" "}
-          Lagos, Nigeria
+          {location}
         </p>
 
         <div className="message-bar">

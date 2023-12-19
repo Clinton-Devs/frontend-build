@@ -18,7 +18,7 @@ function App() {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:projectId" element={<ProjectDetail />} />
-        <Route path="/projects/unit-details" element={<UnitDetail />} />
+        <Route path="/projects/units/:unitId" element={<UnitDetail />} />
         {/* <Route path="/messages" element={<Messages />} /> */}
       </Routes>
     </BrowserRouter>
