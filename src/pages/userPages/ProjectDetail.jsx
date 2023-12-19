@@ -56,11 +56,15 @@ const ProjectDetail = () => {
           </Title>
         }
       >
-        <ProjectMainImages>
-          <img src={projectImagesUrl[0]} alt="" className="left" />
-          <img src={projectImagesUrl[1]} alt="" className="right-top" />
-          <img src={projectImagesUrl[2]} alt="" className="right-bottom" />
-        </ProjectMainImages>
+        {projectImages.length === 0 ? (
+          <h3>No Images Available</h3>
+        ) : (
+          <ProjectMainImages>
+            <img src={projectImagesUrl[0]} alt="" className="left" />
+            <img src={projectImagesUrl[1]} alt="" className="right-top" />
+            <img src={projectImagesUrl[2]} alt="" className="right-bottom" />
+          </ProjectMainImages>
+        )}
 
         <Description>
           <h3>Description</h3>
@@ -95,13 +99,17 @@ const ProjectDetail = () => {
 
       <InfoContainer title="3D Images">
         <CardsWrapper>
-          {project3DImages.map((image) => {
-            return (
-              <div>
-                <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
-              </div>
-            );
-          })}
+          {project3DImages.length === 0 ? (
+            <h3>No Images Available</h3>
+          ) : (
+            project3DImages.map((image) => {
+              return (
+                <div>
+                  <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
+                </div>
+              );
+            })
+          )}
         </CardsWrapper>
 
         <Description>
