@@ -5,11 +5,14 @@ import InfoCard from "../../components/dashboard/InfoCard";
 import InfoContainer from "../../components/InfoContainer";
 import DataTable from "react-data-table-component";
 import { CardsWrapper } from "./dashboardStyles";
+import env from "../../env";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
 
 import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 
 //move to services where you will feetch it from
+
+const user = env.getUser();
 const data = [
   {
     id: "56789",
@@ -68,7 +71,7 @@ const UserDashboard = () => {
     <>
       <DashboardNav />
       <Welcome>
-        <h3>Welcome John</h3>
+        <h3>Welcome {user.firstName}</h3>
         <p>You currently have (0) properties</p>
       </Welcome>
 
