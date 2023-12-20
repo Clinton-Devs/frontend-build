@@ -8,6 +8,7 @@ const InputCommonWithIcon = ({
   onChange,
   value,
   onClickIcon,
+  placeholder,
 }) => {
   return (
     <Container marginBottom={marginBottom}>
@@ -18,6 +19,7 @@ const InputCommonWithIcon = ({
           name={inputType}
           onChange={onChange}
           value={value}
+          placeholder={placeholder}
         />
         <img src={icon} alt="" onClick={onClickIcon} />
       </div>

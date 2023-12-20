@@ -4,6 +4,7 @@ import styled from "styled-components";
 const ButtonCommon = ({
   content,
   onClick,
+  width,
   //   marginTop,
   backgroundColor,
   textColor,
@@ -17,6 +18,7 @@ const ButtonCommon = ({
       backgroundColor={backgroundColor}
       textColor={textColor}
       disabled={disabled}
+      width={width}
     >
       {/* {isLoading ? <CircularProgress size={20} color="inherit" /> : text} */}
       {content}
@@ -27,7 +29,8 @@ const ButtonCommon = ({
 export default ButtonCommon;
 
 const ButtonContainer = styled.button`
-  width: 100%;
+  /* width: 100%; */
+  ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)}
   height: 54px;
   border-radius: 9px;
   border: none;

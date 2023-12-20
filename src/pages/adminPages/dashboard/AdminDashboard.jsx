@@ -2,8 +2,10 @@ import { useState } from "react";
 
 import styled from "styled-components";
 import DataTable from "react-data-table-component";
-
+import Sidebar from "../../../components/dashboard/Sidebar";
 import ModalComponent from "../../../components/ModalComponent";
+import Modal from "../../../components/dashboard/Modal";
+import AddUserForm from "../../../components/dashboard/AddUserForm";
 
 const data = [
   {
@@ -53,11 +55,20 @@ const data = [
 const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
 
+  const [openAddUserForm, setOpenAddUserForm] = useState(false);
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleOpenAddUserForm = () => {
+    setOpenAddUserForm(true);
+  };
+  const handleCloseAddUserForm = () => {
+    setOpenAddUserForm(false);
   };
 
   const columns = [
@@ -128,33 +139,38 @@ const Dashboard = () => {
 
   return (
     <>
-      {openModal && (
+      {/* {openModal && (
         <ModalComponent open={handleOpenModal} handleClose={handleCloseModal} />
-      )}
+      )} */}
+
+      <Modal
+        modalOpenCondition={openAddUserForm}
+        headerPrimaryText="Add User"
+        isFullWidth={true}
+        maxWidth="sm"
+        handleClose={handleCloseAddUserForm}
+      >
+        <AddUserForm />
+      </Modal>
       <DashboardContainer>
-        <Sidebar>
-          <div className="sidebar-container">
-            <h3>Clinton's Properties</h3>
-            <ul>
-              <li>User</li>
-              <li>Projects</li>
-              <li>Messages</li>
-            </ul>
-          </div>
-        </Sidebar>
+        <Sidebar />
         <DashboardMain>
           <div className="navbar">
             <h4>Type: User</h4>
-            <button onClick={handleOpenModal}>
+            <button onClick={handleOpenAddUserForm}>
               <span>+</span>Add New User
             </button>
           </div>
           <div style={{ margin: "24px" }}>
-            <DataTable
+            {/* <DataTable
               data={data}
               columns={columns}
               customStyles={customStyles}
-            />
+            /> */}
+
+            <h4 style={{ textAlign: "center", color: "#721F4B" }}>
+              No users available
+            </h4>
           </div>
         </DashboardMain>
       </DashboardContainer>
@@ -180,10 +196,10 @@ const DashboardMain = styled.div`
     /* height: 80px; */
 
     h4 {
-      color: #6976a1;
+      color: #721f4b;
 
       text-align: justify;
-      font-family: Satoshi;
+
       font-size: 18px;
       font-style: normal;
       font-weight: 500;
@@ -193,9 +209,9 @@ const DashboardMain = styled.div`
 
     button {
       padding: 8px 14px;
-      background-color: #eff2fd;
+      background-color: #f8f4f6;
       border: none;
-      color: #6976a1;
+      color: #721f4b;
 
       font-family: Satoshi;
       font-size: 16px;
@@ -207,47 +223,6 @@ const DashboardMain = styled.div`
       span {
         margin-right: 8px;
       }
-    }
-  }
-`;
-
-const Sidebar = styled.div`
-  height: 100vh;
-  background-color: rgba(234, 236, 240, 1);
-
-  .sidebar-container {
-    margin-top: 40px;
-    margin-left: 20px;
-    gap: 20px;
-
-    h3 {
-      margin-bottom: 50px;
-      color: #6976a1;
-
-      font-family: Satoshi;
-      font-size: 20px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: normal;
-    }
-
-    li {
-      margin-bottom: 60px;
-      width: 200px;
-      list-style: none;
-      color: #6976a1;
-      text-align: justify;
-      font-size: 18px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-      letter-spacing: 0.018px;
-      padding: 12px 24px;
-      border-radius: 20px;
-    }
-
-    li:hover {
-      background-color: #fff;
     }
   }
 `;
