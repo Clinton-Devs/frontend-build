@@ -4,7 +4,7 @@ import addImageButton from "../../assets/dashboard/addImageIcon.svg";
 import { CardsWrapper } from "../../pages/userPages/dashboardStyles";
 import useGetOneProject from "../../app/services/projects/useGetOneProject";
 import Spinner from "../../assets/common/spinner.svg";
-import { httpClient } from "../../app/services/axios-https";
+import { http, httpCloudinary } from "../../app/services/axios-https";
 import Notification from "../Notification";
 import toast from "react-hot-toast";
 import env from "../../env";
@@ -14,15 +14,9 @@ import { useDropzone } from "react-dropzone";
 
 const AddImages = ({ projectId }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
-  const [addingImage, setAddingImage] = useState(false);
+  const [uploadedImagesUrl, setUploadedImagesUrl] = useState([]);
 
-  // const {
-  //   loading,
-  //   projectDetail,
-  //   projectImages,
-  //   project3DImages,
-  //   projectUnits,
-  // } = useGetOneProject(projectId);
+  const [addingImage, setAddingImage] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     const newImages = acceptedFiles.map((file) => ({
@@ -30,23 +24,47 @@ const AddImages = ({ projectId }) => {
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
 
+    const formdata = new FormData();
+    acceptedFiles.forEach((file) => {
+      formdata.append("file", file);
+      formdata.append("upload_preset", env.cloudinary_upload_preset);
+      formdata.append("cloud_name", env.cloudinary_cloud_name);
+      formdata.append("folder", "Cloudinary-ClintonDevs");
+
+      httpCloudinary
+        .post(
+          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+          formdata
+        )
+        .then((response) => {
+          console.log(response.data.url);
+          toast.success("Images uploaded");
+          setUploadedImagesUrl((prevImagesUrl) => [
+            ...prevImagesUrl,
+            response.data.url,
+          ]);
+        })
+        .catch((error) =>
+          toast.error(error.response.data.message || "Image upload error")
+        );
+    });
+
     setUploadedImages((prevImages) => [...prevImages, ...newImages]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const addProjectImages = () => {
-    const formData = new FormData();
+    setAddingImage(true);
+    const formdata = {
+      fileType: "2D-image",
+      images: uploadedImagesUrl,
+    };
 
-    uploadedImages.forEach((file) => {
-      setAddingImage(true);
-      formData.append("image", file.file);
-    });
-
-    httpClient
+    http
       .post(
         `${env.clinton_homes_base_url}/admin/project/${projectId}/images`,
-        formData
+        formdata
       )
       .then((response) => {
         toast.success("New Images Added");

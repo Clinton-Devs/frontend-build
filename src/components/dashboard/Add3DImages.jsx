@@ -4,7 +4,7 @@ import addImageButton from "../../assets/dashboard/addImageIcon.svg";
 import { CardsWrapper } from "../../pages/userPages/dashboardStyles";
 import useGetOneProject from "../../app/services/projects/useGetOneProject";
 import Spinner from "../../assets/common/spinner.svg";
-import { httpClient } from "../../app/services/axios-https";
+import { http, httpCloudinary } from "../../app/services/axios-https";
 import Notification from "../Notification";
 import toast from "react-hot-toast";
 import env from "../../env";
@@ -14,6 +14,7 @@ import { useDropzone } from "react-dropzone";
 
 const Add3DImages = ({ projectId }) => {
   const [uploaded3DImages, setUploaded3DImages] = useState([]);
+  const [uploaded3DImagesUrl, setUploaded3DImagesUrl] = useState([]);
   const [adding3DImage, setAdding3DImage] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -22,6 +23,31 @@ const Add3DImages = ({ projectId }) => {
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
 
+    const formdata = new FormData();
+    acceptedFiles.forEach((file) => {
+      formdata.append("file", file);
+      formdata.append("upload_preset", env.cloudinary_upload_preset);
+      formdata.append("cloud_name", env.cloudinary_cloud_name);
+      formdata.append("folder", "Cloudinary-ClintonDevs");
+
+      httpCloudinary
+        .post(
+          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+          formdata
+        )
+        .then((response) => {
+          console.log(response.data.url);
+          toast.success("Images uploaded");
+          setUploaded3DImagesUrl((prevImagesUrl) => [
+            ...prevImagesUrl,
+            response.data.url,
+          ]);
+        })
+        .catch((error) =>
+          toast.error(error.response.data.message || "Image upload error")
+        );
+    });
+
     setUploaded3DImages((prevImages) => [...prevImages, ...newImages]);
   }, []);
 
@@ -29,18 +55,12 @@ const Add3DImages = ({ projectId }) => {
 
   //3D Images
   const add3DProjectImages = () => {
-    const formData = new FormData();
+    const formdata = { fileType: "3D-image", images: uploaded3DImagesUrl };
 
-    uploaded3DImages.forEach((file) => {
-      setAdding3DImage(true);
-      formData.append("image", file.file);
-    });
-    formData.append("fileType", "3D-image");
-
-    httpClient
+    http
       .post(
         `${env.clinton_homes_base_url}/admin/project/${projectId}/images`,
-        formData
+        formdata
       )
       .then((response) => {
         toast.success("New 3D Images Added");

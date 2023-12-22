@@ -1,8 +1,11 @@
 import axios from "axios";
+import env from "../../env";
 
 const http = axios.create();
 
 const httpClient = axios.create();
+
+const httpCloudinary = axios.create();
 
 // sending request
 http.interceptors.request.use(
@@ -81,4 +84,5 @@ httpClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-export { http, httpClient };
+
+export { http, httpClient, httpCloudinary };

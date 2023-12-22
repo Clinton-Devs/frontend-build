@@ -11,7 +11,7 @@ import AddUser from "../../../components/dashboard/AddUser";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../assets/common/spinner.svg";
 import env from "../../../env";
-import { httpClient } from "../../../app/services/axios-https";
+import { http, httpCloudinary } from "../../../app/services/axios-https";
 
 import { useDropzone } from "react-dropzone";
 import Add3DImages from "../../../components/dashboard/Add3DImages";
@@ -20,37 +20,55 @@ const AddUnits = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
 
-  const [name, setName] = useState("");
-  const [noOfRooms, setNoOfRooms] = useState("");
-  const [noOfBathrooms, setNoOfBathRooms] = useState("");
-  const [price, setPrice] = useState("");
+  const [unitName, setUnitName] = useState("");
+  const [noOfRooms, setNoOfRooms] = useState();
+  const [noOfBathrooms, setNoOfBathRooms] = useState();
+  const [price, setPrice] = useState();
   const [paymentPlan, setPaymentPlan] = useState("");
   const [coverImage, setCoverImage] = useState(null);
+  const [coverImageUrl, setCoverImageUrl] = useState("");
   const [addingUnit, setAddingUnit] = useState(false);
   const [unitId, setUnitId] = useState("");
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles);
     setCoverImage(acceptedFiles[0]);
+
+    const formdata = new FormData();
+    formdata.append("file", acceptedFiles[0]);
+    formdata.append("upload_preset", env.cloudinary_upload_preset);
+    formdata.append("cloud_name", env.cloudinary_cloud_name);
+    formdata.append("folder", "Cloudinary-ClintonDevs");
+
+    httpCloudinary
+      .post(
+        `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+        formdata
+      )
+      .then((response) => setCoverImageUrl(response.data.url))
+      .catch((error) =>
+        toast.error(error.response.data.message || "Image upload error")
+      );
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const addUnit = () => {
     setAddingUnit(true);
-    const formdata = new FormData();
-    formdata.append("name", name);
-    formdata.append("numberOfRooms", noOfRooms);
-    formdata.append("numberOfBathrooms", noOfBathrooms);
-    formdata.append("price", price);
-    formdata.append("paymentPlan", "installment");
-    formdata.append("image", coverImage);
-    httpClient
+    const formdata = {
+      name: unitName,
+      numberOfBathRooms: parseInt(noOfBathrooms),
+      paymentPlan: paymentPlan,
+      image: coverImageUrl,
+      numberOfRooms: parseInt(noOfRooms),
+      price: parseInt(price),
+    };
+    http
       .post(
         `${env.clinton_homes_base_url}/admin/project/${projectId}/create-unit`,
         formdata
       )
       .then((response) => {
-        toast.success("Project Successfully Created");
+        toast.success("Unit Successfully Created");
         console.log(response.data.data._id);
         setUnitId(response.data.data._id);
         setAddingUnit(false);
@@ -59,8 +77,6 @@ const AddUnits = () => {
         console.log(error);
         toast.error(error.response.data.message || "An Error Occured");
       });
-
-    console.log("hrllo");
   };
 
   return (
@@ -98,8 +114,8 @@ const AddUnits = () => {
               <InputCommon
                 placeholder="Name:"
                 marginBottom="24px"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={unitName}
+                onChange={(e) => setUnitName(e.target.value)}
               />
               <InputCommon
                 placeholder="Number of rooms:"
@@ -132,7 +148,7 @@ const AddUnits = () => {
                   <p>Drop the files here ...</p>
                 ) : (
                   <InputCommonWithIcon
-                    placeholder={coverImage ? "Image Uploaded" : "Cover Image"}
+                    placeholder={coverImage ? coverImage.name : "Cover Image"}
                     icon={
                       <>
                         <p>Icon</p>
@@ -154,10 +170,8 @@ const AddUnits = () => {
                 />
               </div>
             </FormContainer>
-            {/* {projectId && <AddImages projectId={projectId} />}
-            {projectId && <Add3DImages projectId={projectId} />} */}
-            <AddUser />
-            <AddFloorPlan />
+            {unitId && <AddUser unitId={unitId} />}
+            {unitId && <AddFloorPlan unitId={unitId} />}
           </div>
         </DashboardMain>
       </DashboardContainer>

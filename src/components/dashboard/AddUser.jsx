@@ -1,29 +1,60 @@
 import React, { useState } from "react";
 import InputCommon from "../inputField/InputCommon";
 import Spinner from "../../assets/common/spinner.svg";
-import { httpClient } from "../../app/services/axios-https";
+import { http } from "../../app/services/axios-https";
 import ButtonCommon from "../button/ButtonCommon";
+import toast from "react-hot-toast";
+import env from "../../env";
 
 import styled from "styled-components";
 
-const AddUser = () => {
-  const [name, setName] = useState("");
+const AddUser = ({ unitId }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [pricePaid, setPricePaid] = useState("");
   const [newPricePaid, setNewPricePaid] = useState("");
   const [addingUser, setAddingUser] = useState(false);
 
-  return (
-    // <DashboardContainer>
-    //   <DashboardMain>
+  const addUser = () => {
+    setAddingUser(true);
+    const formdata = {
+      firstName,
+      lastName,
+      email,
+      pricePaid: parseInt(pricePaid),
+    };
+    http
+      .post(
+        `${env.clinton_homes_base_url}/admin/unit/${unitId}/add-user`,
+        formdata
+      )
+      .then((response) => {
+        toast.success(response.data.message);
+        // console.log(response.data.data._id);
+        // setUnitId(response.data.data._id);
+        setAddingUser(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data.message || "An Error Occured");
+      });
+  };
 
+  return (
     <FormContainer>
       <h4>Add User</h4>
       <InputCommon
-        placeholder="Name:"
+        placeholder="First Name:"
         marginBottom="24px"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
+      <InputCommon
+        placeholder="Last Name:"
+        marginBottom="24px"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
       />
       <InputCommon
         placeholder="Email Address:"
@@ -50,7 +81,7 @@ const AddUser = () => {
           backgroundColor="#F8F4F6"
           textColor="#721F4B"
           marginTop="16px"
-          // onClick={addUnit}
+          onClick={addUser}
           width="20%"
         />
       </div>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import addImageButton from "../../assets/dashboard/addImageIcon.svg";
 import { CardsWrapper } from "../../pages/userPages/dashboardStyles";
 import Spinner from "../../assets/common/spinner.svg";
-import { httpClient } from "../../app/services/axios-https";
+import { httpCloudinary, http } from "../../app/services/axios-https";
 import Notification from "../Notification";
 import toast from "react-hot-toast";
 import env from "../../env";
@@ -11,8 +11,9 @@ import ButtonCommon from "../button/ButtonCommon";
 
 import { useDropzone } from "react-dropzone";
 
-const AddFloorPlan = ({ projectId }) => {
+const AddFloorPlan = ({ unitId }) => {
   const [uploadedFloorPlan, setUploadedFloorPlan] = useState([]);
+  const [uploadedFloorPlanUrl, setUploadedFloorPlanUrl] = useState([]);
   const [addingFloorPlan, setAddingFloorPlan] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -21,24 +22,43 @@ const AddFloorPlan = ({ projectId }) => {
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
 
+    const formdata = new FormData();
+    acceptedFiles.forEach((file) => {
+      formdata.append("file", file);
+      formdata.append("upload_preset", env.cloudinary_upload_preset);
+      formdata.append("cloud_name", env.cloudinary_cloud_name);
+      formdata.append("folder", "Cloudinary-ClintonDevs");
+
+      httpCloudinary
+        .post(
+          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+          formdata
+        )
+        .then((response) => {
+          console.log(response.data.url);
+          toast.success("Images uploaded");
+          setUploadedFloorPlanUrl((prevImagesUrl) => [
+            ...prevImagesUrl,
+            response.data.url,
+          ]);
+        })
+        .catch((error) =>
+          toast.error(error.response.data.message || "Image upload error")
+        );
+    });
+
     setUploadedFloorPlan((prevImages) => [...prevImages, ...newImages]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const addFloorPlan = () => {
-    const formData = new FormData();
+    const formdata = { fileType: "floor-plan", images: uploadedFloorPlanUrl };
 
-    uploadedFloorPlan.forEach((file) => {
-      setAddingFloorPlan(true);
-      formData.append("image", file.file);
-    });
-    formData.append("fileType", "floor-plan");
-
-    httpClient
+    http
       .post(
-        `${env.clinton_homes_base_url}/admin/project/${projectId}/images`,
-        formData
+        `${env.clinton_homes_base_url}/admin/unit/${unitId}/floor-plan`,
+        formdata
       )
       .then((response) => {
         toast.success("Floor Plan Images Added");

@@ -8,7 +8,11 @@ import AddImages from "../../../components/dashboard/AddImages";
 import Add3DImages from "../../../components/dashboard/Add3DImages";
 import uploadButton from "../../../assets/common/upload.svg";
 import Spinner from "../../../assets/common/spinner.svg";
-import { httpClient } from "../../../app/services/axios-https";
+import {
+  http,
+  httpClient,
+  httpCloudinary,
+} from "../../../app/services/axios-https";
 import env from "../../../env";
 import { useDropzone } from "react-dropzone";
 import Notification from "../../../components/Notification";
@@ -25,23 +29,44 @@ const AdminProjects = () => {
   const [creatingProject, setCreatingProject] = useState(false);
   const [projectId, setProjectId] = useState("");
 
+  const [coverImageUrl, setCoverImageUrl] = useState("");
+
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles);
     setCoverImage(acceptedFiles[0]);
+
+    const formdata = new FormData();
+    formdata.append("file", acceptedFiles[0]);
+    formdata.append("upload_preset", env.cloudinary_upload_preset);
+    formdata.append("cloud_name", env.cloudinary_cloud_name);
+    formdata.append("folder", "Cloudinary-ClintonDevs");
+
+    httpCloudinary
+      .post(
+        `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+        formdata
+      )
+      .then((response) => {
+        setCoverImageUrl(response.data.url);
+        toast.success("Image uploaded");
+      })
+      .catch((error) =>
+        toast.error(error.response.data.message || "Image upload error")
+      );
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const createProject = () => {
     setCreatingProject(true);
-    const formdata = new FormData();
-    formdata.append("name", projectName);
-    formdata.append("description", description);
-    formdata.append("address", address);
-    formdata.append("location", location);
-    formdata.append("status", "ongoing");
-    // formdata.append("paymentPlan", "installment");
-    formdata.append("image", coverImage);
-    httpClient
+    const formdata = {
+      name: projectName,
+      description,
+      image: coverImageUrl,
+      address,
+      location,
+      status: "ongoing",
+    };
+    http
       .post(`${env.clinton_homes_base_url}/admin/project`, formdata)
       .then((response) => {
         toast.success("Project Successfully Created");
