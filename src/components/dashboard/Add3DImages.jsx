@@ -12,17 +12,9 @@ import ButtonCommon from "../button/ButtonCommon";
 
 import { useDropzone } from "react-dropzone";
 
-const AddImages = ({ projectId }) => {
-  const [uploadedImages, setUploadedImages] = useState([]);
-  const [addingImage, setAddingImage] = useState(false);
-
-  // const {
-  //   loading,
-  //   projectDetail,
-  //   projectImages,
-  //   project3DImages,
-  //   projectUnits,
-  // } = useGetOneProject(projectId);
+const Add3DImages = ({ projectId }) => {
+  const [uploaded3DImages, setUploaded3DImages] = useState([]);
+  const [adding3DImage, setAdding3DImage] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     const newImages = acceptedFiles.map((file) => ({
@@ -30,18 +22,20 @@ const AddImages = ({ projectId }) => {
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
 
-    setUploadedImages((prevImages) => [...prevImages, ...newImages]);
+    setUploaded3DImages((prevImages) => [...prevImages, ...newImages]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const addProjectImages = () => {
+  //3D Images
+  const add3DProjectImages = () => {
     const formData = new FormData();
 
-    uploadedImages.forEach((file) => {
-      setAddingImage(true);
+    uploaded3DImages.forEach((file) => {
+      setAdding3DImage(true);
       formData.append("image", file.file);
     });
+    formData.append("fileType", "3D-image");
 
     httpClient
       .post(
@@ -49,9 +43,9 @@ const AddImages = ({ projectId }) => {
         formData
       )
       .then((response) => {
-        toast.success("New Images Added");
+        toast.success("New 3D Images Added");
         console.log(response.data.data);
-        setAddingImage(false);
+        setAdding3DImage(false);
       })
       .catch((error) => {
         console.log(error);
@@ -61,10 +55,12 @@ const AddImages = ({ projectId }) => {
 
   return (
     <>
-      <AddImagesContainer>
+      {" "}
+      {/* For 3D Images */}
+      <AddImagesContainer style={{ marginTop: "104px" }}>
         <Notification />
         <div className="header-wrapper">
-          <h3>Project Images</h3>
+          <h3>3D Images</h3>
 
           <div {...getRootProps()} style={{ textAlign: "end" }}>
             <input {...getInputProps()} />
@@ -76,13 +72,12 @@ const AddImages = ({ projectId }) => {
           </div>
         </div>
       </AddImagesContainer>
-
       <AddImagesContainer>
-        {uploadedImages.length === 0 ? (
+        {uploaded3DImages.length === 0 ? (
           <h3>No Images available</h3>
         ) : (
           <CardsWrapper>
-            {uploadedImages.map((image, index) => {
+            {uploaded3DImages.map((image, index) => {
               return (
                 <ImageContainer>
                   <img src={image.preview} alt={`Preview-${index}`} />
@@ -92,14 +87,14 @@ const AddImages = ({ projectId }) => {
           </CardsWrapper>
         )}
 
-        {uploadedImages.length > 0 && (
+        {uploaded3DImages.length > 0 && (
           <div style={{ textAlign: "end" }}>
             <ButtonCommon
-              content={addingImage ? <img src={Spinner} /> : "Save"}
+              content={adding3DImage ? <img src={Spinner} /> : "Save"}
               backgroundColor="#F8F4F6"
               textColor="#721F4B"
               marginTop="16px"
-              onClick={addProjectImages}
+              onClick={add3DProjectImages}
               width="20%"
             />
           </div>
@@ -109,7 +104,7 @@ const AddImages = ({ projectId }) => {
   );
 };
 
-export default AddImages;
+export default Add3DImages;
 
 const AddImagesContainer = styled.div`
   padding: 24px;

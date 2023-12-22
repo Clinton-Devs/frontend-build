@@ -1,29 +1,33 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
+import Notification from "../../../components/Notification";
 import Sidebar from "../../../components/dashboard/Sidebar";
+import toast from "react-hot-toast";
 import InputCommon from "../../../components/inputField/InputCommon";
 import InputCommonWithIcon from "../../../components/inputField/InputCommonWithIcon";
+import AddFloorPlan from "../../../components/dashboard/AddFloorPlan";
 import ButtonCommon from "../../../components/button/ButtonCommon";
-import AddImages from "../../../components/dashboard/AddImages";
-import Add3DImages from "../../../components/dashboard/Add3DImages";
-import uploadButton from "../../../assets/common/upload.svg";
+import AddUser from "../../../components/dashboard/AddUser";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../assets/common/spinner.svg";
-import { httpClient } from "../../../app/services/axios-https";
 import env from "../../../env";
-import { useDropzone } from "react-dropzone";
-import Notification from "../../../components/Notification";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { httpClient } from "../../../app/services/axios-https";
 
-const AdminProjects = () => {
+import { useDropzone } from "react-dropzone";
+import Add3DImages from "../../../components/dashboard/Add3DImages";
+
+const AddUnits = () => {
   const navigate = useNavigate();
-  const [projectName, setProjectName] = useState("");
-  const [address, setAddress] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
+  const { projectId } = useParams();
+
+  const [name, setName] = useState("");
+  const [noOfRooms, setNoOfRooms] = useState("");
+  const [noOfBathrooms, setNoOfBathRooms] = useState("");
+  const [price, setPrice] = useState("");
+  const [paymentPlan, setPaymentPlan] = useState("");
   const [coverImage, setCoverImage] = useState(null);
-  const [creatingProject, setCreatingProject] = useState(false);
-  const [projectId, setProjectId] = useState("");
+  const [addingUnit, setAddingUnit] = useState(false);
+  const [unitId, setUnitId] = useState("");
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles);
@@ -31,30 +35,32 @@ const AdminProjects = () => {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const createProject = () => {
-    setCreatingProject(true);
+  const addUnit = () => {
+    setAddingUnit(true);
     const formdata = new FormData();
-    formdata.append("name", projectName);
-    formdata.append("description", description);
-    formdata.append("address", address);
-    formdata.append("location", location);
-    formdata.append("status", "ongoing");
-    // formdata.append("paymentPlan", "installment");
+    formdata.append("name", name);
+    formdata.append("numberOfRooms", noOfRooms);
+    formdata.append("numberOfBathrooms", noOfBathrooms);
+    formdata.append("price", price);
+    formdata.append("paymentPlan", "installment");
     formdata.append("image", coverImage);
     httpClient
-      .post(`${env.clinton_homes_base_url}/admin/project`, formdata)
+      .post(
+        `${env.clinton_homes_base_url}/admin/project/${projectId}/create-unit`,
+        formdata
+      )
       .then((response) => {
         toast.success("Project Successfully Created");
         console.log(response.data.data._id);
-        setProjectId(response.data.data._id);
-        setCreatingProject(false);
+        setUnitId(response.data.data._id);
+        setAddingUnit(false);
       })
       .catch((error) => {
         console.log(error);
         toast.error(error.response.data.message || "An Error Occured");
       });
 
-    // console.log(formdata);
+    console.log("hrllo");
   };
 
   return (
@@ -62,7 +68,6 @@ const AdminProjects = () => {
       <DashboardContainer>
         <Notification />
         <Sidebar />
-
         <DashboardMain>
           <div className="navbar">
             <Title>
@@ -84,50 +89,41 @@ const AdminProjects = () => {
                 </svg>
               </div>
 
-              <h4>Add Project</h4>
+              <h4>Add Unit</h4>
             </Title>
-
-            {projectId && (
-              <button
-                onClick={() =>
-                  navigate(`/admin-dashboard/projects/${projectId}/add-units`)
-                }
-              >
-                <span>+</span>Add Unit
-              </button>
-            )}
           </div>
-          <div style={{ margin: "24px" }}>
-            {/* <DataTable
-              data={data}
-              columns={columns}
-              customStyles={customStyles}
-            /> */}
 
+          <div style={{ margin: "24px" }}>
             <FormContainer>
               <InputCommon
-                placeholder="Project name:"
+                placeholder="Name:"
                 marginBottom="24px"
-                value={projectName}
-                onChange={(e) => setProjectName(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               <InputCommon
-                placeholder="Description:"
+                placeholder="Number of rooms:"
                 marginBottom="24px"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={noOfRooms}
+                onChange={(e) => setNoOfRooms(e.target.value)}
               />
               <InputCommon
-                placeholder="Address:"
+                placeholder="Number of bathrooms:"
                 marginBottom="24px"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                value={noOfBathrooms}
+                onChange={(e) => setNoOfBathRooms(e.target.value)}
               />
               <InputCommon
-                placeholder="Location:"
+                placeholder="Price:"
                 marginBottom="24px"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <InputCommon
+                placeholder="Payment plan:"
+                marginBottom="24px"
+                value={paymentPlan}
+                onChange={(e) => setPaymentPlan(e.target.value)}
               />
 
               <div {...getRootProps()}>
@@ -136,28 +132,32 @@ const AdminProjects = () => {
                   <p>Drop the files here ...</p>
                 ) : (
                   <InputCommonWithIcon
-                    placeholder={coverImage ? coverImage.name : "Upload Image"}
-                    icon={uploadButton}
+                    placeholder={coverImage ? "Image Uploaded" : "Cover Image"}
+                    icon={
+                      <>
+                        <p>Icon</p>
+                      </>
+                    }
                     marginBottom={"32px"}
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
-                    // onClickIcon={handleSendCode}
+                    readOnly={true}
                   />
                 )}
               </div>
               <div style={{ textAlign: "end" }}>
                 <ButtonCommon
-                  content={creatingProject ? <img src={Spinner} /> : "Save"}
+                  content={addingUnit ? <img src={Spinner} /> : "Save"}
                   backgroundColor="#F8F4F6"
                   textColor="#721F4B"
                   marginTop="16px"
-                  onClick={createProject}
+                  onClick={addUnit}
                   width="20%"
                 />
               </div>
             </FormContainer>
-            {projectId && <AddImages projectId={projectId} />}
-            {projectId && <Add3DImages projectId={projectId} />}
+            {/* {projectId && <AddImages projectId={projectId} />}
+            {projectId && <Add3DImages projectId={projectId} />} */}
+            <AddUser />
+            <AddFloorPlan />
           </div>
         </DashboardMain>
       </DashboardContainer>
@@ -165,7 +165,7 @@ const AdminProjects = () => {
   );
 };
 
-export default AdminProjects;
+export default AddUnits;
 
 const DashboardContainer = styled.div`
   display: grid;
@@ -178,28 +178,24 @@ const DashboardMain = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    margin: 40px 35px auto 35px;
+    margin: 40px auto 71px auto;
     /* height: 80px; */
+    width: 70%;
 
     h4 {
       color: #721f4b;
-
-      text-align: justify;
-
       font-size: 18px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
+      font-weight: 700;
       letter-spacing: 0.018px;
     }
 
     button {
       padding: 8px 14px;
-      background-color: #f1e9ed;
+      background-color: #f8f4f6;
       border: none;
-      border-radius: 5px;
       color: #721f4b;
+
+      font-family: Satoshi;
       font-size: 16px;
       font-style: normal;
       font-weight: 500;
@@ -239,6 +235,10 @@ const Title = styled.div`
   gap: 40px;
 
   h4 {
+    color: #721f4b;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.018px;
     margin-bottom: 6px;
   }
 `;

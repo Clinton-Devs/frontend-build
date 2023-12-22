@@ -82,9 +82,10 @@ const UserDashboard = () => {
       <InfoContainer title="Recent Transactions">
         <div style={{ padding: "16px", backgroundColor: "#fafafa" }}>
           <DataTable
-            data={data}
+            data={[]}
             columns={columns}
             customStyles={dashboardTableSyles}
+            noDataComponent={<h4>No Transactions Available</h4>}
           />
         </div>
       </InfoContainer>

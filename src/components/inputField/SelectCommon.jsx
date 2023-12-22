@@ -54,7 +54,7 @@ const Container = styled.div`
 
   select:focus {
     border: none;
-    border: 1px solid #2753e8;
+    border: 1px solid #721f4b;
     outline: none;
   }
 `;

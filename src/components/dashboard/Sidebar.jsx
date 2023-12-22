@@ -30,7 +30,8 @@ const Sidebar = () => {
           </li>
           <li
             className={`${
-              location.pathname === "/admin-dashboard/projects" && "active"
+              location.pathname.includes("/admin-dashboard/projects") &&
+              "active"
             }`}
             onClick={() => navigate("/admin-dashboard/projects")}
           >

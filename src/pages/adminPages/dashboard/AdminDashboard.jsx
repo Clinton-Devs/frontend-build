@@ -5,64 +5,14 @@ import DataTable from "react-data-table-component";
 import Sidebar from "../../../components/dashboard/Sidebar";
 import ModalComponent from "../../../components/ModalComponent";
 import Modal from "../../../components/dashboard/Modal";
+import useGetAllUsers from "../../../app/services/projects/useGetAllUsers";
 import AddUserForm from "../../../components/dashboard/AddUserForm";
-
-const data = [
-  {
-    id: "56119",
-    name: "Rhoda Bola",
-    email: "rhoda@gmail.com",
-    assignedProperty: "Inana Estate",
-    created: "22/02/2024",
-  },
-  {
-    id: "56789",
-    name: "Joanna Friday",
-    email: "joanna@gmail.com",
-    assignedProperty: "Rhoda Bola",
-    created: "22/02/2024",
-  },
-  {
-    id: "56119",
-    name: "Rhoda Bola",
-    email: "rhoda@gmail.com",
-    assignedProperty: "Inana Estate",
-    created: "22/02/2024",
-  },
-  {
-    id: "56789",
-    name: "Joanna Friday",
-    email: "joanna@gmail.com",
-    assignedProperty: "Rhoda Bola",
-    created: "22/02/2024",
-  },
-  {
-    id: "56119",
-    name: "Rhoda Bola",
-    email: "rhoda@gmail.com",
-    assignedProperty: "Inana Estate",
-    created: "22/02/2024",
-  },
-  {
-    id: "56789",
-    name: "Joanna Friday",
-    email: "joanna@gmail.com",
-    assignedProperty: "Rhoda Bola",
-    created: "22/02/2024",
-  },
-];
+import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
+import editButton from "../../../assets/dashboard/EditButton.svg";
 
 const Dashboard = () => {
-  const [openModal, setOpenModal] = useState(false);
-
+  const { userList} = useGetAllUsers();
   const [openAddUserForm, setOpenAddUserForm] = useState(false);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
 
   const handleOpenAddUserForm = () => {
     setOpenAddUserForm(true);
@@ -75,67 +25,36 @@ const Dashboard = () => {
     {
       name: "ID",
       selector: (row) => row.id,
+      grow: 0.2,
     },
     {
       name: "Name",
       selector: (row) => row.name,
     },
     {
-      name: "EMAIL",
+      name: "Email",
       selector: (row) => row.email,
     },
 
     {
       name: "Assigned Property",
-      selector: (row) => row.assignedProperty,
+      selector: (row) => "Placeholder Estate",
     },
     {
       name: "Created",
-      selector: (row) => row.created,
+      selector: (row) => "12/12/2023",
     },
 
     {
       name: "",
-      cell: () => <p>Edit</p>,
+      cell: () => (
+        <div>
+          <img src={editButton} alt="edit" />
+        </div>
+      ),
+      grow: 0.5,
     },
   ];
-
-  const customStyles = {
-    table: {
-      style: {
-        border: "none",
-        position: "relative",
-      },
-    },
-    rows: {
-      style: {
-        minHeight: "72px", // override the row height
-        // fontFamily: "DM Sans",
-        fontSize: "16px",
-        fontWeight: "400",
-        color: "#6976A1",
-        borderBottom: "8px solid rgba(239, 242, 253, 1)!important",
-      },
-    },
-    headCells: {
-      style: {
-        padding: "30px 10px 30px 10px",
-        backgroundColor: "#FFF",
-        // fontFamily: "DM Sans",
-        fontSize: "14px",
-        fontWeight: "500",
-        color: "#2B3241",
-        borderBottom: "24px solid rgba(239, 242, 253, 1)!important",
-      },
-    },
-    cells: {
-      style: {
-        paddingLeft: "10px", // override the cell padding for data cells
-        paddingRight: "10px",
-        minWidth: "100px",
-      },
-    },
-  };
 
   return (
     <>
@@ -161,16 +80,13 @@ const Dashboard = () => {
               <span>+</span>Add New User
             </button>
           </div>
-          <div style={{ margin: "24px" }}>
-            {/* <DataTable
-              data={data}
+          <div style={{ margin: "24px", padding: "24px" }}>
+            <DataTable
+              data={userList}
               columns={columns}
-              customStyles={customStyles}
-            /> */}
-
-            <h4 style={{ textAlign: "center", color: "#721F4B" }}>
-              No users available
-            </h4>
+              customStyles={dashboardTableSyles}
+              noDataComponent={<h4>No users available</h4>}
+            />
           </div>
         </DashboardMain>
       </DashboardContainer>
@@ -191,7 +107,6 @@ const DashboardMain = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     margin: 40px 35px auto 35px;
     /* height: 80px; */
 
@@ -209,11 +124,10 @@ const DashboardMain = styled.div`
 
     button {
       padding: 8px 14px;
-      background-color: #f8f4f6;
+      background-color: #f1e9ed;
       border: none;
+      border-radius: 5px;
       color: #721f4b;
-
-      font-family: Satoshi;
       font-size: 16px;
       font-style: normal;
       font-weight: 500;

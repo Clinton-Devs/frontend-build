@@ -66,7 +66,7 @@ const ModalHeader = styled.div`
   box-sizing: border-box;
 
   h4 {
-    color: #6976a1;
+    color: #192861;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -76,7 +76,7 @@ const ModalHeader = styled.div`
 
   p {
     margin: 0px;
-    color: #98a2b3;
+    color: #192861;
     font-size: 12px;
     font-weight: 400;
     line-height: 18px; /* 150% */

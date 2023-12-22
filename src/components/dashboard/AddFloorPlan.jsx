@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import addImageButton from "../../assets/dashboard/addImageIcon.svg";
 import { CardsWrapper } from "../../pages/userPages/dashboardStyles";
-import useGetOneProject from "../../app/services/projects/useGetOneProject";
 import Spinner from "../../assets/common/spinner.svg";
 import { httpClient } from "../../app/services/axios-https";
 import Notification from "../Notification";
@@ -12,17 +11,9 @@ import ButtonCommon from "../button/ButtonCommon";
 
 import { useDropzone } from "react-dropzone";
 
-const AddImages = ({ projectId }) => {
-  const [uploadedImages, setUploadedImages] = useState([]);
-  const [addingImage, setAddingImage] = useState(false);
-
-  // const {
-  //   loading,
-  //   projectDetail,
-  //   projectImages,
-  //   project3DImages,
-  //   projectUnits,
-  // } = useGetOneProject(projectId);
+const AddFloorPlan = ({ projectId }) => {
+  const [uploadedFloorPlan, setUploadedFloorPlan] = useState([]);
+  const [addingFloorPlan, setAddingFloorPlan] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     const newImages = acceptedFiles.map((file) => ({
@@ -30,18 +21,19 @@ const AddImages = ({ projectId }) => {
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
 
-    setUploadedImages((prevImages) => [...prevImages, ...newImages]);
+    setUploadedFloorPlan((prevImages) => [...prevImages, ...newImages]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const addProjectImages = () => {
+  const addFloorPlan = () => {
     const formData = new FormData();
 
-    uploadedImages.forEach((file) => {
-      setAddingImage(true);
+    uploadedFloorPlan.forEach((file) => {
+      setAddingFloorPlan(true);
       formData.append("image", file.file);
     });
+    formData.append("fileType", "floor-plan");
 
     httpClient
       .post(
@@ -49,9 +41,9 @@ const AddImages = ({ projectId }) => {
         formData
       )
       .then((response) => {
-        toast.success("New Images Added");
+        toast.success("Floor Plan Images Added");
         console.log(response.data.data);
-        setAddingImage(false);
+        setAddingFloorPlan(false);
       })
       .catch((error) => {
         console.log(error);
@@ -61,10 +53,10 @@ const AddImages = ({ projectId }) => {
 
   return (
     <>
-      <AddImagesContainer>
+      <AddImagesContainer style={{ marginTop: "104px" }}>
         <Notification />
         <div className="header-wrapper">
-          <h3>Project Images</h3>
+          <h3>Floor Plan</h3>
 
           <div {...getRootProps()} style={{ textAlign: "end" }}>
             <input {...getInputProps()} />
@@ -76,13 +68,12 @@ const AddImages = ({ projectId }) => {
           </div>
         </div>
       </AddImagesContainer>
-
       <AddImagesContainer>
-        {uploadedImages.length === 0 ? (
+        {uploadedFloorPlan.length === 0 ? (
           <h3>No Images available</h3>
         ) : (
           <CardsWrapper>
-            {uploadedImages.map((image, index) => {
+            {uploadedFloorPlan.map((image, index) => {
               return (
                 <ImageContainer>
                   <img src={image.preview} alt={`Preview-${index}`} />
@@ -92,14 +83,14 @@ const AddImages = ({ projectId }) => {
           </CardsWrapper>
         )}
 
-        {uploadedImages.length > 0 && (
+        {uploadedFloorPlan.length > 0 && (
           <div style={{ textAlign: "end" }}>
             <ButtonCommon
-              content={addingImage ? <img src={Spinner} /> : "Save"}
+              content={addingFloorPlan ? <img src={Spinner} /> : "Save"}
               backgroundColor="#F8F4F6"
               textColor="#721F4B"
               marginTop="16px"
-              onClick={addProjectImages}
+              onClick={addFloorPlan}
               width="20%"
             />
           </div>
@@ -109,7 +100,7 @@ const AddImages = ({ projectId }) => {
   );
 };
 
-export default AddImages;
+export default AddFloorPlan;
 
 const AddImagesContainer = styled.div`
   padding: 24px;

@@ -86,10 +86,10 @@ const SignIn = () => {
         env.storeUser(response.data.data.token, response.data.data.user);
         setIsLoggingIn(false);
 
-        if (response.data.data.user.userType === "admin") {
-          navigate("/admin-dashboard");
-        } else {
+        if (response.data.data.user.userType === "user") {
           navigate("/user-dashboard");
+        } else {
+          navigate("/admin-dashboard");
         }
       })
       .catch((error) => {
