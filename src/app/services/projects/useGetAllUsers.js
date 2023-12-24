@@ -21,7 +21,7 @@ const useGetAllUsers = () => {
           };
         });
         setUserList([...usersData]);
-        // setLoading(false);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);

@@ -1,6 +1,7 @@
+import React from "react";
 import styled from "styled-components";
 
-const InputCommon = ({
+const TextArea = ({
   inputType,
   inputLabel,
   placeholder,
@@ -8,27 +9,26 @@ const InputCommon = ({
   onChange,
   value,
   disabled,
-  // inputMode,
-  // pattern,
 }) => {
   return (
     <Container marginBottom={marginBottom}>
       <label htmlFor={inputType}>{inputLabel}</label>
-      <input
+      <textarea
+        name=""
+        id=""
+        cols="30"
+        rows="10"
         type={inputType}
-        name={inputType}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
         disabled={disabled}
-        // inputMode={inputMode}
-        // pattern={pattern}
-      />
+      ></textarea>
     </Container>
   );
 };
 
-export default InputCommon;
+export default TextArea;
 
 const Container = styled.div`
   display: flex;
@@ -48,25 +48,19 @@ const Container = styled.div`
     letter-spacing: 0.014px;
   }
 
-  input {
-    width: 100%;
-    height: 52px;
-    padding: 20px 25px;
-    /* border-radius: 5px; */
-    border: 1px solid #eaecf0;
-    /* box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05); */
-    margin-top: 12px;
-    box-sizing: border-box;
-
+  textarea {
     border-radius: 13px;
+    border: 1px solid #eaecf0;
     background: #fff;
     box-shadow: 0px 8px 50px -4px rgba(16, 24, 40, 0.01),
       0px 20px 50px -4px rgba(16, 24, 40, 0.03),
       1px -4px 50px 4px rgba(16, 24, 40, 0.01),
       0px -10px 50px 4px rgba(0, 0, 0, 0.03);
+    width: 100%;
+    padding: 20px 25px;
   }
 
-  input:focus {
+  textarea:focus {
     border: none;
     border: 1px solid #721f4b;
     outline: none;

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import InfoCard from "../../components/dashboard/InfoCard";
 import InfoContainer from "../../components/InfoContainer";
 import DataTable from "react-data-table-component";
+import MobileAdminNav from "../../components/navbar/MobileAdminNav";
 import { CardsWrapper } from "./dashboardStyles";
 import env from "../../env";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
@@ -70,6 +71,7 @@ const UserDashboard = () => {
   return (
     <>
       <DashboardNav />
+
       <Welcome>
         <h3>Welcome {user.firstName}</h3>
         <p>You currently have (0) properties</p>
@@ -93,7 +95,7 @@ const UserDashboard = () => {
       <InfoContainer title="Ongoing Projects">
         <CardsWrapper>
           {loading ? (
-            <h3>Loading</h3>
+            <h3>Loading...</h3>
           ) : (
             projectList.map(
               (project) =>

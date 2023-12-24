@@ -53,7 +53,6 @@ const Add3DImages = ({ projectId }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  //3D Images
   const add3DProjectImages = () => {
     const formdata = { fileType: "3D-image", images: uploaded3DImagesUrl };
 

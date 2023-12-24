@@ -3,15 +3,18 @@ import { useState } from "react";
 import styled from "styled-components";
 import DataTable from "react-data-table-component";
 import Sidebar from "../../../components/dashboard/Sidebar";
-import ModalComponent from "../../../components/ModalComponent";
+import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import Modal from "../../../components/dashboard/Modal";
 import useGetAllUsers from "../../../app/services/projects/useGetAllUsers";
 import AddUserForm from "../../../components/dashboard/AddUserForm";
+import { DashboardContainer } from "./AdminDashboardStyles";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 import editButton from "../../../assets/dashboard/EditButton.svg";
+import ActionButton from "../../../components/button/ActionButton";
+import TableMobile from "../../../components/dashboard/TableMobile";
 
 const Dashboard = () => {
-  const { userList} = useGetAllUsers();
+  const { userList, loading } = useGetAllUsers();
   const [openAddUserForm, setOpenAddUserForm] = useState(false);
 
   const handleOpenAddUserForm = () => {
@@ -58,10 +61,6 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* {openModal && (
-        <ModalComponent open={handleOpenModal} handleClose={handleCloseModal} />
-      )} */}
-
       <Modal
         modalOpenCondition={openAddUserForm}
         headerPrimaryText="Add User"
@@ -73,21 +72,29 @@ const Dashboard = () => {
       </Modal>
       <DashboardContainer>
         <Sidebar />
+        <MobileAdminNav />
         <DashboardMain>
           <div className="navbar">
             <h4>Type: User</h4>
-            <button onClick={handleOpenAddUserForm}>
-              <span>+</span>Add New User
-            </button>
+            <ActionButton
+              text="Add New User"
+              handleAction={handleOpenAddUserForm}
+            />
           </div>
-          <div style={{ margin: "24px", padding: "24px" }}>
+          <TableContainer>
             <DataTable
               data={userList}
               columns={columns}
               customStyles={dashboardTableSyles}
               noDataComponent={<h4>No users available</h4>}
+              progressPending={loading}
             />
-          </div>
+          </TableContainer>
+          {loading ? (
+            <h3 style={{ textAlign: "center" }}>Loading...</h3>
+          ) : (
+            <TableMobile list={userList} />
+          )}
         </DashboardMain>
       </DashboardContainer>
     </>
@@ -95,11 +102,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-const DashboardContainer = styled.div`
-  display: grid;
-  grid-template-columns: 270px 1fr;
-`;
 
 const DashboardMain = styled.div`
   background-color: #fafafa;
@@ -121,22 +123,14 @@ const DashboardMain = styled.div`
       line-height: normal;
       letter-spacing: 0.018px;
     }
+  }
+`;
 
-    button {
-      padding: 8px 14px;
-      background-color: #f1e9ed;
-      border: none;
-      border-radius: 5px;
-      color: #721f4b;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-      letter-spacing: 0.016px;
+const TableContainer = styled.div`
+  margin: 24px;
+  padding: 24px;
 
-      span {
-        margin-right: 8px;
-      }
-    }
+  @media only screen and (max-width: 768px) {
+    display: none;
   }
 `;

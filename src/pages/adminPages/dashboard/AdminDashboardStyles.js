@@ -1,279 +1,125 @@
 import styled from "styled-components";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  height: calc(100vh - 5rem);
-  padding: 2rem;
-  box-sizing: border-box;
-  background: #fbfbfb;
+const DashboardContainer = styled.div`
+  display: grid;
+  grid-template-columns: 270px 1fr;
 
-  h1 {
-    color: #1c2c02;
-    font-weight: 400;
-    font-size: 1.5rem;
-    line-height: 2.5rem;
-    letter-spacing: 0.01875rem;
-    margin: 0;
-    margin-bottom: 0.5rem;
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const Transaction = styled.div`
+const DashboardMain = styled.div`
+  background-color: #fafafa;
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 40px 35px 70px 35px;
+    /* height: 80px; */
+
+    h4 {
+      color: #721f4b;
+
+      text-align: justify;
+
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0.018px;
+    }
+
+    button {
+      padding: 8px 14px;
+      background-color: #f1e9ed;
+      border: none;
+      border-radius: 5px;
+      color: #721f4b;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0.016px;
+
+      span {
+        margin-right: 8px;
+      }
+    }
+  }
+`;
+
+const Title = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-`;
+  gap: 40px;
 
-const AccountBalance = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-direction: column;
-  /* width: 40%; */
-  width: 25rem;
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 12px;
-  border: 0.5px solid #dbdfe7;
-  background: #fff;
-  margin-right: 1rem;
-  height: 10rem;
-
-  .accountBalance {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-
-    .accountBalance__amount {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-direction: column;
-      flex: 1;
-
-      h2 {
-        color: #933d0c;
-        font-size: 1.5rem;
-        font-weight: 500;
-        line-height: 2.25rem;
-        margin: 0;
-      }
-
-      p {
-        color: #98a2b3;
-        font-size: 0.75rem;
-        line-height: 1.125rem;
-        margin: 0;
-      }
-    }
-
-    img {
-      cursor: pointer;
-    }
-  }
-
-  .accountDetails {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-    /* margin-top: 2rem; */
-
-    .accountNumber,
-    .accountName {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-direction: column;
-      width: 100%;
-
-      h3 {
-        color: #434c61;
-        font-size: 0.875rem;
-        font-weight: 500;
-        line-height: 1.3125rem;
-        letter-spacing: 0.01rem;
-        margin: 0;
-      }
-
-      p {
-        color: #98a2b3;
-        font-size: 0.75rem;
-        line-height: 1.125rem;
-        margin: 0;
-      }
-    }
-
-    .accountName {
-      align-items: flex-end;
-
-      h3 {
-        color: #933d0c;
-      }
-    }
+  h4 {
+    margin-bottom: 6px;
   }
 `;
 
-const TransactionVolume = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-direction: column;
-  width: calc((100% - 25rem - 1rem) / 2);
-  padding: 1rem;
-  box-sizing: border-box;
-  border-radius: 12px;
-  border: 0.5px solid #dbdfe7;
-  border-right: none;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  background: #fff;
-  height: 10rem;
+const FormContainer = styled.div`
+  padding: 24px;
+  background-color: rgba(255, 255, 255, 1);
+  width: 70%;
+  margin: 0px auto 104px auto;
 
-  .transactionVolume {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-
-    h3 {
-      color: #2b3241;
-      font-size: 1rem;
-      font-weight: 500;
-      line-height: 1.5rem;
-      letter-spacing: 0.01rem;
-      margin: 0;
-    }
-
-    .accountBalance__day {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-
-      h3 {
-        margin: 0;
-        color: #667085;
-        font-size: 0.875rem;
-        line-height: 1.3125rem;
-      }
-    }
-  }
-
-  .transactionVolume__amount {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-
-    .amount {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      flex-direction: column;
-      width: 100%;
-
-      h3 {
-        color: #1c2c02;
-        font-size: 1.5rem;
-        line-height: 2.8125rem;
-        letter-spacing: 0.015rem;
-        margin: 0;
-        font-weight: 500;
-      }
-
-      .amount__details {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-
-        p {
-          margin: 0;
-          color: #008d4b;
-          text-align: center;
-          font-size: 0.875rem;
-          font-weight: 500;
-          line-height: 1.3125rem;
-          letter-spacing: 0.01rem;
-
-          span {
-            color: #98a2b3;
-            font-size: 0.8rem;
-            line-height: 1.3rem;
-            font-weight: 400;
-          }
-        }
-      }
-    }
+  h4 {
+    color: #721f4b;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.018px;
+    margin-bottom: 32px;
   }
 `;
 
-const TransactionCount = styled(TransactionVolume)`
-  border-radius: 12px;
-  border: 0.5px solid #dbdfe7;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-`;
+const AddImagesContainer = styled.div`
+  padding: 24px;
+  /* width: 100%; */
+  background-color: #fff;
 
-const Services = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 1rem;
-  border-radius: 12px;
-  background: #fff;
-  border: 0.5px solid #dbdfe7;
-
-  .service {
+  .header-wrapper {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 100%;
-    padding: 1rem 1.5rem;
-    border-right: 0.5px solid #dbdfe7;
-
-    .service__details {
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-direction: column;
-      /* width: 100%; */
-      margin-left: 1rem;
-
-      h3 {
-        color: #434c61;
-        text-align: center;
-        font-size: 1.125rem;
-        font-weight: 500;
-        line-height: 1.5rem;
-        margin: 0;
-      }
-
-      p {
-        color: #949ca9;
-        font-size: 0.75rem;
-        line-height: 1.125rem;
-        margin: 0;
-      }
-    }
+    justify-content: space-between;
   }
 
-  .service:last-child {
-    border-right: none;
+  h3 {
+    color: #721f4b;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 26px; /* 144.444% */
+    letter-spacing: 0.018px;
+    margin-bottom: 32px;
+  }
+`;
+
+const ImageContainer = styled.div`
+  max-width: 100%;
+  height: 200px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+`;
+
+const TableContainer = styled.div`
+  margin: 24px;
+  padding: 24px;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
   }
 `;
 
 export {
-  Container,
-  Transaction,
-  AccountBalance,
-  TransactionVolume,
-  TransactionCount,
-  Services,
+  DashboardContainer,
+  DashboardMain,
+  Title,
+  FormContainer,
+  AddImagesContainer,
+  ImageContainer,
+  TableContainer,
 };

@@ -15,7 +15,7 @@ const useGetOneProject = (projectId) => {
     http
       .get(`${env.clinton_homes_base_url}/public/project/${projectId}`)
       .then((response) => {
-        console.log(response.data.data[0].units);
+        // console.log(response.data.data[0]["2D-ProjectImages"][0]);
         setProjectDetail([...response.data.data]);
         setProjectImages([...response.data.data[0]["2D-ProjectImages"]]);
         setProject3DImages([...response.data.data[0]["3D-ProjectImages"]]);

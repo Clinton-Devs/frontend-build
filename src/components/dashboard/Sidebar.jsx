@@ -59,6 +59,10 @@ const SidebarStyle = styled.div`
   min-height: 100vh;
   background-color: #f8f4f6;
 
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
+
   .sidebar-container {
     display: flex;
     flex-direction: column;
