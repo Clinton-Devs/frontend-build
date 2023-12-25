@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import editButton from "../../assets/dashboard/EditButton.svg";
+import ActionButton from "../../button/ActionButton";
+import { useNavigate } from "react-router-dom";
 
-const TableMobileItem = ({ id, name, email, assignedProperty }) => {
+const ProjectTableItem = ({ name, noOfRooms }) => {
+  const navigate = useNavigate();
   return (
     <>
-      <div>
-        <p>ID: {id}</p>
-      </div>
       <div>
         <p>
           <b>Name:</b> {name}
@@ -15,47 +14,37 @@ const TableMobileItem = ({ id, name, email, assignedProperty }) => {
       </div>
       <div>
         <p>
-          <b>Email:</b> {email}
+          <b>Type:</b> ---
         </p>
       </div>
       <div>
         <p>
-          <b>Assigned Property:</b> {assignedProperty}
+          <b>Number of Rooms:</b> {noOfRooms}
         </p>
       </div>
-      <div>
-        <p>
-          <b>Date:</b> 12/12/24
-        </p>
-      </div>
-      <div style={{ marginBottom: "16px" }}>
-        <img
-          src={editButton}
-          alt="edit"
-          style={{ width: "70%", height: "70%" }}
-        />
-      </div>
+      <ActionButton
+        text="View"
+        handleAction={() => navigate("/admin-dashboard/units/:unitId")}
+      />
     </>
   );
 };
 
-const TableMobile = ({ list }) => {
+const ProjectUnitTable = ({ list }) => {
   return (
     <TableMobileStyle>
       {list.length === 0 ? (
-        <h3>No User Available</h3>
+        <h3>No Unit Avaible</h3>
       ) : (
         list.map((item, index) => {
           return (
             <div className="table-item-wrapper">
               <p>{index + 1}</p>
               <div className="table-item">
-                <TableMobileItem
-                  key={item.id}
-                  id={item.id}
+                <ProjectTableItem
                   name={item.name}
-                  email={item.email}
-                  assignedProperty="Placeholder Estate"
+                  type={item.type}
+                  noOfRooms={item.numberOfRooms}
                 />
               </div>
             </div>
@@ -66,7 +55,7 @@ const TableMobile = ({ list }) => {
   );
 };
 
-export default TableMobile;
+export default ProjectUnitTable;
 
 const TableMobileStyle = styled.div`
   display: none;
@@ -85,6 +74,7 @@ const TableMobileStyle = styled.div`
       margin-bottom: 16px;
       margin-right: 16px;
     }
+
     h3 {
       text-align: center;
     }
@@ -92,9 +82,8 @@ const TableMobileStyle = styled.div`
     .table-item-wrapper {
       display: flex;
       gap: 8px;
-      justify-content: center;
       align-items: center;
-      margin: 16px 20px;
+      margin: 16px 8px;
       background: #fff;
       padding: 20px 16px;
       box-shadow: 0px 8px 50px -4px rgba(16, 24, 40, 0.01),
@@ -102,13 +91,30 @@ const TableMobileStyle = styled.div`
         1px -4px 50px 4px rgba(16, 24, 40, 0.01),
         0px -10px 50px 4px rgba(0, 0, 0, 0.03);
       border-radius: 8px;
-      /* width: 70%; */
 
       .table-item {
         display: flex;
         flex-wrap: wrap;
         justify-content: start;
         align-items: center;
+      }
+    }
+
+    .view-btn {
+      padding: 8px 32px;
+      border-radius: 5px;
+      background: #f8f4f6;
+      margin-bottom: 16px;
+
+      p {
+        color: #192861;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        letter-spacing: 0.016px;
+        margin: 0;
+        padding: 0;
       }
     }
   }

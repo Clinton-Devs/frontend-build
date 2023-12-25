@@ -65,6 +65,10 @@ const FormContainer = styled.div`
   width: 70%;
   margin: 0px auto 104px auto;
 
+  @media only screen and (max-width: 768px) {
+    width: 90%;
+  }
+
   h4 {
     color: #721f4b;
     font-size: 18px;
@@ -108,6 +112,7 @@ const ImageContainer = styled.div`
 const TableContainer = styled.div`
   margin: 24px;
   padding: 24px;
+  width: 90%;
 
   @media only screen and (max-width: 768px) {
     display: none;

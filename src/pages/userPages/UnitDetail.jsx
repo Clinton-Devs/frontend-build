@@ -2,7 +2,7 @@ import React from "react";
 import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import InfoContainer from "../../components/InfoContainer";
 
 import PayButton from "../../assets/dashboard/payElectricityButton.svg";
@@ -11,6 +11,8 @@ import image8 from "../../assets/images/image_8.png";
 import image9 from "../../assets/images/image_9.png";
 import image10 from "../../assets/images/image_10.png";
 
+import useGetOneUnit from "../../app/services/projects/useGetOneUnit";
+
 import floorPlan1 from "../../assets/images/image_11.png";
 import floorPlan2 from "../../assets/images/image_13.png";
 import floorPlan3 from "../../assets/images/image_12.png";
@@ -18,6 +20,10 @@ import { CardsWrapper } from "./dashboardStyles";
 
 const UnitDetail = () => {
   const navigate = useNavigate();
+  const { unitId } = useParams();
+
+  const { loading, unitDetail, floorPlanImages } = useGetOneUnit(unitId);
+
   return (
     <>
       <DashboardNav />
@@ -43,7 +49,7 @@ const UnitDetail = () => {
               </svg>
             </div>
 
-            <p>Project A</p>
+            <p>Unit Details</p>
           </Title>
         }
       >
@@ -57,8 +63,8 @@ const UnitDetail = () => {
           <OverviewContainer>
             <Overview>
               <div className="title">
-                <h4>Minna Star Apartment</h4>
-                <p>N1.2m</p>
+                <h4>{unitDetail[0].name}</h4>
+                <p>{unitDetail[0].price}</p>
               </div>
 
               <div>
@@ -115,15 +121,17 @@ const UnitDetail = () => {
 
       <InfoContainer title="3D Images">
         <CardsWrapper>
-          <div>
-            <img src={floorPlan1} alt="" style={{ maxWidth: "100%" }} />
-          </div>
-          <div>
-            <img src={floorPlan2} alt="" style={{ maxWidth: "100%" }} />
-          </div>
-          <div>
-            <img src={floorPlan3} alt="" style={{ maxWidth: "100%" }} />
-          </div>
+          {floorPlanImages.length === 0 ? (
+            <h3>No Images Available</h3>
+          ) : (
+            floorPlanImages.map((image) => {
+              return (
+                <div>
+                  <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
+                </div>
+              );
+            })
+          )}
         </CardsWrapper>
 
         <Description>

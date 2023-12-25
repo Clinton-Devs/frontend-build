@@ -24,32 +24,29 @@ import Sidebar from "../../../components/dashboard/Sidebar";
 import InputCommon from "../../../components/inputField/InputCommon";
 import TextArea from "../../../components/inputField/TextArea";
 import ButtonCommon from "../../../components/button/ButtonCommon";
-import useGetOneProject from "../../../app/services/projects/useGetOneProject";
+import useGetOneUnit from "../../../app/services/projects/useGetOneUnit";
+import useGetAllTransactions from "../../../app/services/projects/useGetAllTransactions";
 import { useDropzone } from "react-dropzone";
 import InputCommonWithIcon from "../../../components/inputField/InputCommonWithIcon";
 import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 
-const AdminProjectDetail = () => {
+const AdminUnitDetails = () => {
   const navigate = useNavigate();
-  const { projectId } = useParams();
-  const {
-    loading,
-    projectDetail,
-    projectImages,
-    project3DImages,
-    projectUnits,
-  } = useGetOneProject(projectId);
+  const { unitId } = useParams();
+  const { loading, unitDetail, floorPlanImages } = useGetOneUnit(unitId);
+  const { transactionLoading, transactionList } = useGetAllTransactions();
 
   const [readOnly, setReadOnly] = useState(true);
   const [coverImage, setCoverImage] = useState(null);
   const [coverImageUrl, setCoverImageUrl] = useState("");
 
-  const [newProjectName, setNewProjectName] = useState("");
-  const [newAddress, setNewAddress] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [newLocation, setNewLocation] = useState("");
-  const [updatingProject, setUpdatingProject] = useState(false);
+  const [newUnitName, setNewUnitName] = useState("");
+  const [newNoOfRooms, setNewNoOfRooms] = useState("");
+  const [newNoOfBathRooms, setNewNoOfBathRooms] = useState("");
+  const [newPrice, setNewPrice] = useState("");
+  const [newPaymentPlan, setNewPaymentPlan] = useState("");
+  const [updatingUnit, setUpdatingUnit] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles);
@@ -76,66 +73,33 @@ const AdminProjectDetail = () => {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const updateProject = () => {
-    setUpdatingProject(true);
+  const updateUnit = () => {
+    setUpdatingUnit(true);
     const formdata = {
-      name: newProjectName,
-      description: newDescription,
+      name: newUnitName,
+      numberOfRooms: newNoOfRooms,
+      numberOfBathRooms: newNoOfBathRooms,
+      price: newPrice,
+      paymentPlan: newPaymentPlan,
       image: coverImageUrl,
-      location: newLocation,
-      address: newAddress,
-      status: "ongoing",
     };
     http
       .put(
-        `${env.clinton_homes_base_url}/admin/update-project/${projectId}`,
+        `${env.clinton_homes_base_url}/admin/${unitId}/update-unit`,
         formdata
       )
       .then((response) => {
         toast.success("Project Successfully Updated");
-        setUpdatingProject(false);
+        setUpdatingUnit(false);
       })
       .catch((error) => {
         console.log(error);
         toast.error(error.response.data.message || "An Error Occured");
-        setUpdatingProject(false);
+        setUpdatingUnit(false);
       });
 
     // console.log(formdata);
   };
-
-  const columns = [
-    {
-      name: "ID",
-      selector: (row) => row._id.substring(0, 5),
-      grow: 0.2,
-    },
-    {
-      name: "Name",
-      selector: (row) => row.name,
-    },
-    {
-      name: "Type",
-      selector: (row) => (row.type ? row.type : "---"),
-      grow: 0.5,
-    },
-
-    {
-      name: "No of Rooms",
-      selector: (row) => row.numberOfRooms,
-    },
-
-    {
-      name: "",
-      cell: (row) => (
-        <ActionButton
-          text="View"
-          handleAction={() => navigate(`/admin-dashboard/units/${row._id}`)}
-        />
-      ),
-      grow: 0.5,
-    },
-  ];
 
   return (
     <>
@@ -145,6 +109,7 @@ const AdminProjectDetail = () => {
         <MobileAdminNav />
         <DashboardMain>
           <div className="navbar">
+            {" "}
             <Title>
               <div onClick={() => navigate(-1)}>
                 <svg
@@ -164,10 +129,9 @@ const AdminProjectDetail = () => {
                 </svg>
               </div>
 
-              <h4>Project Detail</h4>
+              <h4>Unit Details</h4>
             </Title>
-
-            {projectId && (
+            {unitId && (
               <div
                 onClick={() => setReadOnly(false)}
                 style={{ cursor: "pointer" }}
@@ -179,39 +143,48 @@ const AdminProjectDetail = () => {
 
           <FormContainer>
             <InputCommon
-              placeholder={`Project name: ${
-                loading ? "fetching..." : projectDetail[0]?.name
+              placeholder={`Name: ${
+                loading ? "fetching..." : unitDetail[0]?.name
               }`}
               marginBottom="24px"
               disabled={readOnly}
-              value={newProjectName}
-              onChange={(e) => setNewProjectName(e.target.value)}
-            />
-            <TextArea
-              placeholder={`Description: ${
-                loading ? "fetching..." : projectDetail[0]?.description
-              }`}
-              disabled={readOnly}
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
+              value={newUnitName}
+              onChange={(e) => setNewUnitName(e.target.value)}
             />
             <InputCommon
-              placeholder={`Address: ${
-                loading ? "fetching..." : projectDetail[0]?.address
+              placeholder={`Number of Rooms: ${
+                loading ? "fetching..." : unitDetail[0]?.numberOfRooms
               }`}
               marginBottom="24px"
               disabled={readOnly}
-              value={newAddress}
-              onChange={(e) => setNewAddress(e.target.value)}
+              value={newNoOfRooms}
+              onChange={(e) => setNewNoOfRooms(e.target.value)}
+            />
+            <InputCommon
+              placeholder={`Number of Bathrooms: ${
+                loading ? "fetching..." : unitDetail[0]?.numberOfBathRooms
+              }`}
+              marginBottom="24px"
+              disabled={readOnly}
+              value={newNoOfBathRooms}
+              onChange={(e) => setNewNoOfBathRooms(e.target.value)}
             />
 
             <InputCommon
-              placeholder={`Location: ${
-                loading ? "fetching..." : projectDetail[0]?.location
+              placeholder={`Price: ${
+                loading ? "fetching..." : unitDetail[0]?.price
               }`}
               marginBottom="24px"
-              value={newLocation}
-              onChange={(e) => setNewLocation(e.target.value)}
+              value={newPrice}
+              onChange={(e) => setNewPrice(e.target.value)}
+            />
+            <InputCommon
+              placeholder={`Payment Plan: ${
+                loading ? "fetching..." : unitDetail[0]?.paymentPlan
+              }`}
+              marginBottom="24px"
+              value={newPaymentPlan}
+              onChange={(e) => setNewPaymentPlan(e.target.value)}
             />
 
             <div {...getRootProps()}>
@@ -228,67 +201,68 @@ const AdminProjectDetail = () => {
             </div>
             <div style={{ textAlign: "end" }}>
               <ButtonCommon
-                content={updatingProject ? <img src={Spinner} /> : "Save"}
+                content={updatingUnit ? <img src={Spinner} /> : "Save"}
                 backgroundColor="#F8F4F6"
                 textColor="#721F4B"
                 marginTop="16px"
-                onClick={updateProject}
+                onClick={updateUnit}
                 width="20%"
               />
             </div>
           </FormContainer>
 
-          <FormContainer>
-            <h4>Project Units</h4>
-            <TableContainer>
-              {" "}
-              <DataTable
-                data={projectUnits}
-                columns={columns}
-                customStyles={dashboardTableSyles}
-                noDataComponent={<h4>No units available</h4>}
-                progressPending={loading}
-              />
-            </TableContainer>
+          {/* <FormContainer>
+            <h4>User</h4>
+            <InputCommon
+              placeholder={`Name: ${
+                loading ? "fetching..." : unitDetail[0]?.name
+              }`}
+              marginBottom="24px"
+              disabled={readOnly}
+              value={newUnitName}
+              onChange={(e) => setNewUnitName(e.target.value)}
+            />
+            <InputCommon
+              placeholder={`Number of Rooms: ${
+                loading ? "fetching..." : unitDetail[0]?.numberOfRooms
+              }`}
+              marginBottom="24px"
+              disabled={readOnly}
+              value={newNoOfRooms}
+              onChange={(e) => setNewNoOfRooms(e.target.value)}
+            />
+            <InputCommon
+              placeholder={`Number of Bathrooms: ${
+                loading ? "fetching..." : unitDetail[0]?.numberOfBathRooms
+              }`}
+              marginBottom="24px"
+              disabled={readOnly}
+              value={newNoOfBathRooms}
+              onChange={(e) => setNewNoOfBathRooms(e.target.value)}
+            />
 
-            {loading ? (
-              <h3 style={{ textAlign: "center" }}>Loading...</h3>
-            ) : (
-              <ProjectUnitTable list={projectUnits} />
-            )}
-          </FormContainer>
+            <InputCommon
+              placeholder={`Price: ${
+                loading ? "fetching..." : unitDetail[0]?.price
+              }`}
+              marginBottom="24px"
+              value={newPrice}
+              onChange={(e) => setNewPrice(e.target.value)}
+            />
+          </FormContainer> */}
 
           <AddImagesContainer>
             <div className="header-wrapper">
-              <h3>Project Images</h3>
+              <h3>Floor Plan</h3>
             </div>
-            {projectImages.length === 0 ? (
+            {floorPlanImages.length === 0 ? (
               <h3>No Images Available</h3>
             ) : (
               <CardsWrapper>
-                {projectImages.map((image, index) => {
+                {floorPlanImages.map((image, index) => {
                   return (
                     <ImageContainer>
                       <img src={image.url} alt={`Project Image -${index}`} />
-                    </ImageContainer>
-                  );
-                })}
-              </CardsWrapper>
-            )}
-          </AddImagesContainer>
-
-          <AddImagesContainer>
-            <div className="header-wrapper">
-              <h3>3D Images</h3>
-            </div>
-            {project3DImages.length === 0 ? (
-              <h3>No Images Available</h3>
-            ) : (
-              <CardsWrapper>
-                {project3DImages.map((image, index) => {
-                  return (
-                    <ImageContainer>
-                      <img src={image.url} alt={`${index}`} />
                     </ImageContainer>
                   );
                 })}
@@ -301,4 +275,4 @@ const AdminProjectDetail = () => {
   );
 };
 
-export default AdminProjectDetail;
+export default AdminUnitDetails;

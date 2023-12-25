@@ -90,7 +90,7 @@ const ProjectDetail = () => {
                     {unit.numberOfRooms}
                   </Tag>
                 }
-                link="/projects/units/:unitId"
+                link={`/projects/units/${unit._id}`}
               />
             );
           })}

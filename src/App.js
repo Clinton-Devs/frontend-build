@@ -10,6 +10,7 @@ import ProjectDetail from "./pages/userPages/ProjectDetail";
 import UnitDetail from "./pages/userPages/UnitDetail";
 import AddUnits from "./pages/adminPages/dashboard/AddUnits";
 import AdminProjects from "./pages/adminPages/dashboard/AdminProjects";
+import AdminUnitDetails from "./pages/adminPages/dashboard/AdminUnitDetails";
 // import Messages from "./pages/userPages/Messages";
 
 function App() {
@@ -22,6 +23,10 @@ function App() {
         <Route
           path="/admin-dashboard/projects/:projectId"
           element={<AdminProjectDetail />}
+        />
+        <Route
+          path="/admin-dashboard/units/:unitId"
+          element={<AdminUnitDetails />}
         />
         <Route
           path="/admin-dashboard/projects/create"
