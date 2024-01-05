@@ -26,7 +26,7 @@ const InfoCard = ({ imgSrc, tagInfo, link, name, location, price }) => {
         </p>
 
         <div className="message-bar">
-          <p>Clinton Properties</p>
+          <p>Clinton's Developers Ltd</p>
           <img src={messageButton} alt="" />
         </div>
       </CardContainer>

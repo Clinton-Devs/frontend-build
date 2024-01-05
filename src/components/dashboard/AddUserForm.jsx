@@ -14,6 +14,7 @@ const AddUserForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [addingUser, setAddingUser] = useState(false);
 
   const clearFields = () => {
@@ -27,6 +28,7 @@ const AddUserForm = () => {
     const formdata = {
       firstName,
       lastName,
+      phoneNumber,
       email,
     };
 
@@ -50,6 +52,7 @@ const AddUserForm = () => {
     const formdata = {
       firstName,
       lastName,
+      phoneNumber,
       email,
     };
 
@@ -88,6 +91,12 @@ const AddUserForm = () => {
         value={lastName}
         marginBottom="24px"
         onChange={(e) => setLastName(e.target.value)}
+      />
+      <InputCommon
+        placeholder="Phone Number:"
+        marginBottom="24px"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
       />
       <InputCommon
         placeholder="Email:"

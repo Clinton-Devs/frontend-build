@@ -8,6 +8,7 @@ const useGetOneProject = (projectId) => {
   const [projectDetail, setProjectDetail] = useState([]);
   const [projectImages, setProjectImages] = useState([]);
   const [project3DImages, setProject3DImages] = useState([]);
+  const [projectVideos, setProjectVideos] = useState([]);
   const [projectUnits, setProjectUnits] = useState([]);
 
   const getOneProject = () => {
@@ -19,6 +20,7 @@ const useGetOneProject = (projectId) => {
         setProjectDetail([...response.data.data]);
         setProjectImages([...response.data.data[0]["2D-ProjectImages"]]);
         setProject3DImages([...response.data.data[0]["3D-ProjectImages"]]);
+        setProjectVideos([...response.data.data[0]["videos"]]);
         setProjectUnits([...response.data.data[0].units]);
         setLoading(false);
       })
@@ -36,6 +38,7 @@ const useGetOneProject = (projectId) => {
     projectDetail,
     projectImages,
     project3DImages,
+    projectVideos,
     projectUnits,
   };
 };

@@ -9,16 +9,21 @@ import Notification from "../Notification";
 import toast from "react-hot-toast";
 import env from "../../env";
 import ButtonCommon from "../button/ButtonCommon";
+import ActionButton from "../button/ActionButton";
+import { ImageContainer } from "../../pages/adminPages/dashboard/AdminDashboardStyles";
 
 import { useDropzone } from "react-dropzone";
 
-const Add3DImages = ({ projectId }) => {
-  const [uploaded3DImages, setUploaded3DImages] = useState([]);
-  const [uploaded3DImagesUrl, setUploaded3DImagesUrl] = useState([]);
-  const [adding3DImage, setAdding3DImage] = useState(false);
+const AddUnitVideos = ({ unitId }) => {
+  const [uploadedVideos, setUploadedVideos] = useState([]);
+  const [uploadedVideosUrl, setUploadedVideosUrl] = useState([]);
+  const [uploadedVideosPreviewUrl, setUploadedVideosPreviewUrl] = useState([]);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [addingVideo, setAddingVideo] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
-    const newImages = acceptedFiles.map((file) => ({
+    setUploadingVideo(true);
+    const newVideos = acceptedFiles.map((file) => ({
       file,
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
@@ -32,40 +37,49 @@ const Add3DImages = ({ projectId }) => {
 
       httpCloudinary
         .post(
-          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/video/upload`,
           formdata
         )
         .then((response) => {
           console.log(response.data.url);
-          toast.success("Images uploaded");
-          setUploaded3DImagesUrl((prevImagesUrl) => [
-            ...prevImagesUrl,
+          toast.success("Videos uploaded");
+          setUploadedVideosUrl((prevVideosUrl) => [
+            ...prevVideosUrl,
             response.data.url,
           ]);
+          setUploadedVideosPreviewUrl((prevVideosPreviewUrl) => [
+            ...prevVideosPreviewUrl,
+            response.data.secure_url,
+          ]);
+          setUploadingVideo(false);
         })
-        .catch((error) =>
-          toast.error(error.response.data.message || "Image upload error")
-        );
+        .catch((error) => {
+          toast.error(error.response.data.message || "Image upload error");
+          setUploadingVideo(false);
+        });
     });
 
-    setUploaded3DImages((prevImages) => [...prevImages, ...newImages]);
+    setUploadedVideos((prevVideos) => [...prevVideos, ...newVideos]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const add3DProjectImages = () => {
-    setAdding3DImage(true);
-    const formdata = { fileType: "3D-image", images: uploaded3DImagesUrl };
+  const addUnitVideos = () => {
+    setAddingVideo(true);
+    const formdata = {
+      fileType: "unit-video",
+      images: uploadedVideosUrl,
+    };
 
     http
       .post(
-        `${env.clinton_homes_base_url}/admin/project/${projectId}/images`,
+        `${env.clinton_homes_base_url}/admin/unit/${unitId}/floor-plan`,
         formdata
       )
       .then((response) => {
-        toast.success("New 3D Images Added");
+        toast.success("New Videos Added");
         console.log(response.data.data);
-        setAdding3DImage(false);
+        setAddingVideo(false);
       })
       .catch((error) => {
         console.log(error);
@@ -75,43 +89,49 @@ const Add3DImages = ({ projectId }) => {
 
   return (
     <>
-      {" "}
-      {/* For 3D Images */}
-      <AddImagesContainer style={{}}>
+      <AddImagesContainer>
         <Notification />
         <div className="header-wrapper">
-          <h3>3D Images</h3>
+          <h3 onClick={() => console.log(uploadedVideos)}>Unit Videos</h3>
 
           <div {...getRootProps()} style={{ textAlign: "end" }}>
             <input {...getInputProps()} />
             {isDragActive ? (
               <p>Drop the files here ...</p>
             ) : (
-              <img src={addImageButton} alt="" />
+              <ActionButton
+                text="Add Videos"
+                loading={uploadingVideo}
+                loadingText="Uploading video..."
+              />
             )}
           </div>
         </div>
       </AddImagesContainer>
-      {uploaded3DImages.length > 0 && (
+
+      {uploadedVideosUrl.length > 0 && (
         <AddImagesContainer>
           <CardsWrapper>
-            {uploaded3DImages.map((image, index) => {
+            {uploadedVideos.map((video, index) => {
               return (
                 <ImageContainer>
-                  <img src={image.preview} alt={`Preview-${index}`} />
+                  <video autoPlay loop muted>
+                    <source src={video.preview + "#t=0,5"} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
                 </ImageContainer>
               );
             })}
           </CardsWrapper>
 
-          {uploaded3DImages.length > 0 && (
+          {uploadedVideos.length > 0 && (
             <div style={{ textAlign: "end" }}>
               <ButtonCommon
-                content={adding3DImage ? <img src={Spinner} /> : "Save"}
+                content={addingVideo ? <img src={Spinner} /> : "Save"}
                 backgroundColor="#F8F4F6"
                 textColor="#721F4B"
                 marginTop="16px"
-                onClick={add3DProjectImages}
+                onClick={addUnitVideos}
                 width="20%"
               />
             </div>
@@ -122,7 +142,7 @@ const Add3DImages = ({ projectId }) => {
   );
 };
 
-export default Add3DImages;
+export default AddUnitVideos;
 
 const AddImagesContainer = styled.div`
   padding: 24px;
@@ -144,13 +164,15 @@ const AddImagesContainer = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
-  max-width: 100%;
-  height: 200px;
+// const ImageContainer = styled.div`
+//   max-width: 100%;
+//   height: 200px;
 
-  img {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-`;
+//   img,
+//   video {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+//     display: block;
+//   }
+// `;

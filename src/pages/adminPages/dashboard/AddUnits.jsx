@@ -15,6 +15,7 @@ import { http, httpCloudinary } from "../../../app/services/axios-https";
 
 import { useDropzone } from "react-dropzone";
 import Add3DImages from "../../../components/dashboard/Add3DImages";
+import AddUnitVideos from "../../../components/dashboard/AddUnitVideos";
 
 const AddUnits = () => {
   const navigate = useNavigate();
@@ -161,7 +162,7 @@ const AddUnits = () => {
               </div>
               <div style={{ textAlign: "end" }}>
                 <ButtonCommon
-                  content={addingUnit ? <img src={Spinner} /> : "Save"}
+                  content={addingUnit ? <img src={Spinner} /> : "Add"}
                   backgroundColor="#F8F4F6"
                   textColor="#721F4B"
                   marginTop="16px"
@@ -172,6 +173,7 @@ const AddUnits = () => {
             </FormContainer>
             {unitId && <AddUser unitId={unitId} />}
             {unitId && <AddFloorPlan unitId={unitId} />}
+            {unitId && <AddUnitVideos unitId={unitId} />}
           </div>
         </DashboardMain>
       </DashboardContainer>

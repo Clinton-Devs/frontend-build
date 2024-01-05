@@ -15,7 +15,6 @@ import { useDropzone } from "react-dropzone";
 const AddImages = ({ projectId }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadedImagesUrl, setUploadedImagesUrl] = useState([]);
-
   const [addingImage, setAddingImage] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -95,10 +94,8 @@ const AddImages = ({ projectId }) => {
         </div>
       </AddImagesContainer>
 
-      <AddImagesContainer>
-        {uploadedImages.length === 0 ? (
-          <h3>No Images available</h3>
-        ) : (
+      {uploadedImages.length > 0 && (
+        <AddImagesContainer>
           <CardsWrapper>
             {uploadedImages.map((image, index) => {
               return (
@@ -108,21 +105,21 @@ const AddImages = ({ projectId }) => {
               );
             })}
           </CardsWrapper>
-        )}
 
-        {uploadedImages.length > 0 && (
-          <div style={{ textAlign: "end" }}>
-            <ButtonCommon
-              content={addingImage ? <img src={Spinner} /> : "Save"}
-              backgroundColor="#F8F4F6"
-              textColor="#721F4B"
-              marginTop="16px"
-              onClick={addProjectImages}
-              width="20%"
-            />
-          </div>
-        )}
-      </AddImagesContainer>
+          {uploadedImages.length > 0 && (
+            <div style={{ textAlign: "end" }}>
+              <ButtonCommon
+                content={addingImage ? <img src={Spinner} /> : "Save"}
+                backgroundColor="#F8F4F6"
+                textColor="#721F4B"
+                marginTop="16px"
+                onClick={addProjectImages}
+                width="20%"
+              />
+            </div>
+          )}
+        </AddImagesContainer>
+      )}
     </>
   );
 };

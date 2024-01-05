@@ -6,6 +6,7 @@ import InputCommonWithIcon from "../../../components/inputField/InputCommonWithI
 import ButtonCommon from "../../../components/button/ButtonCommon";
 import AddImages from "../../../components/dashboard/AddImages";
 import Add3DImages from "../../../components/dashboard/Add3DImages";
+import AddProjectVideos from "../../../components/dashboard/AddProjectVideos";
 import uploadButton from "../../../assets/common/upload.svg";
 import Spinner from "../../../assets/common/spinner.svg";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
@@ -176,6 +177,7 @@ const AddProjects = () => {
             </FormContainer>
             {projectId && <AddImages projectId={projectId} />}
             {projectId && <Add3DImages projectId={projectId} />}
+            {projectId && <AddProjectVideos projectId={projectId} />}
           </div>
         </DashboardMain>
       </DashboardContainer>

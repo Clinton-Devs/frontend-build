@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import bed from "../../assets/dashboard/bed-icon.svg";
 import useGetOneProject from "../../app/services/projects/useGetOneProject";
 
 import { CardsWrapper } from "./dashboardStyles";
+import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
 const ProjectDetail = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
@@ -18,6 +19,7 @@ const ProjectDetail = () => {
     projectDetail,
     projectImages,
     project3DImages,
+    projectVideos,
     projectUnits,
   } = useGetOneProject(projectId);
 
@@ -26,6 +28,26 @@ const ProjectDetail = () => {
   });
 
   const projectName = projectDetail[0]?.name;
+
+  const videoRef = useRef(null);
+
+  const handleVideoClick = () => {
+    const videoElement = videoRef.current;
+
+    if (videoElement) {
+      if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+      } else if (videoElement.mozRequestFullScreen) {
+        videoElement.mozRequestFullScreen();
+      } else if (videoElement.webkitRequestFullscreen) {
+        videoElement.webkitRequestFullscreen();
+      } else if (videoElement.msRequestFullscreen) {
+        videoElement.msRequestFullscreen();
+      }
+
+      videoElement.play();
+    }
+  };
 
   return (
     <>
@@ -107,6 +129,36 @@ const ProjectDetail = () => {
                 <div>
                   <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
                 </div>
+              );
+            })
+          )}
+        </CardsWrapper>
+
+        <Description>
+          <h3>Description</h3>
+          <p>{projectDetail[0]?.description}</p>
+        </Description>
+      </InfoContainer>
+
+      <InfoContainer title="Project Videos">
+        <CardsWrapper>
+          {projectVideos.length === 0 ? (
+            <h3>No Vido Available</h3>
+          ) : (
+            projectVideos.map((video) => {
+              return (
+                <ImageContainer>
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    onClick={handleVideoClick}
+                    ref={videoRef}
+                  >
+                    <source src={video.url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </ImageContainer>
               );
             })
           )}

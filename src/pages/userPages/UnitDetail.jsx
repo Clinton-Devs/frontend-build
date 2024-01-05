@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
 
 import { useNavigate, useParams } from "react-router-dom";
 import InfoContainer from "../../components/InfoContainer";
+import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
 
 import PayButton from "../../assets/dashboard/payElectricityButton.svg";
 import messageButton from "../../assets/dashboard/message-cta.svg";
@@ -13,16 +14,34 @@ import image10 from "../../assets/images/image_10.png";
 
 import useGetOneUnit from "../../app/services/projects/useGetOneUnit";
 
-import floorPlan1 from "../../assets/images/image_11.png";
-import floorPlan2 from "../../assets/images/image_13.png";
-import floorPlan3 from "../../assets/images/image_12.png";
 import { CardsWrapper } from "./dashboardStyles";
 
 const UnitDetail = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
 
-  const { loading, unitDetail, floorPlanImages } = useGetOneUnit(unitId);
+  const { loading, unitDetail, floorPlanImages, unitVideos } =
+    useGetOneUnit(unitId);
+
+  const videoRef = useRef(null);
+
+  const handleVideoClick = () => {
+    const videoElement = videoRef.current;
+
+    if (videoElement) {
+      if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+      } else if (videoElement.mozRequestFullScreen) {
+        videoElement.mozRequestFullScreen();
+      } else if (videoElement.webkitRequestFullscreen) {
+        videoElement.webkitRequestFullscreen();
+      } else if (videoElement.msRequestFullscreen) {
+        videoElement.msRequestFullscreen();
+      }
+
+      videoElement.play();
+    }
+  };
 
   return (
     <>
@@ -63,8 +82,8 @@ const UnitDetail = () => {
           <OverviewContainer>
             <Overview>
               <div className="title">
-                <h4>{unitDetail[0].name}</h4>
-                <p>{unitDetail[0].price}</p>
+                <h4>{unitDetail[0]?.name}</h4>
+                <p>{unitDetail[0]?.price}</p>
               </div>
 
               <div>
@@ -119,7 +138,7 @@ const UnitDetail = () => {
         </div>
       </InfoContainer>
 
-      <InfoContainer title="3D Images">
+      <InfoContainer title="Floor Plan">
         <CardsWrapper>
           {floorPlanImages.length === 0 ? (
             <h3>No Images Available</h3>
@@ -143,6 +162,36 @@ const UnitDetail = () => {
             adipisicing elit. Assumenda deserunt est provident excepturi
             consequatur necessitatibus non, iste cum voluptas .
           </p>
+        </Description>
+      </InfoContainer>
+
+      <InfoContainer title="Unit Videos">
+        <CardsWrapper>
+          {unitVideos.length === 0 ? (
+            <h3>No Video Available</h3>
+          ) : (
+            unitVideos.map((video) => {
+              return (
+                <ImageContainer>
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    onClick={handleVideoClick}
+                    ref={videoRef}
+                  >
+                    <source src={video.url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </ImageContainer>
+              );
+            })
+          )}
+        </CardsWrapper>
+
+        <Description>
+          <h3>Description</h3>
+          <p>{unitDetail[0]?.description}</p>
         </Description>
       </InfoContainer>
     </>

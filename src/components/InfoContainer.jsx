@@ -25,13 +25,14 @@ const Container = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 32px;
+    margin-top: 20px;
     h3 {
       color: #721f4b;
       font-size: 18px;
       font-weight: 700;
       line-height: 26px; /* 144.444% */
       letter-spacing: 0.018px;
-      margin-bottom: 32px;
     }
   }
 `;

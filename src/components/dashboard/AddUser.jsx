@@ -12,8 +12,9 @@ const AddUser = ({ unitId }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [pricePaid, setPricePaid] = useState("");
-  const [newPricePaid, setNewPricePaid] = useState("");
+  // const [newPricePaid, setNewPricePaid] = useState("");
   const [addingUser, setAddingUser] = useState(false);
 
   const addUser = () => {
@@ -57,6 +58,12 @@ const AddUser = ({ unitId }) => {
         onChange={(e) => setLastName(e.target.value)}
       />
       <InputCommon
+        placeholder="Phone Number:"
+        marginBottom="24px"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+      />
+      <InputCommon
         placeholder="Email Address:"
         marginBottom="24px"
         value={email}
@@ -68,12 +75,12 @@ const AddUser = ({ unitId }) => {
         value={pricePaid}
         onChange={(e) => setPricePaid(e.target.value)}
       />
-      <InputCommon
+      {/* <InputCommon
         placeholder="New Price Paid:"
         marginBottom="24px"
         value={newPricePaid}
         onChange={(e) => setNewPricePaid(e.target.value)}
-      />
+      /> */}
 
       <div style={{ textAlign: "end" }}>
         <ButtonCommon

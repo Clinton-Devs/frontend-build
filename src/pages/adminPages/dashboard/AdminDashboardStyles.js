@@ -102,9 +102,11 @@ const ImageContainer = styled.div`
   max-width: 100%;
   height: 200px;
 
-  img {
+  img,
+  video {
     width: 100%;
     height: 100%;
+    object-fit: cover;
     display: block;
   }
 `;

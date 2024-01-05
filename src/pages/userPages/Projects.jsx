@@ -8,6 +8,7 @@ import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 
 const Projects = () => {
   const { loading, projectList } = useGetAllProjects();
+
   return (
     <div>
       <DashboardNav />
@@ -22,7 +23,11 @@ const Projects = () => {
                   <InfoCard
                     name={project.name}
                     imgSrc={project.image}
-                    tagInfo="10 Units"
+                    tagInfo={
+                      project["unit count"].length === 0
+                        ? "0 Units"
+                        : `${project["unit count"][0].count} units`
+                    }
                     location={project.location}
                     link={`/projects/${project._id}`}
                   />
@@ -43,7 +48,11 @@ const Projects = () => {
                   <InfoCard
                     name={project.name}
                     imgSrc={project.image}
-                    tagInfo="10 Units"
+                    tagInfo={
+                      project["unit count"].length === 0
+                        ? "0 Units"
+                        : `${project["unit count"][0].count} units`
+                    }
                     location={project.location}
                     link={`/projects/${project._id}`}
                   />

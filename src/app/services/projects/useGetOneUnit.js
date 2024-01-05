@@ -7,6 +7,7 @@ const useGetOneUnit = (unitId) => {
   const [loading, setLoading] = useState(false);
   const [unitDetail, setUnitDetail] = useState([]);
   const [floorPlanImages, setFloorPlanImages] = useState([]);
+  const [unitVideos, setUnitVideos] = useState([]);
 
   const getOneUnit = () => {
     setLoading(true);
@@ -15,6 +16,7 @@ const useGetOneUnit = (unitId) => {
       .then((response) => {
         console.log(response.data.data);
         setUnitDetail([...response.data.data]);
+        setUnitVideos([...response.data.data[0]["videos"]]);
         setFloorPlanImages([...response.data.data[0]["floorPlan"]]);
         setLoading(false);
       })
@@ -31,6 +33,7 @@ const useGetOneUnit = (unitId) => {
     loading,
     unitDetail,
     floorPlanImages,
+    unitVideos,
   };
 };
 

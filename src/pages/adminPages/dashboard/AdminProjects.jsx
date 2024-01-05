@@ -33,7 +33,11 @@ const AdminProjects = () => {
                       <InfoCard
                         name={project.name}
                         imgSrc={project.image}
-                        tagInfo="10 Units"
+                        tagInfo={
+                          project["unit count"].length === 0
+                            ? "0 Units"
+                            : `${project["unit count"][0].count} units`
+                        }
                         location={project.location}
                         link={`/admin-dashboard/projects/${project._id}`}
                       />
@@ -54,7 +58,11 @@ const AdminProjects = () => {
                       <InfoCard
                         name={project.name}
                         imgSrc={project.image}
-                        tagInfo="10 Units"
+                        tagInfo={
+                          project["unit count"].length === 0
+                            ? "0 Units"
+                            : `${project["unit count"][0].count} units`
+                        }
                         location={project.location}
                         link={`/admin-dashboard/projects/:projectId`}
                       />

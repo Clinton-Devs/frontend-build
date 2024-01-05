@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import env from "../../../env";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
 import Spinner from "../../../assets/common/spinner.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import ProjectUnitTable from "../../../components/dashboard/TableMobile/ProjectUnitTable";
+import styled from "styled-components";
 import {
   DashboardContainer,
   DashboardMain,
@@ -29,6 +30,11 @@ import { useDropzone } from "react-dropzone";
 import InputCommonWithIcon from "../../../components/inputField/InputCommonWithIcon";
 import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
+import Modal from "../../../components/dashboard/Modal";
+import AddUnitForm from "../../../components/dashboard/AddUnitForm";
+import AddImages from "../../../components/dashboard/AddImages";
+import Add3DImages from "../../../components/dashboard/Add3DImages";
+import AddProjectVideos from "../../../components/dashboard/AddProjectVideos";
 
 const AdminProjectDetail = () => {
   const navigate = useNavigate();
@@ -38,6 +44,7 @@ const AdminProjectDetail = () => {
     projectDetail,
     projectImages,
     project3DImages,
+    projectVideos,
     projectUnits,
   } = useGetOneProject(projectId);
 
@@ -50,6 +57,34 @@ const AdminProjectDetail = () => {
   const [newDescription, setNewDescription] = useState("");
   const [newLocation, setNewLocation] = useState("");
   const [updatingProject, setUpdatingProject] = useState(false);
+  const [openAddUnitForm, setOpenAddUnitForm] = useState(false);
+
+  const videoRef = useRef(null);
+
+  const handleVideoClick = () => {
+    const videoElement = videoRef.current;
+
+    if (videoElement) {
+      if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+      } else if (videoElement.mozRequestFullScreen) {
+        videoElement.mozRequestFullScreen();
+      } else if (videoElement.webkitRequestFullscreen) {
+        videoElement.webkitRequestFullscreen();
+      } else if (videoElement.msRequestFullscreen) {
+        videoElement.msRequestFullscreen();
+      }
+
+      videoElement.play();
+    }
+  };
+
+  const handleOpenAddUnitForm = () => {
+    setOpenAddUnitForm(true);
+  };
+  const handleCloseAddUnitForm = () => {
+    setOpenAddUnitForm(false);
+  };
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles);
@@ -139,6 +174,15 @@ const AdminProjectDetail = () => {
 
   return (
     <>
+      <Modal
+        modalOpenCondition={openAddUnitForm}
+        headerPrimaryText="Add Unit"
+        isFullWidth={true}
+        maxWidth="sm"
+        handleClose={handleCloseAddUnitForm}
+      >
+        <AddUnitForm projectId={projectId} />
+      </Modal>
       <DashboardContainer>
         <Notification />
         <Sidebar />
@@ -239,7 +283,13 @@ const AdminProjectDetail = () => {
           </FormContainer>
 
           <FormContainer>
-            <h4>Project Units</h4>
+            <SectionHeader>
+              <h4 style={{ marginBottom: "0px" }}>Project Units</h4>
+              <ActionButton
+                text="Add Unit"
+                handleAction={handleOpenAddUnitForm}
+              />
+            </SectionHeader>
             <TableContainer>
               {" "}
               <DataTable
@@ -259,9 +309,7 @@ const AdminProjectDetail = () => {
           </FormContainer>
 
           <AddImagesContainer>
-            <div className="header-wrapper">
-              <h3>Project Images</h3>
-            </div>
+            <AddImages projectId={projectId} />
             {projectImages.length === 0 ? (
               <h3>No Images Available</h3>
             ) : (
@@ -278,9 +326,7 @@ const AdminProjectDetail = () => {
           </AddImagesContainer>
 
           <AddImagesContainer>
-            <div className="header-wrapper">
-              <h3>3D Images</h3>
-            </div>
+            <Add3DImages projectId={projectId} />
             {project3DImages.length === 0 ? (
               <h3>No Images Available</h3>
             ) : (
@@ -295,6 +341,32 @@ const AdminProjectDetail = () => {
               </CardsWrapper>
             )}
           </AddImagesContainer>
+
+          <AddImagesContainer>
+            <AddProjectVideos projectId={projectId} />
+            {projectVideos.length === 0 ? (
+              <h3>No Videos Available</h3>
+            ) : (
+              <CardsWrapper>
+                {projectVideos.map((video, index) => {
+                  return (
+                    <ImageContainer>
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        onClick={handleVideoClick}
+                        ref={videoRef}
+                      >
+                        <source src={video.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </ImageContainer>
+                  );
+                })}
+              </CardsWrapper>
+            )}
+          </AddImagesContainer>
         </DashboardMain>
       </DashboardContainer>
     </>
@@ -302,3 +374,9 @@ const AdminProjectDetail = () => {
 };
 
 export default AdminProjectDetail;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;

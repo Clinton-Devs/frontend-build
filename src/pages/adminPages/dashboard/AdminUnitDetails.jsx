@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import env from "../../../env";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
 import Spinner from "../../../assets/common/spinner.svg";
@@ -14,6 +14,7 @@ import {
   AddImagesContainer,
   TableContainer,
 } from "./AdminDashboardStyles";
+import AddUnitVideos from "../../../components/dashboard/AddUnitVideos";
 import { CardsWrapper } from "../../userPages/dashboardStyles";
 import editButton from "../../../assets/dashboard/EditButton.svg";
 import ActionButton from "../../../components/button/ActionButton";
@@ -25,6 +26,7 @@ import InputCommon from "../../../components/inputField/InputCommon";
 import TextArea from "../../../components/inputField/TextArea";
 import ButtonCommon from "../../../components/button/ButtonCommon";
 import useGetOneUnit from "../../../app/services/projects/useGetOneUnit";
+import useGetUnitUser from "../../../app/services/projects/useGetUnitUser";
 import useGetAllTransactions from "../../../app/services/projects/useGetAllTransactions";
 import { useDropzone } from "react-dropzone";
 import InputCommonWithIcon from "../../../components/inputField/InputCommonWithIcon";
@@ -34,7 +36,9 @@ import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 const AdminUnitDetails = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
-  const { loading, unitDetail, floorPlanImages } = useGetOneUnit(unitId);
+  const { loading, unitDetail, floorPlanImages, unitVideos } =
+    useGetOneUnit(unitId);
+  const { userLoading, userDetail } = useGetUnitUser(unitId);
   const { transactionLoading, transactionList } = useGetAllTransactions();
 
   const [readOnly, setReadOnly] = useState(true);
@@ -47,6 +51,26 @@ const AdminUnitDetails = () => {
   const [newPrice, setNewPrice] = useState("");
   const [newPaymentPlan, setNewPaymentPlan] = useState("");
   const [updatingUnit, setUpdatingUnit] = useState(false);
+
+  const videoRef = useRef(null);
+
+  const handleVideoClick = () => {
+    const videoElement = videoRef.current;
+
+    if (videoElement) {
+      if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+      } else if (videoElement.mozRequestFullScreen) {
+        videoElement.mozRequestFullScreen();
+      } else if (videoElement.webkitRequestFullscreen) {
+        videoElement.webkitRequestFullscreen();
+      } else if (videoElement.msRequestFullscreen) {
+        videoElement.msRequestFullscreen();
+      }
+
+      videoElement.play();
+    }
+  };
 
   const onDrop = useCallback((acceptedFiles) => {
     console.log(acceptedFiles);
@@ -77,19 +101,19 @@ const AdminUnitDetails = () => {
     setUpdatingUnit(true);
     const formdata = {
       name: newUnitName,
-      numberOfRooms: newNoOfRooms,
-      numberOfBathRooms: newNoOfBathRooms,
-      price: newPrice,
+      numberOfRooms: parseInt(newNoOfRooms),
+      numberOfBathRooms: parseInt(newNoOfBathRooms),
+      price: parseInt(newPrice),
       paymentPlan: newPaymentPlan,
       image: coverImageUrl,
     };
     http
       .put(
-        `${env.clinton_homes_base_url}/admin/${unitId}/update-unit`,
+        `${env.clinton_homes_base_url}/admin/unit/${unitId}/update-unit`,
         formdata
       )
       .then((response) => {
-        toast.success("Project Successfully Updated");
+        toast.success("Unit Successfully Updated");
         setUpdatingUnit(false);
       })
       .catch((error) => {
@@ -211,45 +235,49 @@ const AdminUnitDetails = () => {
             </div>
           </FormContainer>
 
-          {/* <FormContainer>
-            <h4>User</h4>
-            <InputCommon
-              placeholder={`Name: ${
-                loading ? "fetching..." : unitDetail[0]?.name
-              }`}
-              marginBottom="24px"
-              disabled={readOnly}
-              value={newUnitName}
-              onChange={(e) => setNewUnitName(e.target.value)}
-            />
-            <InputCommon
-              placeholder={`Number of Rooms: ${
-                loading ? "fetching..." : unitDetail[0]?.numberOfRooms
-              }`}
-              marginBottom="24px"
-              disabled={readOnly}
-              value={newNoOfRooms}
-              onChange={(e) => setNewNoOfRooms(e.target.value)}
-            />
-            <InputCommon
-              placeholder={`Number of Bathrooms: ${
-                loading ? "fetching..." : unitDetail[0]?.numberOfBathRooms
-              }`}
-              marginBottom="24px"
-              disabled={readOnly}
-              value={newNoOfBathRooms}
-              onChange={(e) => setNewNoOfBathRooms(e.target.value)}
-            />
+          {userDetail.length > 0 && (
+            <FormContainer>
+              <h4>User</h4>
+              <InputCommon
+                placeholder={`Name: ${
+                  loading
+                    ? "fetching..."
+                    : `${userDetail[0].ownerId.firstName} ${userDetail[0].ownerId.lastName}`
+                }`}
+                marginBottom="24px"
+                disabled={readOnly}
+                value={newUnitName}
+                onChange={(e) => setNewUnitName(e.target.value)}
+              />
+              <InputCommon
+                placeholder={`Email: ${
+                  loading ? "fetching..." : userDetail[0].ownerId.email
+                }`}
+                marginBottom="24px"
+                disabled={readOnly}
+                value={newNoOfRooms}
+                onChange={(e) => setNewNoOfRooms(e.target.value)}
+              />
+              <InputCommon
+                placeholder={`Price Paid: ${
+                  loading ? "fetching..." : userDetail[0].pricePaid
+                }`}
+                marginBottom="24px"
+                disabled={readOnly}
+                value={newNoOfBathRooms}
+                onChange={(e) => setNewNoOfBathRooms(e.target.value)}
+              />
 
-            <InputCommon
-              placeholder={`Price: ${
-                loading ? "fetching..." : unitDetail[0]?.price
-              }`}
-              marginBottom="24px"
-              value={newPrice}
-              onChange={(e) => setNewPrice(e.target.value)}
-            />
-          </FormContainer> */}
+              <InputCommon
+                placeholder={`New Price Paid: ${
+                  loading ? "fetching..." : userDetail[0].recentPayment
+                }`}
+                marginBottom="24px"
+                value={newPrice}
+                onChange={(e) => setNewPrice(e.target.value)}
+              />
+            </FormContainer>
+          )}
 
           <AddImagesContainer>
             <div className="header-wrapper">
@@ -263,6 +291,32 @@ const AdminUnitDetails = () => {
                   return (
                     <ImageContainer>
                       <img src={image.url} alt={`Project Image -${index}`} />
+                    </ImageContainer>
+                  );
+                })}
+              </CardsWrapper>
+            )}
+          </AddImagesContainer>
+
+          <AddImagesContainer>
+            <AddUnitVideos unitId={unitId} />
+            {unitVideos.length === 0 ? (
+              <h3>No Videos Available</h3>
+            ) : (
+              <CardsWrapper>
+                {unitVideos.map((video, index) => {
+                  return (
+                    <ImageContainer>
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        onClick={handleVideoClick}
+                        ref={videoRef}
+                      >
+                        <source src={video.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
                     </ImageContainer>
                   );
                 })}
