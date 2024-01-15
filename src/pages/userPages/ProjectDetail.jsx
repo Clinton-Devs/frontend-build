@@ -6,7 +6,7 @@ import styled from "styled-components";
 import InfoContainer from "../../components/InfoContainer";
 import InfoCard from "../../components/dashboard/InfoCard";
 import bed from "../../assets/dashboard/bed-icon.svg";
-
+import PlayButton from "../../assets/common/play-button.svg";
 import useGetOneProject from "../../app/services/projects/useGetOneProject";
 
 import { CardsWrapper } from "./dashboardStyles";
@@ -150,13 +150,10 @@ const ProjectDetail = () => {
             projectVideos.map((video) => {
               return (
                 <ImageContainer>
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    onClick={handleVideoClick}
-                    ref={videoRef}
-                  >
+                  <Play onClick={handleVideoClick}>
+                    <img src={PlayButton} alt="play_button" />
+                  </Play>
+                  <video muted onClick={handleVideoClick} ref={videoRef}>
                     <source src={video.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -229,4 +226,21 @@ const Description = styled.div`
 const Tag = styled.div`
   display: flex;
   gap: 6px;
+`;
+
+const Play = styled.div`
+  position: absolute;
+  top: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  z-index: 10;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+
+  :hover {
+    transform: scale(1.05, 1.05);
+  }
 `;

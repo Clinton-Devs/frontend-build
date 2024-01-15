@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { useNavigate, useParams } from "react-router-dom";
 import InfoContainer from "../../components/InfoContainer";
+import PlayButton from "../../assets/common/play-button.svg";
 import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
 
 import PayButton from "../../assets/dashboard/payElectricityButton.svg";
@@ -178,13 +179,10 @@ const UnitDetail = () => {
             unitVideos.map((video) => {
               return (
                 <ImageContainer>
-                  <video
-                    autoPlay
-                    loop
-                    muted
-                    onClick={handleVideoClick}
-                    ref={videoRef}
-                  >
+                  <Play onClick={handleVideoClick}>
+                    <img src={PlayButton} alt="play_button" />
+                  </Play>
+                  <video muted onClick={handleVideoClick} ref={videoRef}>
                     <source src={video.url} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -336,5 +334,22 @@ const PropertyManager = styled.div`
         letter-spacing: 0.014px;
       }
     }
+  }
+`;
+
+const Play = styled.div`
+  position: absolute;
+  top: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  z-index: 10;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+
+  :hover {
+    transform: scale(1.05, 1.05);
   }
 `;
