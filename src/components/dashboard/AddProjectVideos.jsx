@@ -11,7 +11,7 @@ import env from "../../env";
 import ButtonCommon from "../button/ButtonCommon";
 import ActionButton from "../button/ActionButton";
 import { ImageContainer } from "../../pages/adminPages/dashboard/AdminDashboardStyles";
-
+import PlayButton from "../../assets/common/play-button.svg";
 import { useDropzone } from "react-dropzone";
 
 const AddProjectVideos = ({ projectId }) => {
@@ -115,6 +115,9 @@ const AddProjectVideos = ({ projectId }) => {
             {uploadedVideos.map((video, index) => {
               return (
                 <ImageContainer>
+                  <Play>
+                    <img src={PlayButton} alt="play_button" />
+                  </Play>
                   <video autoPlay loop muted>
                     <source src={video.preview + "#t=0,5"} type="video/mp4" />
                     Your browser does not support the video tag.
@@ -164,15 +167,19 @@ const AddImagesContainer = styled.div`
   }
 `;
 
-// const ImageContainer = styled.div`
-//   max-width: 100%;
-//   height: 200px;
+const Play = styled.div`
+  position: absolute;
+  top: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  z-index: 10;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
 
-//   img,
-//   video {
-//     width: 100%;
-//     height: 100%;
-//     object-fit: cover;
-//     display: block;
-//   }
-// `;
+  :hover {
+    transform: scale(1.05, 1.05);
+  }
+`;

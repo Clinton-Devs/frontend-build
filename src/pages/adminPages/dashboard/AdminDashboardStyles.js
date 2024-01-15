@@ -62,8 +62,15 @@ const Title = styled.div`
 const FormContainer = styled.div`
   padding: 24px;
   background-color: rgba(255, 255, 255, 1);
-  width: 70%;
+  width: 90%;
   margin: 0px auto 104px auto;
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
 
   @media only screen and (max-width: 768px) {
     width: 90%;
@@ -101,6 +108,7 @@ const AddImagesContainer = styled.div`
 const ImageContainer = styled.div`
   max-width: 100%;
   height: 200px;
+  position: relative;
 
   img,
   video {

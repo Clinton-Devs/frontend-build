@@ -5,11 +5,13 @@ import debitCard from "../../assets/dashboard/debit-card-icon.svg";
 import messageIcon from "../../assets/dashboard/message-icon-message.svg";
 import houseIcon from "../../assets/dashboard/house-icon.svg";
 import { useNavigate, useLocation } from "react-router-dom";
+import env from "../../env";
 
 const DashboardNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const user = env.getUser();
   const selectActiveMenu = (option) => {
     navigate(`/${option}`);
   };
@@ -41,14 +43,18 @@ const DashboardNav = () => {
                 <MenuItemSelected></MenuItemSelected>
               )} */}
             </div>
-            <div className="menu-item" style={{ marginRight: "32px" }}>
+            <div
+              className="menu-item"
+              style={{ marginRight: "32px" }}
+              onClick={() => selectActiveMenu("messages")}
+            >
               <img src={messageIcon} alt="" />
-              {/* {location.pathname === "/messages" && (
+              {location.pathname === "/messages" && (
                 <MenuItemSelected></MenuItemSelected>
-              )} */}
+              )}
             </div>
           </div>
-          <p>John Olga</p>
+          <p>{`${user.firstName} ${user.lastName}`}</p>
         </div>
       </Nav>
     </>

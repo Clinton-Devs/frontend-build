@@ -9,10 +9,11 @@ const InputCommonWithIcon = ({
   value,
   onClickIcon,
   placeholder,
-  readOnly,
+  disabled,
+  iconMarginTop,
 }) => {
   return (
-    <Container marginBottom={marginBottom}>
+    <Container marginBottom={marginBottom} iconMarginTop={iconMarginTop}>
       <label htmlFor={inputType}>{inputLabel}</label>
       <div className="inputWithIcon">
         <input
@@ -21,7 +22,7 @@ const InputCommonWithIcon = ({
           onChange={onChange}
           value={value}
           placeholder={placeholder}
-          readOnly={readOnly}
+          disabled={disabled}
         />
         <img src={icon} alt="" onClick={onClickIcon} />
       </div>
@@ -53,6 +54,8 @@ const Container = styled.div`
       position: absolute;
       right: 1rem;
       top: 1.2rem;
+      margin-top: 4px;
+      ${({ iconMarginTop }) => iconMarginTop && `margin-top: ${iconMarginTop}`}
     }
   }
 

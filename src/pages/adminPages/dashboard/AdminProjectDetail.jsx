@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import env from "../../../env";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
 import Spinner from "../../../assets/common/spinner.svg";
@@ -11,11 +11,8 @@ import {
   DashboardMain,
   Title,
   FormContainer,
-  ImageContainer,
-  AddImagesContainer,
   TableContainer,
 } from "./AdminDashboardStyles";
-import { CardsWrapper } from "../../userPages/dashboardStyles";
 import editButton from "../../../assets/dashboard/EditButton.svg";
 import ActionButton from "../../../components/button/ActionButton";
 import uploadButton from "../../../assets/common/upload.svg";
@@ -31,22 +28,24 @@ import InputCommonWithIcon from "../../../components/inputField/InputCommonWithI
 import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 import Modal from "../../../components/dashboard/Modal";
-import AddUnitForm from "../../../components/dashboard/AddUnitForm";
-import AddImages from "../../../components/dashboard/AddImages";
-import Add3DImages from "../../../components/dashboard/Add3DImages";
-import AddProjectVideos from "../../../components/dashboard/AddProjectVideos";
+import AddUnitForm from "../../../components/dashboard/modals/AddUnitForm";
+
+import ProjectGallery from "../../../components/gallery/ProjectGallery";
 
 const AdminProjectDetail = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
-  const {
-    loading,
-    projectDetail,
-    projectImages,
-    project3DImages,
-    projectVideos,
-    projectUnits,
-  } = useGetOneProject(projectId);
+  const [reloadCount, setReloadCount] = useState(0);
+  const { loading, projectDetail, projectUnits } = useGetOneProject(
+    projectId,
+    reloadCount
+  );
+
+  const triggerReload = () => {
+    // Update refreshKey to trigger a re-render
+    console.log("triggered");
+    setReloadCount((prevKey) => prevKey + 1);
+  };
 
   const [readOnly, setReadOnly] = useState(true);
   const [coverImage, setCoverImage] = useState(null);
@@ -58,26 +57,6 @@ const AdminProjectDetail = () => {
   const [newLocation, setNewLocation] = useState("");
   const [updatingProject, setUpdatingProject] = useState(false);
   const [openAddUnitForm, setOpenAddUnitForm] = useState(false);
-
-  const videoRef = useRef(null);
-
-  const handleVideoClick = () => {
-    const videoElement = videoRef.current;
-
-    if (videoElement) {
-      if (videoElement.requestFullscreen) {
-        videoElement.requestFullscreen();
-      } else if (videoElement.mozRequestFullScreen) {
-        videoElement.mozRequestFullScreen();
-      } else if (videoElement.webkitRequestFullscreen) {
-        videoElement.webkitRequestFullscreen();
-      } else if (videoElement.msRequestFullscreen) {
-        videoElement.msRequestFullscreen();
-      }
-
-      videoElement.play();
-    }
-  };
 
   const handleOpenAddUnitForm = () => {
     setOpenAddUnitForm(true);
@@ -135,8 +114,6 @@ const AdminProjectDetail = () => {
         toast.error(error.response.data.message || "An Error Occured");
         setUpdatingProject(false);
       });
-
-    // console.log(formdata);
   };
 
   const columns = [
@@ -172,6 +149,16 @@ const AdminProjectDetail = () => {
     },
   ];
 
+  useEffect(() => {
+    if (!readOnly) {
+      toast("Project can now be edited!", {
+        icon: "🖊️",
+      });
+    }
+  }, [readOnly]);
+
+  useEffect(() => {}, []);
+
   return (
     <>
       <Modal
@@ -181,7 +168,7 @@ const AdminProjectDetail = () => {
         maxWidth="sm"
         handleClose={handleCloseAddUnitForm}
       >
-        <AddUnitForm projectId={projectId} />
+        <AddUnitForm projectId={projectId} triggerReload={triggerReload} />
       </Modal>
       <DashboardContainer>
         <Notification />
@@ -296,77 +283,27 @@ const AdminProjectDetail = () => {
                 data={projectUnits}
                 columns={columns}
                 customStyles={dashboardTableSyles}
-                noDataComponent={<h4>No units available</h4>}
-                progressPending={loading}
+                noDataComponent={
+                  <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                    No units available
+                  </h3>
+                }
+                // progressPending={loading}
               />
             </TableContainer>
 
             {loading ? (
-              <h3 style={{ textAlign: "center" }}>Loading...</h3>
+              <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                Loading...
+              </h3>
             ) : (
               <ProjectUnitTable list={projectUnits} />
             )}
           </FormContainer>
 
-          <AddImagesContainer>
-            <AddImages projectId={projectId} />
-            {projectImages.length === 0 ? (
-              <h3>No Images Available</h3>
-            ) : (
-              <CardsWrapper>
-                {projectImages.map((image, index) => {
-                  return (
-                    <ImageContainer>
-                      <img src={image.url} alt={`Project Image -${index}`} />
-                    </ImageContainer>
-                  );
-                })}
-              </CardsWrapper>
-            )}
-          </AddImagesContainer>
-
-          <AddImagesContainer>
-            <Add3DImages projectId={projectId} />
-            {project3DImages.length === 0 ? (
-              <h3>No Images Available</h3>
-            ) : (
-              <CardsWrapper>
-                {project3DImages.map((image, index) => {
-                  return (
-                    <ImageContainer>
-                      <img src={image.url} alt={`${index}`} />
-                    </ImageContainer>
-                  );
-                })}
-              </CardsWrapper>
-            )}
-          </AddImagesContainer>
-
-          <AddImagesContainer>
-            <AddProjectVideos projectId={projectId} />
-            {projectVideos.length === 0 ? (
-              <h3>No Videos Available</h3>
-            ) : (
-              <CardsWrapper>
-                {projectVideos.map((video, index) => {
-                  return (
-                    <ImageContainer>
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        onClick={handleVideoClick}
-                        ref={videoRef}
-                      >
-                        <source src={video.url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </ImageContainer>
-                  );
-                })}
-              </CardsWrapper>
-            )}
-          </AddImagesContainer>
+          <ProjectGallery projectId={projectId} fileType="2D-image" />
+          <ProjectGallery projectId={projectId} fileType="3D-image" />
+          <ProjectGallery projectId={projectId} fileType="project-video" />
         </DashboardMain>
       </DashboardContainer>
     </>

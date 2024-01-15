@@ -103,6 +103,8 @@ const ProjectDetail = () => {
           {projectUnits.map((unit) => {
             return (
               <InfoCard
+                linkToMessage="/messages"
+                unitId={unit._id}
                 name={unit.name}
                 imgSrc={unit.image}
                 price={unit.price}

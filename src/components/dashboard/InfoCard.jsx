@@ -1,36 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import env from "../../env";
 import locationIcon from "../../assets/common/location-icon.svg";
 import messageButton from "../../assets/dashboard/message-cta.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { http } from "../../app/services/axios-https";
+import toast from "react-hot-toast";
+import Notification from "../Notification";
 
-const InfoCard = ({ imgSrc, tagInfo, link, name, location, price }) => {
+const InfoCard = ({
+  imgSrc,
+  tagInfo,
+  link,
+  name,
+  location,
+  price,
+  linkToMessage,
+  ownedUnitId,
+}) => {
+  const navigate = useNavigate();
+
+  const [creatingChatRoom, setCreatingChatRoom] = useState(false);
+
+  const goToMessage = () => {
+    setCreatingChatRoom(true);
+
+    http
+      .post(
+        `${env.clinton_homes_base_url}/user/create-chat-room/${ownedUnitId}`
+      )
+      .then((response) => {
+        navigate(linkToMessage, { state: { unitId: ownedUnitId } });
+        setCreatingChatRoom(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data.message || "An Error Occured");
+      });
+  };
+
+  creatingChatRoom && toast("Loading Chats..");
+
   return (
-    <Link to={link}>
-      <CardContainer>
-        <div className="main-image">
-          <img src={imgSrc} alt="house" />
-          <div className="info-tag">{tagInfo}</div>
-        </div>
+    <CardContainer>
+      <Notification />
+      <div className="main-image" onClick={() => navigate(link)}>
+        <img src={imgSrc} alt="house" style={{ height: "250px" }} />
+        <div className="info-tag">{tagInfo}</div>
+      </div>
 
-        <div className="name-and-price">
-          <h5>{name}</h5>
-          <p>{price || "1.2m"}</p>
-        </div>
+      <div className="name-and-price" onClick={() => navigate(link)}>
+        <h5>{name}</h5>
+        <p>{price || "1.2m"}</p>
+      </div>
 
-        <p className="location">
-          <span>
-            <img src={locationIcon} alt="" style={{ marginTop: "5px" }} />
-          </span>{" "}
-          {location}
-        </p>
+      <p className="location">
+        <span>
+          <img src={locationIcon} alt="" style={{ marginTop: "5px" }} />
+        </span>{" "}
+        {location}
+      </p>
 
-        <div className="message-bar">
-          <p>Clinton's Developers Ltd</p>
-          <img src={messageButton} alt="" />
-        </div>
-      </CardContainer>
-    </Link>
+      <div className="message-bar">
+        <p>Clinton's Developers Ltd</p>
+
+        {ownedUnitId && (
+          <img src={messageButton} alt="" onClick={() => goToMessage()} />
+        )}
+      </div>
+    </CardContainer>
   );
 };
 
@@ -50,6 +88,7 @@ const CardContainer = styled.div`
   .main-image {
     margin-bottom: 20px;
     position: relative;
+    cursor: pointer;
     img {
       width: 100%;
       display: block;
@@ -73,6 +112,7 @@ const CardContainer = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 7px;
+    cursor: pointer;
 
     h5,
     p {

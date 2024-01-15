@@ -8,11 +8,8 @@ import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
 
 import PayButton from "../../assets/dashboard/payElectricityButton.svg";
 import messageButton from "../../assets/dashboard/message-cta.svg";
-import image8 from "../../assets/images/image_8.png";
-import image9 from "../../assets/images/image_9.png";
-import image10 from "../../assets/images/image_10.png";
 
-import useGetOneUnit from "../../app/services/projects/useGetOneUnit";
+import useGetOneUnit from "../../app/services/units/useGetOneUnit";
 
 import { CardsWrapper } from "./dashboardStyles";
 
@@ -41,6 +38,10 @@ const UnitDetail = () => {
 
       videoElement.play();
     }
+  };
+
+  const goToMessage = () => {
+    navigate("/messages", { state: { unitId: unitDetail[0]?._id } });
   };
 
   return (
@@ -73,9 +74,9 @@ const UnitDetail = () => {
         }
       >
         <ProjectMainImages>
-          <img src={image10} alt="" className="left" />
-          <img src={image8} alt="" className="right-top" />
-          <img src={image9} alt="" className="right-bottom" />
+          <img src={unitDetail[0]?.image} alt="" className="left" />
+          <img src={unitDetail[0]?.image} alt="" className="right-top" />
+          <img src={unitDetail[0]?.image} alt="" className="right-bottom" />
         </ProjectMainImages>
 
         <Grid>
@@ -108,21 +109,25 @@ const UnitDetail = () => {
             </Description>
           </OverviewContainer>
 
-          <PropertyManager>
-            <div className="title">
-              <h4>Property Manager</h4>
-              <img src={messageButton} alt="" />
-            </div>
-            <div className="detail">
-              <div className="img-thumbnail">
-                <img src="" alt="" />
+          {unitDetail[0]?.projectManager && (
+            <PropertyManager>
+              <div className="title">
+                <h4>Property Manager</h4>
+                <img src={messageButton} alt="" onClick={() => goToMessage()} />
               </div>
-              <div className="name">
-                <p>Mark Stephen</p>
-                <p>Property Manager</p>
+              <div className="detail">
+                <div className="img-thumbnail">
+                  <img src="" alt="" />
+                </div>
+                <div className="name">
+                  <p>
+                    {`${unitDetail[0]?.projectManager?.firstName} ${unitDetail[0]?.projectManager?.lastName}`}
+                  </p>
+                  <p>Property Manager</p>
+                </div>
               </div>
-            </div>
-          </PropertyManager>
+            </PropertyManager>
+          )}
         </Grid>
       </InfoContainer>
 

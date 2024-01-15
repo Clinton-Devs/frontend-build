@@ -5,18 +5,40 @@ import DataTable from "react-data-table-component";
 import Sidebar from "../../../components/dashboard/Sidebar";
 import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import Modal from "../../../components/dashboard/Modal";
-import useGetAllUsers from "../../../app/services/projects/useGetAllUsers";
-import AddUserForm from "../../../components/dashboard/AddUserForm";
+import useGetAllUsers from "../../../app/services/users/useGetAllUsers";
+import AddUserForm from "../../../components/dashboard/modals/AddUserForm";
 import { DashboardContainer } from "./AdminDashboardStyles";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 import editButton from "../../../assets/dashboard/EditButton.svg";
 import ActionButton from "../../../components/button/ActionButton";
 import TableMobile from "../../../components/dashboard/TableMobile";
+import ToggleUserType from "../../../components/dashboard/ToggleUserType";
 
 const Dashboard = () => {
-  const { userList, loading } = useGetAllUsers();
   const [openAddUserForm, setOpenAddUserForm] = useState(false);
 
+  const [showUserOption, setShowUserOption] = useState(false);
+  const [userType, setUserType] = useState("user");
+  const toggleUser = () =>
+    showUserOption ? setShowUserOption(false) : setShowUserOption(true);
+
+  const [reloadCount, setReloadCount] = useState(0);
+  const reloadData = () => {
+    setReloadCount((prevKey) => prevKey + 1);
+  };
+
+  const { userList, loading } = useGetAllUsers(userType, reloadCount);
+
+  const handleSelectUser = (userType) => {
+    if (userType === "user") {
+      setUserType("user");
+    }
+    if (userType === "admin") {
+      setUserType("admin");
+    }
+    reloadData();
+    setShowUserOption(false);
+  };
   const handleOpenAddUserForm = () => {
     setOpenAddUserForm(true);
   };
@@ -75,7 +97,12 @@ const Dashboard = () => {
         <MobileAdminNav />
         <DashboardMain>
           <div className="navbar">
-            <h4>Type: User</h4>
+            <ToggleUserType
+              showUserOption={showUserOption}
+              toggleUser={toggleUser}
+              userType={userType}
+              handleSelectUser={handleSelectUser}
+            />
             <ActionButton
               text="Add New User"
               handleAction={handleOpenAddUserForm}
@@ -90,11 +117,7 @@ const Dashboard = () => {
               progressPending={loading}
             />
           </TableContainer>
-          {loading ? (
-            <h3 style={{ textAlign: "center" }}>Loading...</h3>
-          ) : (
-            <TableMobile list={userList} />
-          )}
+          {loading ? null : <TableMobile list={userList} />}
         </DashboardMain>
       </DashboardContainer>
     </>

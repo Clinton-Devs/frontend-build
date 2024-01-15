@@ -53,6 +53,7 @@ const AddFloorPlan = ({ unitId }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const addFloorPlan = () => {
+    setAddingFloorPlan(true);
     const formdata = { fileType: "floor-plan", images: uploadedFloorPlanUrl };
 
     http
@@ -68,6 +69,7 @@ const AddFloorPlan = ({ unitId }) => {
       .catch((error) => {
         console.log(error);
         toast.error(error.response.data.message || "An Error Occured");
+        setAddingFloorPlan(false);
       });
   };
 
@@ -89,9 +91,7 @@ const AddFloorPlan = ({ unitId }) => {
         </div>
       </AddImagesContainer>
       <AddImagesContainer>
-        {uploadedFloorPlan.length === 0 ? (
-          <h3>No Images available</h3>
-        ) : (
+        {uploadedFloorPlan.length > 0 && (
           <CardsWrapper>
             {uploadedFloorPlan.map((image, index) => {
               return (

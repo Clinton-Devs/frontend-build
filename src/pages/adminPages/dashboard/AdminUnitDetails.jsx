@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef } from "react";
 import env from "../../../env";
+import styled from "styled-components";
+import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
 import Spinner from "../../../assets/common/spinner.svg";
 import { useNavigate, useParams } from "react-router-dom";
-import DataTable from "react-data-table-component";
-import ProjectUnitTable from "../../../components/dashboard/TableMobile/ProjectUnitTable";
 import {
   DashboardContainer,
   DashboardMain,
@@ -17,40 +17,90 @@ import {
 import AddUnitVideos from "../../../components/dashboard/AddUnitVideos";
 import { CardsWrapper } from "../../userPages/dashboardStyles";
 import editButton from "../../../assets/dashboard/EditButton.svg";
+import updateButton from "../../../assets/dashboard/updateIcon.svg";
 import ActionButton from "../../../components/button/ActionButton";
 import uploadButton from "../../../assets/common/upload.svg";
 import Notification from "../../../components/Notification";
 import toast from "react-hot-toast";
 import Sidebar from "../../../components/dashboard/Sidebar";
 import InputCommon from "../../../components/inputField/InputCommon";
-import TextArea from "../../../components/inputField/TextArea";
 import ButtonCommon from "../../../components/button/ButtonCommon";
-import useGetOneUnit from "../../../app/services/projects/useGetOneUnit";
-import useGetUnitUser from "../../../app/services/projects/useGetUnitUser";
-import useGetAllTransactions from "../../../app/services/projects/useGetAllTransactions";
+import useGetOneUnit from "../../../app/services/units/useGetOneUnit";
+import useGetUnitUser from "../../../app/services/users/useGetUnitUser";
+import useGetUnitTransactions from "../../../app/services/Transactions/useGetUnitTransactions";
 import { useDropzone } from "react-dropzone";
 import InputCommonWithIcon from "../../../components/inputField/InputCommonWithIcon";
 import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
-import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
+import Modal from "../../../components/dashboard/Modal";
+import AssignUserForm from "../../../components/dashboard/modals/AssignUserForm";
+import UpdatePaymentForm from "../../../components/dashboard/modals/updatePaymentForm";
+import AssignAdminForm from "../../../components/dashboard/modals/AssignAdminForm";
+import DataTable from "react-data-table-component";
+import ProjectUnitTable from "../../../components/dashboard/TableMobile/ProjectUnitTable";
+import UnitTransactionsTable from "../../../components/dashboard/TableMobile/UnitTransactionsTable";
+
+import ProjectGallery from "../../../components/gallery/ProjectGallery";
+import useGetOneProject from "../../../app/services/projects/useGetOneProject";
+import UnitGallery from "../../../components/gallery/UnitGallery";
 
 const AdminUnitDetails = () => {
   const navigate = useNavigate();
   const { unitId } = useParams();
-  const { loading, unitDetail, floorPlanImages, unitVideos } =
-    useGetOneUnit(unitId);
-  const { userLoading, userDetail } = useGetUnitUser(unitId);
-  const { transactionLoading, transactionList } = useGetAllTransactions();
+
+  const [reloadCount, setReloadCount] = useState(0);
+  const { loading, unitDetail, floorPlanImages, unitVideos } = useGetOneUnit(
+    unitId,
+    reloadCount
+  );
+
+  const { userLoading, userDetail, ownedUnitId } = useGetUnitUser(
+    unitId,
+    reloadCount
+  );
+
+  const triggerReload = () => {
+    setReloadCount((prevKey) => prevKey + 1);
+  };
+
+  const { transactionLoading, unitTransactionList } =
+    useGetUnitTransactions(unitId);
 
   const [readOnly, setReadOnly] = useState(true);
   const [coverImage, setCoverImage] = useState(null);
   const [coverImageUrl, setCoverImageUrl] = useState("");
-
   const [newUnitName, setNewUnitName] = useState("");
   const [newNoOfRooms, setNewNoOfRooms] = useState("");
   const [newNoOfBathRooms, setNewNoOfBathRooms] = useState("");
   const [newPrice, setNewPrice] = useState("");
   const [newPaymentPlan, setNewPaymentPlan] = useState("");
   const [updatingUnit, setUpdatingUnit] = useState(false);
+
+  //FOR ASSIGN USER MODAL
+  const [openAssignUserForm, setOpenAssignUserForm] = useState(false);
+  const handleOpenAssignUserForm = () => {
+    setOpenAssignUserForm(true);
+  };
+  const handleCloseAssignUserForm = () => {
+    setOpenAssignUserForm(false);
+  };
+
+  //FOR ASSIGN ADMIN MODAL
+  const [openAssignAdminForm, setOpenAssignAdminForm] = useState(false);
+  const handleOpenAssignAdminForm = () => {
+    setOpenAssignAdminForm(true);
+  };
+  const handleCloseAssignAdminForm = () => {
+    setOpenAssignAdminForm(false);
+  };
+
+  //FOR UPATE PAYMENT MODAL
+  const [openUpdatePaymentForm, setOpenUpdatePaymentForm] = useState(false);
+  const handleOpenUpdatePaymentForm = () => {
+    setOpenUpdatePaymentForm(true);
+  };
+  const handleCloseUpdatePaymentForm = () => {
+    setOpenUpdatePaymentForm(false);
+  };
 
   const videoRef = useRef(null);
 
@@ -121,12 +171,75 @@ const AdminUnitDetails = () => {
         toast.error(error.response.data.message || "An Error Occured");
         setUpdatingUnit(false);
       });
-
-    // console.log(formdata);
   };
+
+  //FOR TRANSACTION TABLE
+  const columns = [
+    {
+      name: "",
+      selector: (row, index) => index + 1,
+      grow: 0.2,
+    },
+    {
+      name: "Title",
+      selector: (row) => row.txTitle,
+      grow: 2,
+    },
+    {
+      name: "Amount Paid",
+      selector: (row) => row.amount,
+    },
+
+    {
+      name: "Date",
+      selector: (row) => row.date,
+      grow: 0.5,
+    },
+  ];
 
   return (
     <>
+      <Modal
+        modalOpenCondition={openAssignUserForm}
+        headerPrimaryText="Add User"
+        isFullWidth={true}
+        maxWidth="sm"
+        handleClose={handleCloseAssignUserForm}
+      >
+        <AssignUserForm
+          unitId={unitId}
+          triggerReload={triggerReload}
+          handleClose={handleCloseAssignUserForm}
+        />
+      </Modal>
+
+      <Modal
+        modalOpenCondition={openUpdatePaymentForm}
+        headerPrimaryText="Update Payment"
+        isFullWidth={true}
+        maxWidth="sm"
+        handleClose={handleCloseUpdatePaymentForm}
+      >
+        <UpdatePaymentForm
+          ownedUnitId={ownedUnitId}
+          triggerReload={triggerReload}
+          handleClose={handleCloseUpdatePaymentForm}
+        />
+      </Modal>
+
+      <Modal
+        modalOpenCondition={openAssignAdminForm}
+        headerPrimaryText="Add Admin"
+        isFullWidth={true}
+        maxWidth="sm"
+        handleClose={handleCloseAssignAdminForm}
+      >
+        <AssignAdminForm
+          unitId={unitId}
+          triggerReload={triggerReload}
+          handleClose={handleCloseAssignAdminForm}
+        />
+      </Modal>
       <DashboardContainer>
         <Notification />
         <Sidebar />
@@ -165,6 +278,7 @@ const AdminUnitDetails = () => {
             )}
           </div>
 
+          {/* UNIT DETAIL */}
           <FormContainer>
             <InputCommon
               placeholder={`Name: ${
@@ -201,6 +315,7 @@ const AdminUnitDetails = () => {
               marginBottom="24px"
               value={newPrice}
               onChange={(e) => setNewPrice(e.target.value)}
+              disabled={readOnly}
             />
             <InputCommon
               placeholder={`Payment Plan: ${
@@ -209,6 +324,7 @@ const AdminUnitDetails = () => {
               marginBottom="24px"
               value={newPaymentPlan}
               onChange={(e) => setNewPaymentPlan(e.target.value)}
+              disabled={readOnly}
             />
 
             <div {...getRootProps()}>
@@ -220,6 +336,7 @@ const AdminUnitDetails = () => {
                   placeholder={coverImage ? coverImage.name : "Upload Image"}
                   icon={uploadButton}
                   marginBottom={"32px"}
+                  disabled={readOnly}
                 />
               )}
             </div>
@@ -235,94 +352,172 @@ const AdminUnitDetails = () => {
             </div>
           </FormContainer>
 
-          {userDetail.length > 0 && (
-            <FormContainer>
-              <h4>User</h4>
-              <InputCommon
-                placeholder={`Name: ${
-                  loading
-                    ? "fetching..."
-                    : `${userDetail[0].ownerId.firstName} ${userDetail[0].ownerId.lastName}`
-                }`}
-                marginBottom="24px"
-                disabled={readOnly}
-                value={newUnitName}
-                onChange={(e) => setNewUnitName(e.target.value)}
-              />
-              <InputCommon
-                placeholder={`Email: ${
-                  loading ? "fetching..." : userDetail[0].ownerId.email
-                }`}
-                marginBottom="24px"
-                disabled={readOnly}
-                value={newNoOfRooms}
-                onChange={(e) => setNewNoOfRooms(e.target.value)}
-              />
-              <InputCommon
-                placeholder={`Price Paid: ${
-                  loading ? "fetching..." : userDetail[0].pricePaid
-                }`}
-                marginBottom="24px"
-                disabled={readOnly}
-                value={newNoOfBathRooms}
-                onChange={(e) => setNewNoOfBathRooms(e.target.value)}
-              />
+          {/* USER DETAIL */}
+          <FormContainer>
+            <div className="form-header">
+              <h4 style={{ marginBottom: "0px" }}>User</h4>
 
-              <InputCommon
-                placeholder={`New Price Paid: ${
-                  loading ? "fetching..." : userDetail[0].recentPayment
-                }`}
-                marginBottom="24px"
-                value={newPrice}
-                onChange={(e) => setNewPrice(e.target.value)}
-              />
-            </FormContainer>
-          )}
-
-          <AddImagesContainer>
-            <div className="header-wrapper">
-              <h3>Floor Plan</h3>
+              {!userDetail[0] && (
+                <ActionButton
+                  text="Add User"
+                  handleAction={handleOpenAssignUserForm}
+                />
+              )}
             </div>
-            {floorPlanImages.length === 0 ? (
-              <h3>No Images Available</h3>
-            ) : (
-              <CardsWrapper>
-                {floorPlanImages.map((image, index) => {
-                  return (
-                    <ImageContainer>
-                      <img src={image.url} alt={`Project Image -${index}`} />
-                    </ImageContainer>
-                  );
-                })}
-              </CardsWrapper>
-            )}
-          </AddImagesContainer>
 
-          <AddImagesContainer>
-            <AddUnitVideos unitId={unitId} />
-            {unitVideos.length === 0 ? (
-              <h3>No Videos Available</h3>
+            {userDetail.length < 1 ? (
+              <>
+                {userLoading ? (
+                  <h3 style={{ textAlign: "center", color: "#ededed" }}>
+                    No user assigned
+                  </h3>
+                ) : (
+                  <h3 style={{ textAlign: "center", color: "#ededed" }}>
+                    No user assigned
+                  </h3>
+                )}
+              </>
             ) : (
-              <CardsWrapper>
-                {unitVideos.map((video, index) => {
-                  return (
-                    <ImageContainer>
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        onClick={handleVideoClick}
-                        ref={videoRef}
-                      >
-                        <source src={video.url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </ImageContainer>
-                  );
-                })}
-              </CardsWrapper>
+              <>
+                <InputCommon
+                  placeholder={`Name: ${
+                    loading
+                      ? "fetching..."
+                      : `${userDetail[0].ownerId.firstName} ${userDetail[0].ownerId.lastName}`
+                  }`}
+                  marginBottom="24px"
+                  disabled={readOnly}
+                />
+                <InputCommon
+                  placeholder={`Email: ${
+                    loading ? "fetching..." : userDetail[0].ownerId.email
+                  }`}
+                  marginBottom="24px"
+                  disabled={readOnly}
+                />
+                {userDetail[0].phoneNumber && (
+                  <InputCommon
+                    placeholder={`Phone Number: ${
+                      loading ? "fetching..." : userDetail[0].phoneNumer
+                    }`}
+                    marginBottom="24px"
+                    disabled={readOnly}
+                  />
+                )}
+
+                <InputCommon
+                  placeholder={`Price Paid: ${
+                    loading ? "fetching..." : userDetail[0].pricePaid
+                  }`}
+                  marginBottom="24px"
+                  disabled={readOnly}
+                />
+
+                <InputCommonWithIcon
+                  placeholder={`New Price Paid: ${
+                    loading ? "fetching..." : userDetail[0].recentPayment
+                  }`}
+                  marginBottom="24px"
+                  disabled={readOnly}
+                  icon={updateButton}
+                  onClickIcon={handleOpenUpdatePaymentForm}
+                />
+              </>
             )}
-          </AddImagesContainer>
+          </FormContainer>
+
+          {/* {userLoading ? (
+            <FormContainer>
+              <h3 style={{ textAlign: "center", color: "#ededed" }}>
+                Fetching user details...
+              </h3>
+            </FormContainer>
+          ) : } */}
+
+          {/* ADMIN */}
+          <FormContainer>
+            <div className="form-header">
+              <h4 style={{ marginBottom: "0px" }}>Admin</h4>
+
+              {!unitDetail[0]?.projectManager && (
+                <ActionButton
+                  text="Add Admin"
+                  handleAction={handleOpenAssignAdminForm}
+                />
+              )}
+            </div>
+
+            {unitDetail[0]?.projectManager ? (
+              <>
+                <InputCommon
+                  placeholder={`Name: ${
+                    loading
+                      ? "fetching..."
+                      : `${unitDetail[0]?.projectManager.firstName} ${unitDetail[0]?.projectManager.lastName}`
+                  }`}
+                  marginBottom="24px"
+                  disabled={readOnly}
+                />
+                <InputCommon
+                  placeholder={`Email: ${
+                    loading
+                      ? "fetching..."
+                      : `${unitDetail[0]?.projectManager.email}`
+                  }`}
+                  marginBottom="24px"
+                  disabled={readOnly}
+                />
+                {unitDetail[0]?.projectManager.email && (
+                  <InputCommon
+                    placeholder={`Phone: ${
+                      loading
+                        ? "fetching..."
+                        : `${unitDetail[0]?.projectManager.phoneNumber}`
+                    }`}
+                    marginBottom="24px"
+                    disabled={readOnly}
+                  />
+                )}
+              </>
+            ) : (
+              <h3 style={{ textAlign: "center", color: "#ededed" }}>
+                {loading ? "Fetching Admin Details" : "No Admin assigned"}
+              </h3>
+            )}
+          </FormContainer>
+
+          {/* TRANSACTIONS */}
+          <FormContainer>
+            <SectionHeader>
+              <h4 style={{ marginBottom: "0px" }}>Unit Transactions</h4>
+            </SectionHeader>
+            <TableContainer>
+              {" "}
+              <DataTable
+                data={unitTransactionList}
+                columns={columns}
+                customStyles={dashboardTableSyles}
+                noDataComponent={
+                  <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                    No transactions found
+                  </h3>
+                }
+                // progressPending={loading}
+              />
+            </TableContainer>
+
+            {loading ? (
+              <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                Loading...
+              </h3>
+            ) : (
+              <UnitTransactionsTable list={unitTransactionList} />
+            )}
+          </FormContainer>
+
+          {/* IMAGES AND VIDEO */}
+          <UnitGallery unitId={unitId} fileType="floor-plan" />
+          <UnitGallery unitId={unitId} fileType="unit-video" />
         </DashboardMain>
       </DashboardContainer>
     </>
@@ -330,3 +525,9 @@ const AdminUnitDetails = () => {
 };
 
 export default AdminUnitDetails;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;

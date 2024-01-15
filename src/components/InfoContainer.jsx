@@ -20,6 +20,7 @@ export default InfoContainer;
 
 const Container = styled.div`
   padding: 24px;
+  background-color: #fff;
 
   .title-container {
     display: flex;

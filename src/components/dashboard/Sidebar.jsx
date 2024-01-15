@@ -30,7 +30,8 @@ const Sidebar = () => {
           </li>
           <li
             className={`${
-              location.pathname.includes("/admin-dashboard/projects") &&
+              (location.pathname.includes("/admin-dashboard/projects") ||
+                location.pathname.includes("/admin-dashboard/units")) &&
               "active"
             }`}
             onClick={() => navigate("/admin-dashboard/projects")}
@@ -42,7 +43,7 @@ const Sidebar = () => {
             className={`${
               location.pathname === "/admin-dashboard/messages" && "active"
             }`}
-            // onClick={() => navigate("/admin-dashboard/messages")}
+            onClick={() => navigate("/admin-dashboard/messages")}
           >
             <img src={messageIcon} alt="" style={{ marginRight: "10px" }} />
             Messages
@@ -64,6 +65,7 @@ const SidebarStyle = styled.div`
   }
 
   .sidebar-container {
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-import { http } from "../../app/services/axios-https";
-import env from "../../env";
-import InputCommon from "../inputField/InputCommon";
-import SelectCommon from "../inputField/SelectCommon";
-import ButtonCommon from "../button/ButtonCommon";
-import Notification from "../Notification";
-import spinner from "../../assets/common/spinner.svg";
+import { http } from "../../../app/services/axios-https";
+import env from "../../../env";
+import InputCommon from "../../inputField/InputCommon";
+import SelectCommon from "../../inputField/SelectCommon";
+import ButtonCommon from "../../button/ButtonCommon";
+import Notification from "../../Notification";
+import spinner from "../../../assets/common/spinner.svg";
 import toast from "react-hot-toast";
 
 const AddUserForm = () => {
@@ -49,6 +49,7 @@ const AddUserForm = () => {
   };
 
   const makeAdmin = () => {
+    setAddingUser(true);
     const formdata = {
       firstName,
       lastName,
@@ -62,9 +63,11 @@ const AddUserForm = () => {
         // console.log(response);
         toast.success("Admin Created");
         clearFields();
+        setAddingUser(false);
       })
       .catch((error) => {
         // console.log(error);
+        setAddingUser(false);
         toast.error(error.response.data.message || "An Error Occured");
       });
   };

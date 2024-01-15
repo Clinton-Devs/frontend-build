@@ -3,14 +3,19 @@ import { useState, useEffect } from "react";
 import env from "../../../env";
 import { http } from "../axios-https";
 
-const useGetAllUsers = () => {
+import { buildQuery } from "../../../utils/styles/buildQuery";
+
+const useGetAllUsers = (type, reloadProp) => {
   const [loading, setLoading] = useState(false);
   const [userList, setUserList] = useState([]);
 
-  const getAllProjects = () => {
+  const getAllUsers = () => {
+    const userQuery = { type: type };
     setLoading(true);
     http
-      .get(`${env.clinton_homes_base_url}/admin/all-users`)
+      .get(
+        `${env.clinton_homes_base_url}/admin/all-users?${buildQuery(userQuery)}`
+      )
       .then((response) => {
         const users = response.data.data;
         const usersData = users.map((user) => {
@@ -29,8 +34,8 @@ const useGetAllUsers = () => {
   };
 
   useEffect(() => {
-    getAllProjects();
-  }, []);
+    getAllUsers();
+  }, [reloadProp]);
 
   return { userList, loading };
 };

@@ -25,7 +25,9 @@ const AdminProjects = () => {
           >
             <CardsWrapper>
               {loading ? (
-                <h3>Loading...</h3>
+                <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                  Loading...
+                </h3>
               ) : (
                 projectList.map(
                   (project) =>
@@ -50,7 +52,9 @@ const AdminProjects = () => {
           <InfoContainer title="Completed Projects">
             <CardsWrapper>
               {loading ? (
-                <h3>Loading...</h3>
+                <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                  Loading...
+                </h3>
               ) : (
                 projectList.map(
                   (project) =>

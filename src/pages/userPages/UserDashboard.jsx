@@ -4,44 +4,22 @@ import styled from "styled-components";
 import InfoCard from "../../components/dashboard/InfoCard";
 import InfoContainer from "../../components/InfoContainer";
 import DataTable from "react-data-table-component";
+import bed from "../../assets/dashboard/bed-icon.svg";
 import MobileAdminNav from "../../components/navbar/MobileAdminNav";
 import { CardsWrapper } from "./dashboardStyles";
 import env from "../../env";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
 
 import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
+import useGetUserOwnedUnit from "../../app/services/units/useGetUserOwnedUnit";
+import useGetUserTransactions from "../../app/services/Transactions/useGetUserTransactions";
 
 //move to services where you will feetch it from
 
 const user = env.getUser();
-const data = [
-  {
-    id: "56789",
-    name: "Payment for Mintar Apartment, Lagos Nigeria",
-    date: "22/02/2024",
-    amount: "N3.5m",
-  },
-  {
-    id: "56789",
-    name: "Payment for Mintar Apartment, Lagos Nigeria",
-    date: "22/02/2024",
-    amount: "N3.5m",
-  },
-  {
-    id: "56789",
-    name: "Payment for Mintar Apartment, Lagos Nigeria",
-    date: "22/02/2024",
-    amount: "N3.5m",
-  },
-  {
-    id: "56789",
-    name: "Payment for Mintar Apartment, Lagos Nigeria",
-    date: "22/02/2024",
-    amount: "N3.5m",
-  },
-];
-
 const UserDashboard = () => {
+  const { unitsLoading, ownedUnits } = useGetUserOwnedUnit();
+  const { transactionLoading, userTransactionList } = useGetUserTransactions();
   const { loading, projectList } = useGetAllProjects();
   const columns = [
     {
@@ -50,21 +28,25 @@ const UserDashboard = () => {
     },
     {
       name: "ID",
-      selector: (row) => row.id,
+      selector: (row) => row.txId,
     },
     {
       name: "Name",
-      selector: (row) => row.name,
-      grow: 3,
-    },
-    {
-      name: "Date",
-      selector: (row) => row.date,
+      selector: (row) => row.txTitle,
+      grow: 2,
     },
 
     {
       name: "Amount",
       selector: (row) => row.amount,
+    },
+    {
+      name: "Type",
+      selector: (row) => row.txType,
+    },
+    {
+      name: "Date",
+      selector: (row) => row.date,
     },
   ];
 
@@ -73,20 +55,49 @@ const UserDashboard = () => {
       <DashboardNav />
 
       <Welcome>
-        <h3>Welcome {user.firstName}</h3>
-        <p>You currently have (0) properties</p>
+        <h3 onClick={() => console.log(ownedUnits)}>
+          Welcome {user.firstName}
+        </h3>
+        <p>You currently have ({ownedUnits.length}) properties</p>
       </Welcome>
 
-      <InfoContainer title="My Properties">
-        <CardsWrapper></CardsWrapper>
-      </InfoContainer>
+      {ownedUnits && (
+        <InfoContainer title="My Properties">
+          <CardsWrapper>
+            {unitsLoading ? (
+              <h3>Loading...</h3>
+            ) : (
+              ownedUnits?.map((unit) => {
+                return (
+                  <InfoCard
+                    linkToMessage="/messages"
+                    ownedUnitId={unit._id}
+                    name={unit.unitId.name}
+                    imgSrc={unit.unitId.image}
+                    tagInfo={
+                      <Tag>
+                        <img src={bed} alt="" />
+                        {unit.unitId.numberOfRooms}
+                      </Tag>
+                    }
+                    // location={project.location}
+                    link={`/projects/units/${unit.unitId._id}`}
+                  />
+                );
+              })
+            )}
+          </CardsWrapper>
+          <br />
+        </InfoContainer>
+      )}
 
       <InfoContainer title="Recent Transactions">
         <div style={{ padding: "16px", backgroundColor: "#fafafa" }}>
           <DataTable
-            data={[]}
+            data={userTransactionList}
             columns={columns}
             customStyles={dashboardTableSyles}
+            progressPending={transactionLoading}
             noDataComponent={<h4>No Transactions Available</h4>}
           />
         </div>
@@ -103,7 +114,11 @@ const UserDashboard = () => {
                   <InfoCard
                     name={project.name}
                     imgSrc={project.image}
-                    tagInfo="10 Units"
+                    tagInfo={
+                      project["unit count"].length === 0
+                        ? "0 Units"
+                        : `${project["unit count"][0].count} units`
+                    }
                     location={project.location}
                     link={`/projects/${project._id}`}
                   />
@@ -139,4 +154,9 @@ const Welcome = styled.div`
     line-height: normal;
     letter-spacing: 0.016px;
   }
+`;
+
+const Tag = styled.div`
+  display: flex;
+  gap: 6px;
 `;

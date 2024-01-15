@@ -47,7 +47,7 @@ const TableMobile = ({ list }) => {
       ) : (
         list.map((item, index) => {
           return (
-            <div className="table-item-wrapper">
+            <div className="table-item-wrapper" key={index + 1}>
               <p>{index + 1}</p>
               <div className="table-item">
                 <TableMobileItem

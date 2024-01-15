@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import env from "../../../env";
 import { http } from "../axios-https";
 
-const useGetOneProject = (projectId) => {
+const useGetOneProject = (projectId, reloadProp) => {
   const [loading, setLoading] = useState(false);
   const [projectDetail, setProjectDetail] = useState([]);
   const [projectImages, setProjectImages] = useState([]);
@@ -31,7 +31,7 @@ const useGetOneProject = (projectId) => {
 
   useEffect(() => {
     getOneProject();
-  }, []);
+  }, [reloadProp]);
 
   return {
     loading,
