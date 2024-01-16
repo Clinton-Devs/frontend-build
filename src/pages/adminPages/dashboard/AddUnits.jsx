@@ -12,9 +12,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../../assets/common/spinner.svg";
 import env from "../../../env";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
+import { DashboardContainer } from "./AdminDashboardStyles";
 
 import { useDropzone } from "react-dropzone";
-import Add3DImages from "../../../components/dashboard/Add3DImages";
 import AddUnitVideos from "../../../components/dashboard/AddUnitVideos";
 
 const AddUnits = () => {
@@ -182,11 +182,6 @@ const AddUnits = () => {
 };
 
 export default AddUnits;
-
-const DashboardContainer = styled.div`
-  display: grid;
-  grid-template-columns: 270px 1fr;
-`;
 
 const DashboardMain = styled.div`
   background-color: #fafafa;

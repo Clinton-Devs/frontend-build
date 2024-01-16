@@ -117,9 +117,9 @@ const UnitDetail = () => {
                 <img src={messageButton} alt="" onClick={() => goToMessage()} />
               </div>
               <div className="detail">
-                <div className="img-thumbnail">
+                {/* <div className="img-thumbnail">
                   <img src="" alt="" />
-                </div>
+                </div> */}
                 <div className="name">
                   <p>
                     {`${unitDetail[0]?.projectManager?.firstName} ${unitDetail[0]?.projectManager?.lastName}`}

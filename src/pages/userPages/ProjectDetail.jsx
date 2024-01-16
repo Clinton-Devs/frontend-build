@@ -145,7 +145,7 @@ const ProjectDetail = () => {
       <InfoContainer title="Project Videos">
         <CardsWrapper>
           {projectVideos.length === 0 ? (
-            <h3>No Vido Available</h3>
+            <h3>No Video Available</h3>
           ) : (
             projectVideos.map((video) => {
               return (

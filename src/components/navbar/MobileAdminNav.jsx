@@ -47,7 +47,12 @@ const MobileAdminNav = () => {
                 <MenuItemSelected></MenuItemSelected>
               )} */}
             </div>
-            <div className="menu-item">
+            <div
+              className={`menu-item ${
+                location.pathname.includes("messages") && "active"
+              }`}
+              onClick={() => selectActiveMenu("admin-dashboard/messages")}
+            >
               <img src={messageIcon} alt="" />
               {/* {location.pathname === "/projects" && (
                 <MenuItemSelected></MenuItemSelected>

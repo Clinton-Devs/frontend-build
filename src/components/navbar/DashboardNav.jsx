@@ -82,6 +82,7 @@ const Nav = styled.nav`
       border-right: 1px solid #e2e4ed;
       display: flex;
       gap: 24px;
+      cursor: pointer;
     }
 
     p {

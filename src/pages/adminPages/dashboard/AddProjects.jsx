@@ -12,8 +12,10 @@ import Spinner from "../../../assets/common/spinner.svg";
 import { http, httpCloudinary } from "../../../app/services/axios-https";
 import env from "../../../env";
 import { useDropzone } from "react-dropzone";
+import { DashboardContainer, FormContainer } from "./AdminDashboardStyles";
 import Notification from "../../../components/Notification";
 import toast from "react-hot-toast";
+import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import { useNavigate } from "react-router-dom";
 
 const AddProjects = () => {
@@ -84,7 +86,7 @@ const AddProjects = () => {
       <DashboardContainer>
         <Notification />
         <Sidebar />
-
+        <MobileAdminNav />
         <DashboardMain>
           <div className="navbar">
             <Title>
@@ -187,11 +189,6 @@ const AddProjects = () => {
 
 export default AddProjects;
 
-const DashboardContainer = styled.div`
-  display: grid;
-  grid-template-columns: 270px 1fr;
-`;
-
 const DashboardMain = styled.div`
   background-color: #fafafa;
   .navbar {
@@ -230,26 +227,6 @@ const DashboardMain = styled.div`
         margin-right: 8px;
       }
     }
-  }
-`;
-
-const FormContainer = styled.div`
-  padding: 24px;
-  background-color: rgba(255, 255, 255, 1);
-  width: 70%;
-  margin: 0px auto 104px auto;
-`;
-
-const ImagesContainer = styled.div`
-  background-color: #fff;
-  margin: 100px auto 20px auto;
-  width: 80%;
-
-  height: 300px;
-
-  .container-header {
-    display: flex;
-    justify-content: space-between;
   }
 `;
 
