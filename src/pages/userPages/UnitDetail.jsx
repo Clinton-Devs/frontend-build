@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
-
+import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import InfoContainer from "../../components/InfoContainer";
 import PlayButton from "../../assets/common/play-button.svg";
@@ -74,28 +74,120 @@ const UnitDetail = () => {
           </Title>
         }
       >
-        <ProjectMainImages>
-          <img src={unitDetail[0]?.image} alt="" className="left" />
-          <img src={unitDetail[0]?.image} alt="" className="right-top" />
-          <img src={unitDetail[0]?.image} alt="" className="right-bottom" />
-        </ProjectMainImages>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <ProjectMainImages>
+              <img src={unitDetail[0]?.image} alt="" className="left" />
+              <img src={unitDetail[0]?.image} alt="" className="right-top" />
+              <img src={unitDetail[0]?.image} alt="" className="right-bottom" />
+            </ProjectMainImages>
 
-        <Grid>
-          <OverviewContainer>
-            <Overview>
-              <div className="title">
-                <h4>{unitDetail[0]?.name}</h4>
-                <p>{unitDetail[0]?.price}</p>
-              </div>
+            <Grid>
+              <OverviewContainer>
+                <Overview>
+                  <div className="title">
+                    <h4>{unitDetail[0]?.name}</h4>
+                    <p>{unitDetail[0]?.price}</p>
+                  </div>
 
-              <div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Nulla distinctio similique ea modi sed necessitatibus nobis
-                  cupiditate deserunt at suscipit.
-                </p>
-              </div>
-            </Overview>
+                  <div>
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                      Nulla distinctio similique ea modi sed necessitatibus
+                      nobis cupiditate deserunt at suscipit.
+                    </p>
+                  </div>
+                </Overview>
+
+                <Description>
+                  <h3>Description</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Assumenda deserunt est provident excepturi consequatur
+                    necessitatibus non, iste cum voluptas amet. m ipsum dolor
+                    sit amet consectetur adipisicing elit. Assumenda deserunt
+                    est provident excepturi consequatur necessitatibus non, iste
+                    cum voluptas .
+                  </p>
+                </Description>
+              </OverviewContainer>
+
+              {unitDetail[0]?.projectManager && (
+                <PropertyManager>
+                  <div className="title">
+                    <h4>Property Manager</h4>
+                    <img
+                      src={messageButton}
+                      alt=""
+                      onClick={() => goToMessage()}
+                    />
+                  </div>
+                  <div className="detail">
+                    {/* <div className="img-thumbnail">
+                  <img src="" alt="" />
+                </div> */}
+                    <div className="name">
+                      <p>
+                        {`${unitDetail[0]?.projectManager?.firstName} ${unitDetail[0]?.projectManager?.lastName}`}
+                      </p>
+                      <p>Property Manager</p>
+                    </div>
+                  </div>
+                </PropertyManager>
+              )}
+            </Grid>
+          </>
+        )}
+      </InfoContainer>
+
+      <InfoContainer title="Payment Plan">
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <p>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia
+              repellendus placeat voluptatem, incidunt hic minima dolorum nobis
+              sit veritatis voluptatum!
+            </p>
+
+            <div style={{ marginTop: "72px" }}>
+              <img src={PayButton} alt="" />
+            </div>
+          </>
+        )}
+      </InfoContainer>
+
+      <InfoContainer title="Floor Plan">
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <CardsWrapper>
+              {floorPlanImages.length === 0 ? (
+                <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                  No Images Available
+                </h3>
+              ) : (
+                floorPlanImages.map((image) => {
+                  return (
+                    <div style={{ height: "250px" }}>
+                      <img
+                        src={image.url}
+                        alt=""
+                        style={{
+                          height: "100%",
+                          width: "100%",
+                          maxWidth: "100%",
+                        }}
+                      />
+                    </div>
+                  );
+                })
+              )}
+            </CardsWrapper>
 
             <Description>
               <h3>Description</h3>
@@ -108,94 +200,43 @@ const UnitDetail = () => {
                 voluptas .
               </p>
             </Description>
-          </OverviewContainer>
-
-          {unitDetail[0]?.projectManager && (
-            <PropertyManager>
-              <div className="title">
-                <h4>Property Manager</h4>
-                <img src={messageButton} alt="" onClick={() => goToMessage()} />
-              </div>
-              <div className="detail">
-                {/* <div className="img-thumbnail">
-                  <img src="" alt="" />
-                </div> */}
-                <div className="name">
-                  <p>
-                    {`${unitDetail[0]?.projectManager?.firstName} ${unitDetail[0]?.projectManager?.lastName}`}
-                  </p>
-                  <p>Property Manager</p>
-                </div>
-              </div>
-            </PropertyManager>
-          )}
-        </Grid>
-      </InfoContainer>
-
-      <InfoContainer title="Payment Plan">
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia
-          repellendus placeat voluptatem, incidunt hic minima dolorum nobis sit
-          veritatis voluptatum!
-        </p>
-
-        <div style={{ marginTop: "72px" }}>
-          <img src={PayButton} alt="" />
-        </div>
-      </InfoContainer>
-
-      <InfoContainer title="Floor Plan">
-        <CardsWrapper>
-          {floorPlanImages.length === 0 ? (
-            <h3>No Images Available</h3>
-          ) : (
-            floorPlanImages.map((image) => {
-              return (
-                <div>
-                  <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
-                </div>
-              );
-            })
-          )}
-        </CardsWrapper>
-
-        <Description>
-          <h3>Description</h3>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda
-            deserunt est provident excepturi consequatur necessitatibus non,
-            iste cum voluptas amet. m ipsum dolor sit amet consectetur
-            adipisicing elit. Assumenda deserunt est provident excepturi
-            consequatur necessitatibus non, iste cum voluptas .
-          </p>
-        </Description>
+          </>
+        )}
       </InfoContainer>
 
       <InfoContainer title="Unit Videos">
-        <CardsWrapper>
-          {unitVideos.length === 0 ? (
-            <h3>No Video Available</h3>
-          ) : (
-            unitVideos.map((video) => {
-              return (
-                <ImageContainer>
-                  <Play onClick={handleVideoClick}>
-                    <img src={PlayButton} alt="play_button" />
-                  </Play>
-                  <video muted onClick={handleVideoClick} ref={videoRef}>
-                    <source src={video.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </ImageContainer>
-              );
-            })
-          )}
-        </CardsWrapper>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <CardsWrapper>
+              {unitVideos.length === 0 ? (
+                <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                  No Video Available
+                </h3>
+              ) : (
+                unitVideos.map((video) => {
+                  return (
+                    <ImageContainer>
+                      <Play onClick={handleVideoClick}>
+                        <img src={PlayButton} alt="play_button" />
+                      </Play>
+                      <video muted onClick={handleVideoClick} ref={videoRef}>
+                        <source src={video.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </ImageContainer>
+                  );
+                })
+              )}
+            </CardsWrapper>
 
-        <Description>
-          <h3>Description</h3>
-          <p>{unitDetail[0]?.description}</p>
-        </Description>
+            <Description>
+              <h3>Description</h3>
+              <p>{unitDetail[0]?.description}</p>
+            </Description>
+          </>
+        )}
       </InfoContainer>
     </>
   );
@@ -312,9 +353,6 @@ const PropertyManager = styled.div`
   }
 
   .detail {
-    display: flex;
-    /* gap: 24px; */
-    justify-content: space-between;
     height: 108px;
     border-radius: 7px;
     margin-top: 30px;
@@ -326,12 +364,16 @@ const PropertyManager = styled.div`
 
     .name {
       margin: auto 0;
+      /* display: flex;
+      justify-content: center;
+      align-items: center; */
       p {
         color: #192861;
         font-size: 14px;
         font-weight: 500;
         line-height: 26px; /* 185.714% */
         letter-spacing: 0.014px;
+        text-align: center;
       }
     }
   }

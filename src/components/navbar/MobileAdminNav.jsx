@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Logo from "../../assets/common/clinton_logo.svg";
+import Logo from "../../assets/common/clinton_logo_original.svg";
 import userIcon from "../../assets/dashboard/user-multiple.svg";
 import projectsIcon from "../../assets/dashboard/house-01.svg";
 import messageIcon from "../../assets/dashboard/bubble-chat.png";
@@ -23,7 +23,7 @@ const MobileAdminNav = () => {
           onClick={() => selectActiveMenu("user-dashboard")}
           style={{ cursor: "pointer" }}
         >
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="" style={{ width: "130px" }} />
         </div>
 
         <div className="dashboard-menu-tray">

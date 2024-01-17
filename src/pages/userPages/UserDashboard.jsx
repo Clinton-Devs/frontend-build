@@ -5,7 +5,7 @@ import InfoCard from "../../components/dashboard/InfoCard";
 import InfoContainer from "../../components/InfoContainer";
 import DataTable from "react-data-table-component";
 import bed from "../../assets/dashboard/bed-icon.svg";
-import MobileAdminNav from "../../components/navbar/MobileAdminNav";
+import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
 import { CardsWrapper } from "./dashboardStyles";
 import env from "../../env";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
@@ -58,38 +58,41 @@ const UserDashboard = () => {
         <h3 onClick={() => console.log(ownedUnits)}>
           Welcome {user.firstName}
         </h3>
-        <p>You currently have ({ownedUnits.length}) properties</p>
+        <p>
+          You currently have ({ownedUnits.length ? ownedUnits.length : "0"})
+          properties
+        </p>
       </Welcome>
 
-      {ownedUnits && (
-        <InfoContainer title="My Properties">
-          <CardsWrapper>
-            {unitsLoading ? (
-              <h3>Loading...</h3>
-            ) : (
-              ownedUnits?.map((unit) => {
-                return (
-                  <InfoCard
-                    linkToMessage="/messages"
-                    ownedUnitId={unit._id}
-                    name={unit.unitId.name}
-                    imgSrc={unit.unitId.image}
-                    tagInfo={
-                      <Tag>
-                        <img src={bed} alt="" />
-                        {unit.unitId.numberOfRooms}
-                      </Tag>
-                    }
-                    // location={project.location}
-                    link={`/projects/units/${unit.unitId._id}`}
-                  />
-                );
-              })
-            )}
-          </CardsWrapper>
-          <br />
-        </InfoContainer>
-      )}
+      <InfoContainer title="My Properties">
+        <CardsWrapper>
+          {unitsLoading ? (
+            <Spinner />
+          ) : ownedUnits ? (
+            ownedUnits?.map((unit) => {
+              return (
+                <InfoCard
+                  linkToMessage="/messages"
+                  ownedUnitId={unit._id}
+                  name={unit.unitId.name}
+                  imgSrc={unit.unitId.image}
+                  tagInfo={
+                    <Tag>
+                      <img src={bed} alt="" />
+                      {unit.unitId.numberOfRooms}
+                    </Tag>
+                  }
+                  // location={project.location}
+                  link={`/projects/units/${unit.unitId._id}`}
+                />
+              );
+            })
+          ) : (
+            <h3>You currently have no properties</h3>
+          )}
+        </CardsWrapper>
+        <br />
+      </InfoContainer>
 
       <InfoContainer title="Recent Transactions">
         <div style={{ padding: "16px", backgroundColor: "#fafafa" }}>
@@ -98,7 +101,10 @@ const UserDashboard = () => {
             columns={columns}
             customStyles={dashboardTableSyles}
             progressPending={transactionLoading}
-            noDataComponent={<h4>No Transactions Available</h4>}
+            noDataComponent={
+              <h4 style={{ color: "e8e8e8" }}>No Transactions Available</h4>
+            }
+            progressComponent={<Spinner />}
           />
         </div>
       </InfoContainer>
@@ -106,7 +112,7 @@ const UserDashboard = () => {
       <InfoContainer title="Ongoing Projects">
         <CardsWrapper>
           {loading ? (
-            <h3>Loading...</h3>
+            <Spinner />
           ) : (
             projectList.map(
               (project) =>

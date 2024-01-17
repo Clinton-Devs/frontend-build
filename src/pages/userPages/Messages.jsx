@@ -6,17 +6,20 @@ import { http } from "../../app/services/axios-https";
 import env from "../../env";
 
 import ChatRooms from "../../components/messages/ChatRooms";
+import ChatRoomsMobile from "../../components/messages/ChatRoomsMobile";
 import MessageArea from "../../components/messages/MessageArea";
+import MessageAreaMobile from "../../components/messages/MessageAreaMobile";
 import useGetChatRooms from "../../app/services/messages/useGetChatRooms";
 
 const Messages = () => {
   const { userType } = env.getUser();
   const { state } = useLocation();
   const [roomId, setRoomId] = useState("");
+  const [showMobileMessage, setShowMobileMessage] = useState(false);
   const { chatRoomList, initialId } = useGetChatRooms();
   const [messageInput, setMessageInput] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
-
+  const [senderDetails, setSenderDetails] = useState("");
   const [reloadCount, setReloadCount] = useState(0);
   const triggerReload = () => {
     setReloadCount((prevKey) => prevKey + 1);
@@ -57,19 +60,21 @@ const Messages = () => {
     }
   }, [initialId]);
 
-  useEffect(() => {
-    console.log(state);
-  });
-
-  useEffect(() => {
-    console.log(userType);
-  }, []);
-
   return (
     <div>
       {userType === "user" && <DashboardNav />}
       <MessagesContainer userType={userType}>
         <ChatRooms updateRoomId={updateRoomId} roomId={roomId} />
+
+        {!showMobileMessage && (
+          <ChatRoomsMobile
+            updateRoomId={updateRoomId}
+            roomId={roomId}
+            setShowMobileMessage={setShowMobileMessage}
+            setSenderDetails={setSenderDetails}
+          />
+        )}
+
         <Divider userType={userType}></Divider>
         <MessageArea
           handleSendMessage={handleSendMessage}
@@ -78,6 +83,18 @@ const Messages = () => {
           setMessageInput={setMessageInput}
           reloadCount={reloadCount}
         />
+
+        {showMobileMessage && (
+          <MessageAreaMobile
+            handleSendMessage={handleSendMessage}
+            roomId={roomId}
+            messageInput={messageInput}
+            setMessageInput={setMessageInput}
+            reloadCount={reloadCount}
+            senderDetails={senderDetails}
+            setShowMobileMessage={setShowMobileMessage}
+          />
+        )}
       </MessagesContainer>
     </div>
   );
@@ -94,6 +111,10 @@ const MessagesContainer = styled.div`
   height: calc(100vh - 204px);
   ${({ userType }) => userType !== "user" && " height: 100vh;"}
   min-height: 500px;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const Divider = styled.div`
@@ -103,4 +124,8 @@ const Divider = styled.div`
   background-color: #eaecf0;
   min-height: 500px;
   margin: 24px 0px;
+
+  @media only screen and (max-width: 768px) {
+    display: none;
+  }
 `;

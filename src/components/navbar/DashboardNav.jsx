@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Logo from "../../assets/common/clinton_logo.svg";
+import Logo from "../../assets/common/clinton_logo_original.svg";
 import debitCard from "../../assets/dashboard/debit-card-icon.svg";
 import messageIcon from "../../assets/dashboard/message-icon-message.svg";
 import houseIcon from "../../assets/dashboard/house-icon.svg";
@@ -23,7 +23,7 @@ const DashboardNav = () => {
           onClick={() => selectActiveMenu("user-dashboard")}
           style={{ cursor: "pointer" }}
         >
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="" style={{ width: "130px" }} />
         </div>
 
         <div className="dashboard-menu-tray">
@@ -73,6 +73,11 @@ const Nav = styled.nav`
   position: relative;
   margin-bottom: 64px;
 
+  @media only screen and (max-width: 768px) {
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
   .dashboard-menu-tray {
     display: flex;
     align-items: center;
@@ -91,6 +96,10 @@ const Nav = styled.nav`
       font-weight: 500;
       line-height: 24px; /* 200% */
       letter-spacing: 0.012px;
+
+      @media only screen and (max-width: 768px) {
+        display: none;
+      }
     }
   }
 `;

@@ -13,7 +13,7 @@ const useGetChatRooms = () => {
     http
       .get(`${env.clinton_homes_base_url}/user/get-chat-rooms`)
       .then((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setChatRoomList([...response.data.data].reverse());
         setInitialId(response.data.data[response.data.data.length - 1]?._id); //last item is now first item
         setRoomsLoading(false);

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
-
+import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
 import InfoContainer from "../../components/InfoContainer";
 import InfoCard from "../../components/dashboard/InfoCard";
 import bed from "../../assets/dashboard/bed-icon.svg";
@@ -74,99 +74,141 @@ const ProjectDetail = () => {
               </svg>
             </div>
 
-            <p>{loading ? "---" : projectName}</p>
+            <p>{loading ? "" : projectName}</p>
           </Title>
         }
       >
-        {projectImages.length === 0 ? (
-          <h3>No Images Available</h3>
+        {loading ? (
+          <Spinner />
         ) : (
-          <ProjectMainImages>
-            <img src={projectImagesUrl[0]} alt="" className="left" />
-            <img src={projectImagesUrl[1]} alt="" className="right-top" />
-            <img src={projectImagesUrl[2]} alt="" className="right-bottom" />
-          </ProjectMainImages>
-        )}
+          <>
+            {projectImages.length === 0 ? (
+              <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                No Images Available
+              </h3>
+            ) : (
+              <ProjectMainImages>
+                <img src={projectImagesUrl[0]} alt="" className="left" />
+                <img src={projectImagesUrl[1]} alt="" className="right-top" />
+                <img
+                  src={projectImagesUrl[2]}
+                  alt=""
+                  className="right-bottom"
+                />
+              </ProjectMainImages>
+            )}
 
-        <Description>
-          <h3>Description</h3>
-          <p>{projectDetail[0]?.description}</p>
-        </Description>
+            <Description>
+              <h3>Description</h3>
+              <p>{projectDetail[0]?.description}</p>
+            </Description>
+          </>
+        )}
       </InfoContainer>
 
       <InfoContainer
-        title={`${projectName} - ${projectUnits.length} Unit${
-          projectUnits.length > 1 ? "s" : ""
-        }`}
+        title={
+          loading
+            ? ""
+            : `${projectName} - ${projectUnits.length} Unit${
+                projectUnits.length > 1 ? "s" : ""
+              }`
+        }
       >
-        <CardsWrapper>
-          {projectUnits.map((unit) => {
-            return (
-              <InfoCard
-                linkToMessage="/messages"
-                unitId={unit._id}
-                name={unit.name}
-                imgSrc={unit.image}
-                price={unit.price}
-                tagInfo={
-                  <Tag>
-                    <img src={bed} alt="" />
-                    {unit.numberOfRooms}
-                  </Tag>
-                }
-                link={`/projects/units/${unit._id}`}
-              />
-            );
-          })}
-        </CardsWrapper>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <CardsWrapper>
+              {projectUnits.map((unit) => {
+                return (
+                  <InfoCard
+                    linkToMessage="/messages"
+                    unitId={unit._id}
+                    name={unit.name}
+                    imgSrc={unit.image}
+                    price={unit.price}
+                    tagInfo={
+                      <Tag>
+                        <img src={bed} alt="" />
+                        {unit.numberOfRooms}
+                      </Tag>
+                    }
+                    link={`/projects/units/${unit._id}`}
+                  />
+                );
+              })}
+            </CardsWrapper>
+          </>
+        )}
       </InfoContainer>
 
       <InfoContainer title="3D Images">
-        <CardsWrapper>
-          {project3DImages.length === 0 ? (
-            <h3>No Images Available</h3>
-          ) : (
-            project3DImages.map((image) => {
-              return (
-                <div>
-                  <img src={image.url} alt="" style={{ maxWidth: "100%" }} />
-                </div>
-              );
-            })
-          )}
-        </CardsWrapper>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <CardsWrapper>
+              {project3DImages.length === 0 ? (
+                <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                  No Images Available
+                </h3>
+              ) : (
+                project3DImages.map((image) => {
+                  return (
+                    <div>
+                      <img
+                        src={image.url}
+                        alt=""
+                        style={{ maxWidth: "100%" }}
+                      />
+                    </div>
+                  );
+                })
+              )}
+            </CardsWrapper>
 
-        <Description>
-          <h3>Description</h3>
-          <p>{projectDetail[0]?.description}</p>
-        </Description>
+            <Description>
+              <h3>Description</h3>
+              <p>{projectDetail[0]?.description}</p>
+            </Description>
+          </>
+        )}
       </InfoContainer>
 
       <InfoContainer title="Project Videos">
-        <CardsWrapper>
-          {projectVideos.length === 0 ? (
-            <h3>No Video Available</h3>
-          ) : (
-            projectVideos.map((video) => {
-              return (
-                <ImageContainer>
-                  <Play onClick={handleVideoClick}>
-                    <img src={PlayButton} alt="play_button" />
-                  </Play>
-                  <video muted onClick={handleVideoClick} ref={videoRef}>
-                    <source src={video.url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </ImageContainer>
-              );
-            })
-          )}
-        </CardsWrapper>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <CardsWrapper>
+              {projectVideos.length === 0 ? (
+                <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+                  No Video Available
+                </h3>
+              ) : (
+                projectVideos.map((video) => {
+                  return (
+                    <ImageContainer>
+                      <Play onClick={handleVideoClick}>
+                        <img src={PlayButton} alt="play_button" />
+                      </Play>
+                      <video muted onClick={handleVideoClick} ref={videoRef}>
+                        <source src={video.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </ImageContainer>
+                  );
+                })
+              )}
+            </CardsWrapper>
 
-        <Description>
-          <h3>Description</h3>
-          <p>{projectDetail[0]?.description}</p>
-        </Description>
+            <Description>
+              <h3>Description</h3>
+              <p>{projectDetail[0]?.description}</p>
+            </Description>
+          </>
+        )}
       </InfoContainer>
     </>
   );

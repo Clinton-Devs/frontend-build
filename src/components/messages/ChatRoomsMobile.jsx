@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import env from "../../env";
 import useGetChatRooms from "../../app/services/messages/useGetChatRooms";
 import ChatRoom from "./ChatRoom";
 
-const ChatRooms = ({ updateRoomId, roomId }) => {
+const ChatRoomsMobile = ({
+  updateRoomId,
+  roomId,
+  setShowMobileMessage,
+  setSenderDetails,
+}) => {
   const { roomsLoading, chatRoomList } = useGetChatRooms();
 
   const { userType } = env.getUser();
@@ -34,7 +39,13 @@ const ChatRooms = ({ updateRoomId, roomId }) => {
               <>
                 <ChatRoom
                   name={userType === "user" ? projectManagerName : userName}
-                  handleChatroomClick={() => updateRoomId(room._id)}
+                  handleChatroomClick={() => {
+                    updateRoomId(room._id);
+                    setSenderDetails(
+                      userType === "user" ? projectManagerName : userName
+                    );
+                    setShowMobileMessage(true);
+                  }}
                   roomId={roomId}
                   active={roomId === room._id}
                   chatRoomId={room._id}
@@ -48,11 +59,11 @@ const ChatRooms = ({ updateRoomId, roomId }) => {
   );
 };
 
-export default ChatRooms;
+export default ChatRoomsMobile;
 
 const ChatRoomsContainer = styled.div`
   /* background-color: #dac4c4; */
-  width: 30%;
+  display: none;
   margin: 24px;
   border-radius: 13px;
   height: 90%;
@@ -63,6 +74,7 @@ const ChatRoomsContainer = styled.div`
   }
 
   @media only screen and (max-width: 768px) {
-    display: none;
+    display: block;
+    width: 90%;
   }
 `;
