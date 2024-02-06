@@ -16,10 +16,10 @@ const AssignAdminForm = ({ unitId, triggerReload, handleClose }) => {
   const [email, setEmail] = useState("");
   const [addingAdmin, setAddingAdmin] = useState(false);
 
-  const userOptions = userList.map((user) => {
+  const userOptions = userList?.map((user) => {
     return {
-      value: user.email,
-      label: user.name,
+      value: user?.email,
+      label: user?.name,
     };
   });
 

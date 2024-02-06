@@ -7,7 +7,7 @@ import ChatRoom from "./ChatRoom";
 const ChatRooms = ({ updateRoomId, roomId }) => {
   const { roomsLoading, chatRoomList } = useGetChatRooms();
 
-  const { userType } = env.getUser();
+  const { userType } = env?.getUser();
 
   return (
     <>
@@ -29,7 +29,7 @@ const ChatRooms = ({ updateRoomId, roomId }) => {
         <ChatRoomsContainer>
           {chatRoomList.map((room) => {
             const projectManagerName = `${room.projectManager.firstName} ${room.projectManager.lastName}`;
-            const userName = `${room.user.firstName} ${room.user.lastName}`;
+            const userName = `${room?.user?.firstName} ${room?.user?.lastName}`;
             return (
               <>
                 <ChatRoom

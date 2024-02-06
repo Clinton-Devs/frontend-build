@@ -22,7 +22,7 @@ const MessageArea = ({
     reloadCount
   );
 
-  const user = env.getUser();
+  const user = env?.getUser();
 
   return (
     <>
@@ -55,7 +55,7 @@ const MessageArea = ({
           })}
         </MessageAreaContainer>
       )}
-      <MessageInputWrapper userType={user.userType}>
+      <MessageInputWrapper userType={user?.userType}>
         <InputCommonWithIcon
           placeholder="Type a message"
           icon={messagesLoading ? spinner : sendMessage}

@@ -18,11 +18,11 @@ const AssignUserForm = ({ unitId, triggerReload, handleClose }) => {
   const [pricePaid, setPricePaid] = useState("");
   const [addingUser, setAddingUser] = useState(false);
 
-  const userOptions = userList.map((user) => {
+  const userOptions = userList?.map((user) => {
     return {
-      value: user.email,
-      label: user.name,
-      phoneNumber: user.phoneNumber ? user.phoneNumber : "",
+      value: user?.email,
+      label: user?.name,
+      phoneNumber: user?.phoneNumber ? user?.phoneNumber : "",
     };
   });
 

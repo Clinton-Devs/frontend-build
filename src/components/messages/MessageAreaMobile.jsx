@@ -23,10 +23,10 @@ const MessageAreaMobile = ({
     reloadCount
   );
 
-  const user = env.getUser();
+  const user = env?.getUser();
 
   useEffect(() => {
-    console.log(user.userType);
+    console.log(user?.userType);
   }, []);
 
   return (
@@ -81,7 +81,7 @@ const MessageAreaMobile = ({
           })}
         </MessageAreaContainer>
       )}
-      <MessageInputWrapper userType={user.userType}>
+      <MessageInputWrapper userType={user?.userType}>
         <InputCommonWithIcon
           placeholder="Type a message"
           icon={messagesLoading ? spinner : sendMessage}

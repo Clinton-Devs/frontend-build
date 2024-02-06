@@ -11,7 +11,7 @@ const DashboardNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const user = env.getUser();
+  const user = env?.getUser();
   const selectActiveMenu = (option) => {
     navigate(`/${option}`);
   };
@@ -54,7 +54,7 @@ const DashboardNav = () => {
               )}
             </div>
           </div>
-          <p>{`${user.firstName} ${user.lastName}`}</p>
+          <p>{`${user?.firstName} ${user?.lastName}`}</p>
         </div>
       </Nav>
     </>

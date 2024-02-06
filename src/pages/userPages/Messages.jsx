@@ -12,7 +12,7 @@ import MessageAreaMobile from "../../components/messages/MessageAreaMobile";
 import useGetChatRooms from "../../app/services/messages/useGetChatRooms";
 
 const Messages = () => {
-  const { userType } = env.getUser();
+  const { userType } = env?.getUser();
   const { state } = useLocation();
   const [roomId, setRoomId] = useState("");
   const [showMobileMessage, setShowMobileMessage] = useState(false);

@@ -17,12 +17,12 @@ const useGetAllUsers = (type, reloadProp) => {
         `${env.clinton_homes_base_url}/admin/all-users?${buildQuery(userQuery)}`
       )
       .then((response) => {
-        const users = response.data.data;
-        const usersData = users.map((user) => {
+        const users = response?.data?.data;
+        const usersData = users?.map((user) => {
           return {
-            id: user._id.substring(0, 5),
-            name: `${user.firstName} ${user.lastName}`,
-            email: user.email,
+            id: user?._id.substring(0, 5),
+            name: `${user?.firstName} ${user?.lastName}`,
+            email: user?.email,
           };
         });
         setUserList([...usersData]);

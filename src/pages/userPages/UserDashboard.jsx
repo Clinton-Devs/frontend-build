@@ -16,7 +16,7 @@ import useGetUserTransactions from "../../app/services/Transactions/useGetUserTr
 
 //move to services where you will feetch it from
 
-const user = env.getUser();
+const user = env?.getUser();
 const UserDashboard = () => {
   const { unitsLoading, ownedUnits } = useGetUserOwnedUnit();
   const { transactionLoading, userTransactionList } = useGetUserTransactions();
@@ -56,7 +56,7 @@ const UserDashboard = () => {
 
       <Welcome>
         <h3 onClick={() => console.log(ownedUnits)}>
-          Welcome {user.firstName}
+          Welcome {user?.firstName}
         </h3>
         <p>
           You currently have ({ownedUnits.length ? ownedUnits.length : "0"})

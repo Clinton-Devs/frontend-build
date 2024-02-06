@@ -82,11 +82,11 @@ const SignIn = () => {
         otp: otp.trim(),
       })
       .then((response) => {
-        console.log(response.data.data);
-        env.storeUser(response.data.data.token, response.data.data.user);
+        console.log(response?.data?.data);
+        env.storeUser(response?.data?.data?.token, response?.data?.data?.user);
         setIsLoggingIn(false);
 
-        if (response.data.data.user.userType === "user") {
+        if (response?.data?.data?.user?.userType === "user") {
           navigate("/user-dashboard");
         } else {
           navigate("/admin-dashboard");
