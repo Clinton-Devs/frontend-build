@@ -64,6 +64,7 @@ const FormContainer = styled.div`
   background-color: rgba(255, 255, 255, 1);
   width: 90%;
   margin: 0px auto 104px auto;
+  border-radius: 6px;
 
   .form-header {
     display: flex;

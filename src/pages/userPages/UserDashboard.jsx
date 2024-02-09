@@ -9,7 +9,7 @@ import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg
 import { CardsWrapper } from "./dashboardStyles";
 import env from "../../env";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
-
+import moment from "moment";
 import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 import useGetUserOwnedUnit from "../../app/services/units/useGetUserOwnedUnit";
 import useGetUserTransactions from "../../app/services/Transactions/useGetUserTransactions";
@@ -46,7 +46,7 @@ const UserDashboard = () => {
     },
     {
       name: "Date",
-      selector: (row) => row.date,
+      selector: (row) => moment(row.createdAt).format("MM/DD/YYYY"),
     },
   ];
 
@@ -69,7 +69,7 @@ const UserDashboard = () => {
           {unitsLoading ? (
             <Spinner />
           ) : ownedUnits ? (
-            ownedUnits?.map((unit) => {
+            ownedUnits?.map((unit, index) => {
               return (
                 <InfoCard
                   linkToMessage="/messages"
@@ -83,7 +83,8 @@ const UserDashboard = () => {
                     </Tag>
                   }
                   // location={project.location}
-                  link={`/projects/units/${unit.unitId._id}`}
+                  link={`/projects/owned-units/${unit.unitId._id}`}
+                  stateObj={{ state: { unitId: ownedUnits[index]?._id } }}
                 />
               );
             })

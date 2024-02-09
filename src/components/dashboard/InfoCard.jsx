@@ -17,6 +17,7 @@ const InfoCard = ({
   price,
   linkToMessage,
   ownedUnitId,
+  stateObj,
 }) => {
   const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ const InfoCard = ({
   return (
     <CardContainer>
       <Notification />
-      <div className="main-image" onClick={() => navigate(link)}>
+      <div className="main-image" onClick={() => navigate(link, stateObj)}>
         <img src={imgSrc} alt="house" style={{ height: "250px" }} />
         <div className="info-tag">{tagInfo}</div>
       </div>

@@ -13,6 +13,7 @@ import AdminProjects from "./pages/adminPages/dashboard/AdminProjects";
 import AdminUnitDetails from "./pages/adminPages/dashboard/AdminUnitDetails";
 import Messages from "./pages/userPages/Messages";
 import AdminMessage from "./pages/adminPages/dashboard/AdminMessage";
+import ElectricityBill from "./pages/userPages/ElectricityBill";
 
 function App() {
   return (
@@ -42,7 +43,9 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:projectId" element={<ProjectDetail />} />
         <Route path="/projects/units/:unitId" element={<UnitDetail />} />
+        <Route path="/projects/owned-units/:unitId" element={<UnitDetail />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/pay-electricity-bill" element={<ElectricityBill />} />
       </Routes>
     </BrowserRouter>
   );

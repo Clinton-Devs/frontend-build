@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import DashboardNav from "../../components/navbar/DashboardNav";
 import styled from "styled-components";
 import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import InfoContainer from "../../components/InfoContainer";
 import PlayButton from "../../assets/common/play-button.svg";
 import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
@@ -16,6 +16,7 @@ import { CardsWrapper } from "./dashboardStyles";
 
 const UnitDetail = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { unitId } = useParams();
 
   const { loading, unitDetail, floorPlanImages, unitVideos } =
@@ -153,7 +154,14 @@ const UnitDetail = () => {
               sit veritatis voluptatum!
             </p>
 
-            <div style={{ marginTop: "72px" }}>
+            <div
+              style={{ marginTop: "72px" }}
+              onClick={() =>
+                navigate("/pay-electricity-bill", {
+                  state: { unitId: state.unitId },
+                })
+              }
+            >
               <img src={PayButton} alt="" />
             </div>
           </>

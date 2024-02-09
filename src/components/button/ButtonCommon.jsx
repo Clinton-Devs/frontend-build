@@ -45,10 +45,9 @@ const ButtonContainer = styled.button`
     ${(props) =>
     props.backgroundColor
       ? `background-color: ${props.backgroundColor};`
-      : `background-color: #933d0c;`}
-
+      : `background-color: #933d0c;`} /* 
     &:disabled {
     background-color: #7a7a7a;
     cursor: not-allowed;
-  }
+  } */
 `;
