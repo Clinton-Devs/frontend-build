@@ -31,7 +31,7 @@ http.interceptors.response.use(
   },
   async function (error) {
     console.log(error);
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       console.log("401 error");
       window.localStorage.removeItem("token");
       window.localStorage.removeItem("user");
@@ -75,7 +75,7 @@ httpClient.interceptors.response.use(
   },
   async function (error) {
     console.log(error);
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       console.log("401 error");
       window.localStorage.removeItem("token");
       window.localStorage.removeItem("user");

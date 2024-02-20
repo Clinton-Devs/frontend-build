@@ -241,11 +241,12 @@ const AdminProjectDetail = () => {
                 loading ? "fetching..." : projectDetail[0]?.location
               }`}
               marginBottom="24px"
+              disabled={readOnly}
               value={newLocation}
               onChange={(e) => setNewLocation(e.target.value)}
             />
 
-            <div {...getRootProps()}>
+            <div {...getRootProps()} style={{ cursor: "default" }}>
               <input {...getInputProps()} />
               {isDragActive ? (
                 <p>Drop the files here ...</p>

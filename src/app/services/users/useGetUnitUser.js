@@ -15,7 +15,7 @@ const useGetUnitUser = (unitId, reloadProp) => {
       .then((response) => {
         // console.log(response.data.data[0]._id);
         setUserDetail([...response.data.data]);
-        setOwnedUnitId(response.data.data[0]._id);
+        setOwnedUnitId(response?.data?.data[0]?._id);
         setUserLoading(false);
       })
       .catch((error) => {

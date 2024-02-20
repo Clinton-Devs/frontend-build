@@ -38,7 +38,7 @@ export default ToggleUserType;
 
 const ToggleUserContainer = styled.div`
   position: relative;
-  width: 90px;
+  width: fit-content;
   cursor: default;
 
   h3 {

@@ -81,7 +81,7 @@ const UnitGallery = ({ unitId, fileType }) => {
     <>
       {fileType === "unit-video" ? (
         <AddImagesContainer>
-          <AddUnitVideos unitId={unitId} />
+          <AddUnitVideos unitId={unitId} reloadData={reloadData} />
           {unitVideos.length === 0 ? (
             <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
               {loading ? "Loading Videos..." : "No Videos Available"}
@@ -138,7 +138,7 @@ const UnitGallery = ({ unitId, fileType }) => {
         </AddImagesContainer>
       ) : (
         <AddImagesContainer>
-          <AddFloorPlan unitId={unitId} />
+          <AddFloorPlan unitId={unitId} reloadData={reloadData} />
           {floorPlanImages.length === 0 ? (
             <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
               {loading ? "Loading Images.." : "No Images Available"}

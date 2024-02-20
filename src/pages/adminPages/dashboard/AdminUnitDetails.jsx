@@ -38,10 +38,8 @@ import AssignAdminForm from "../../../components/dashboard/modals/AssignAdminFor
 import DataTable from "react-data-table-component";
 import ProjectUnitTable from "../../../components/dashboard/TableMobile/ProjectUnitTable";
 import UnitTransactionsTable from "../../../components/dashboard/TableMobile/UnitTransactionsTable";
-
-import ProjectGallery from "../../../components/gallery/ProjectGallery";
-import useGetOneProject from "../../../app/services/projects/useGetOneProject";
 import UnitGallery from "../../../components/gallery/UnitGallery";
+import { formatNumber } from "../../../utils/styles/formatNumber";
 
 const AdminUnitDetails = () => {
   const navigate = useNavigate();
@@ -187,7 +185,7 @@ const AdminUnitDetails = () => {
     },
     {
       name: "Amount Paid",
-      selector: (row) => row.amount,
+      selector: (row) => formatNumber.formatCurrency(row.amount),
     },
 
     {
@@ -310,7 +308,9 @@ const AdminUnitDetails = () => {
 
             <InputCommon
               placeholder={`Price: ${
-                loading ? "fetching..." : unitDetail[0]?.price
+                loading
+                  ? "fetching..."
+                  : formatNumber.formatCurrency(unitDetail[0]?.price)
               }`}
               marginBottom="24px"
               value={newPrice}
@@ -407,7 +407,9 @@ const AdminUnitDetails = () => {
 
                 <InputCommon
                   placeholder={`Price Paid: ${
-                    loading ? "fetching..." : userDetail[0].pricePaid
+                    loading
+                      ? "fetching..."
+                      : formatNumber.formatCurrency(userDetail[0].pricePaid)
                   }`}
                   marginBottom="24px"
                   disabled={readOnly}
@@ -415,7 +417,9 @@ const AdminUnitDetails = () => {
 
                 <InputCommonWithIcon
                   placeholder={`New Price Paid: ${
-                    loading ? "fetching..." : userDetail[0].recentPayment
+                    loading
+                      ? "fetching..."
+                      : formatNumber.formatCurrency(userDetail[0].recentPayment)
                   }`}
                   marginBottom="24px"
                   disabled={readOnly}

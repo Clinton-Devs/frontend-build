@@ -21,6 +21,7 @@ const AddUserForm = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
+    phoneNumber("");
   };
 
   const addUser = () => {
@@ -55,10 +56,11 @@ const AddUserForm = () => {
       lastName,
       phoneNumber,
       email,
+      userType: "admin",
     };
 
     http
-      .post(`${env.clinton_homes_base_url}/admin/make-admin`, formdata)
+      .post(`${env.clinton_homes_base_url}/admin/create-user`, formdata)
       .then((response) => {
         // console.log(response);
         toast.success("Admin Created");

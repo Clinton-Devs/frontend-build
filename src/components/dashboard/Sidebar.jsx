@@ -66,6 +66,7 @@ const SidebarStyle = styled.div`
 
   .sidebar-container {
     position: fixed;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;

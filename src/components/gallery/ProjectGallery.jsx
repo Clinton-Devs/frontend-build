@@ -13,6 +13,7 @@ import {
   ImageContainer,
 } from "../../pages/adminPages/dashboard/AdminDashboardStyles";
 import AddImages from "../dashboard/AddImages";
+import Add3DImages from "../dashboard/Add3DImages";
 import { CardsWrapper } from "../../pages/userPages/dashboardStyles";
 import ActionButton from "../button/ActionButton";
 
@@ -72,7 +73,7 @@ const ProjectGallery = ({ projectId, fileType }) => {
     <>
       {fileType === "project-video" ? (
         <AddImagesContainer>
-          <AddProjectVideos projectId={projectId} />
+          <AddProjectVideos projectId={projectId} reloadData={reloadData} />
           {projectVideos.length === 0 ? (
             <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
               {loading ? "Loading Videos..." : "No Videos Available"}
@@ -127,9 +128,59 @@ const ProjectGallery = ({ projectId, fileType }) => {
             </div>
           )}
         </AddImagesContainer>
+      ) : fileType === "2D-image" ? (
+        <AddImagesContainer>
+          <AddImages projectId={projectId} reloadData={reloadData} />
+          {activeImages.length === 0 ? (
+            <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
+              {loading ? "Loading Images.." : "No Images Available"}
+            </h3>
+          ) : (
+            <CardsWrapper>
+              {activeImages.map((image, index) => {
+                return (
+                  <ImageContainer>
+                    {deleteMedia && (
+                      <Delete onClick={() => deleteImage(image._id)}>
+                        {deleting === image._id ? (
+                          <>
+                            <h3>Deleting...</h3>
+                          </>
+                        ) : (
+                          <>
+                            <h3>Delete</h3>
+                            <DeleteIcon />
+                          </>
+                        )}
+                      </Delete> //should not show when gallery is empty
+                    )}
+
+                    <img src={image.url} alt={`Project Image -${index}`} />
+                  </ImageContainer>
+                );
+              })}
+            </CardsWrapper>
+          )}
+
+          {activeImages.length > 0 && (
+            <div style={{ textAlign: "end", padding: "24px" }}>
+              {deleteMedia ? (
+                <ActionButton
+                  text="Toggle View Mode"
+                  handleAction={toggleDeleteMode}
+                />
+              ) : (
+                <ActionButton
+                  text="Toggle Delete Mode"
+                  handleAction={toggleDeleteMode}
+                />
+              )}
+            </div>
+          )}
+        </AddImagesContainer>
       ) : (
         <AddImagesContainer>
-          <AddImages projectId={projectId} />
+          <Add3DImages projectId={projectId} reloadData={reloadData} />
           {activeImages.length === 0 ? (
             <h3 style={{ textAlign: "center", color: "#e8e8e8" }}>
               {loading ? "Loading Images.." : "No Images Available"}

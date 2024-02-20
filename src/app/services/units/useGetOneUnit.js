@@ -14,7 +14,7 @@ const useGetOneUnit = (unitId, reloadProp) => {
     http
       .get(`${env.clinton_homes_base_url}/public/unit/${unitId}`)
       .then((response) => {
-        // console.log(response.data.data);
+        console.log(response.data.data);
         setUnitDetail([...response.data.data]);
         setUnitVideos([...response.data.data[0]["videos"]]);
         setFloorPlanImages([...response.data.data[0]["floorPlan"]]);

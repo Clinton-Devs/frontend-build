@@ -11,7 +11,7 @@ import ButtonCommon from "../button/ButtonCommon";
 
 import { useDropzone } from "react-dropzone";
 
-const AddFloorPlan = ({ unitId }) => {
+const AddFloorPlan = ({ unitId, reloadData }) => {
   const [uploadedFloorPlan, setUploadedFloorPlan] = useState([]);
   const [uploadedFloorPlanUrl, setUploadedFloorPlanUrl] = useState([]);
   const [addingFloorPlan, setAddingFloorPlan] = useState(false);
@@ -63,8 +63,9 @@ const AddFloorPlan = ({ unitId }) => {
       )
       .then((response) => {
         toast.success("Floor Plan Images Added");
-        console.log(response.data.data);
+        console.log(response?.data?.data);
         setAddingFloorPlan(false);
+        reloadData();
       })
       .catch((error) => {
         console.log(error);

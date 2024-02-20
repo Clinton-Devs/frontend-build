@@ -12,7 +12,7 @@ import ButtonCommon from "../button/ButtonCommon";
 
 import { useDropzone } from "react-dropzone";
 
-const AddImages = ({ projectId }) => {
+const AddImages = ({ projectId, reloadData }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [uploadedImagesUrl, setUploadedImagesUrl] = useState([]);
   const [addingImage, setAddingImage] = useState(false);
@@ -69,6 +69,7 @@ const AddImages = ({ projectId }) => {
         toast.success("New Images Added");
         console.log(response.data.data);
         setAddingImage(false);
+        reloadData();
       })
       .catch((error) => {
         console.log(error);

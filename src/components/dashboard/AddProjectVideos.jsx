@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import addImageButton from "../../assets/dashboard/addImageIcon.svg";
 import { CardsWrapper } from "../../pages/userPages/dashboardStyles";
-import useGetOneProject from "../../app/services/projects/useGetOneProject";
+
 import Spinner from "../../assets/common/spinner.svg";
 import { http, httpCloudinary } from "../../app/services/axios-https";
 import Notification from "../Notification";
@@ -14,7 +14,7 @@ import { ImageContainer } from "../../pages/adminPages/dashboard/AdminDashboardS
 import PlayButton from "../../assets/common/play-button.svg";
 import { useDropzone } from "react-dropzone";
 
-const AddProjectVideos = ({ projectId }) => {
+const AddProjectVideos = ({ projectId, reloadData }) => {
   const [uploadedVideos, setUploadedVideos] = useState([]);
   const [uploadedVideosUrl, setUploadedVideosUrl] = useState([]);
   const [uploadedVideosPreviewUrl, setUploadedVideosPreviewUrl] = useState([]);
@@ -22,8 +22,13 @@ const AddProjectVideos = ({ projectId }) => {
   const [addingVideo, setAddingVideo] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
+    const maxSize = 20971520;
+    if (acceptedFiles[0]?.size > maxSize) {
+      toast.error("Maximum file size (100mb) exceeded");
+      return;
+    }
     setUploadingVideo(true);
-    const newVideos = acceptedFiles.map((file) => ({
+    const newVideos = acceptedFiles?.map((file) => ({
       file,
       preview: URL.createObjectURL(file), // Create a preview URL for the image
     }));
@@ -41,11 +46,11 @@ const AddProjectVideos = ({ projectId }) => {
           formdata
         )
         .then((response) => {
-          console.log(response.data.url);
+          console.log(response?.data?.url);
           toast.success("Videos uploaded");
           setUploadedVideosUrl((prevVideosUrl) => [
             ...prevVideosUrl,
-            response.data.url,
+            response?.data?.url,
           ]);
           setUploadedVideosPreviewUrl((prevVideosPreviewUrl) => [
             ...prevVideosPreviewUrl,
@@ -54,7 +59,7 @@ const AddProjectVideos = ({ projectId }) => {
           setUploadingVideo(false);
         })
         .catch((error) => {
-          toast.error(error.response.data.message || "Image upload error");
+          toast.error(error?.response?.data?.message || "Image upload error");
           setUploadingVideo(false);
         });
     });
@@ -80,6 +85,7 @@ const AddProjectVideos = ({ projectId }) => {
         toast.success("New Videos Added");
         console.log(response.data.data);
         setAddingVideo(false);
+        reloadData();
       })
       .catch((error) => {
         console.log(error);

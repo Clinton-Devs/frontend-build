@@ -10,11 +10,12 @@ import toast from "react-hot-toast";
 import env from "../../env";
 import ButtonCommon from "../button/ButtonCommon";
 import ActionButton from "../button/ActionButton";
+import PlayButton from "../../assets/common/play-button.svg";
 import { ImageContainer } from "../../pages/adminPages/dashboard/AdminDashboardStyles";
 
 import { useDropzone } from "react-dropzone";
 
-const AddUnitVideos = ({ unitId }) => {
+const AddUnitVideos = ({ unitId, reloadData }) => {
   const [uploadedVideos, setUploadedVideos] = useState([]);
   const [uploadedVideosUrl, setUploadedVideosUrl] = useState([]);
   const [uploadedVideosPreviewUrl, setUploadedVideosPreviewUrl] = useState([]);
@@ -22,6 +23,11 @@ const AddUnitVideos = ({ unitId }) => {
   const [addingVideo, setAddingVideo] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
+    const maxSize = 20971520;
+    if (acceptedFiles[0]?.size > maxSize) {
+      toast.error("Maximum file size (100mb) exceeded");
+      return;
+    }
     setUploadingVideo(true);
     const newVideos = acceptedFiles.map((file) => ({
       file,
@@ -80,6 +86,7 @@ const AddUnitVideos = ({ unitId }) => {
         toast.success("New Videos Added");
         console.log(response.data.data);
         setAddingVideo(false);
+        reloadData();
       })
       .catch((error) => {
         console.log(error);
@@ -115,6 +122,9 @@ const AddUnitVideos = ({ unitId }) => {
             {uploadedVideos.map((video, index) => {
               return (
                 <ImageContainer>
+                  <Play>
+                    <img src={PlayButton} alt="play_button" />
+                  </Play>
                   <video autoPlay loop muted>
                     <source src={video.preview + "#t=0,5"} type="video/mp4" />
                     Your browser does not support the video tag.
@@ -161,6 +171,23 @@ const AddImagesContainer = styled.div`
     line-height: 26px; /* 144.444% */
     letter-spacing: 0.018px;
     margin-bottom: 32px;
+  }
+`;
+
+const Play = styled.div`
+  position: absolute;
+  top: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  z-index: 10;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+
+  :hover {
+    transform: scale(1.05, 1.05);
   }
 `;
 

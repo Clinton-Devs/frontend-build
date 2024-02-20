@@ -9,10 +9,9 @@ import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
 
 import PayButton from "../../assets/dashboard/payElectricityButton.svg";
 import messageButton from "../../assets/dashboard/message-cta.svg";
-
 import useGetOneUnit from "../../app/services/units/useGetOneUnit";
-
 import { CardsWrapper } from "./dashboardStyles";
+import { formatNumber } from "../../utils/styles/formatNumber";
 
 const UnitDetail = () => {
   const navigate = useNavigate();
@@ -90,27 +89,28 @@ const UnitDetail = () => {
                 <Overview>
                   <div className="title">
                     <h4>{unitDetail[0]?.name}</h4>
-                    <p>{unitDetail[0]?.price}</p>
+                    <p>{formatNumber.formatCurrency(unitDetail[0]?.price)}</p>
                   </div>
 
                   <div>
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                      Nulla distinctio similique ea modi sed necessitatibus
-                      nobis cupiditate deserunt at suscipit.
-                    </p>
+                    <p>This is the detail page for {unitDetail[0]?.name}.</p>
                   </div>
                 </Overview>
 
                 <Description>
                   <h3>Description</h3>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Assumenda deserunt est provident excepturi consequatur
-                    necessitatibus non, iste cum voluptas amet. m ipsum dolor
-                    sit amet consectetur adipisicing elit. Assumenda deserunt
-                    est provident excepturi consequatur necessitatibus non, iste
-                    cum voluptas .
+                    The {unitDetail[0]?.name} is a beautiful and well
+                    constructed unit under the{" "}
+                    <b>{unitDetail[0]?.projectId?.name}</b> project for Clinton
+                    properties. It is located at{" "}
+                    <b>
+                      {unitDetail[0]?.projectId?.address},{" "}
+                      {unitDetail[0]?.projectId?.location}.
+                    </b>{" "}
+                    This particular unit has {unitDetail[0]?.numberOfRooms}{" "}
+                    rooms and {unitDetail[0]?.numberOfBathRooms} bathrooms See
+                    more details below.
                   </p>
                 </Description>
               </OverviewContainer>
@@ -123,6 +123,7 @@ const UnitDetail = () => {
                       src={messageButton}
                       alt=""
                       onClick={() => goToMessage()}
+                      style={{ cursor: "pointer" }}
                     />
                   </div>
                   <div className="detail">
@@ -148,14 +149,10 @@ const UnitDetail = () => {
           <Spinner />
         ) : (
           <>
-            <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officia
-              repellendus placeat voluptatem, incidunt hic minima dolorum nobis
-              sit veritatis voluptatum!
-            </p>
+            {unitDetail[0]?.paymentPlan}
 
             <div
-              style={{ marginTop: "72px" }}
+              style={{ marginTop: "72px", cursor: "pointer" }}
               onClick={() =>
                 navigate("/pay-electricity-bill", {
                   state: { unitId: state.unitId },
@@ -197,7 +194,7 @@ const UnitDetail = () => {
               )}
             </CardsWrapper>
 
-            <Description>
+            {/* <Description>
               <h3>Description</h3>
               <p>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -207,7 +204,7 @@ const UnitDetail = () => {
                 provident excepturi consequatur necessitatibus non, iste cum
                 voluptas .
               </p>
-            </Description>
+            </Description> */}
           </>
         )}
       </InfoContainer>
@@ -239,10 +236,10 @@ const UnitDetail = () => {
               )}
             </CardsWrapper>
 
-            <Description>
+            {/* <Description>
               <h3>Description</h3>
               <p>{unitDetail[0]?.description}</p>
-            </Description>
+            </Description> */}
           </>
         )}
       </InfoContainer>
@@ -302,7 +299,7 @@ const Description = styled.div`
 
 const Grid = styled.div`
   display: flex;
-  gap: 40px;
+  gap: 100px;
 `;
 
 const OverviewContainer = styled.div``;
