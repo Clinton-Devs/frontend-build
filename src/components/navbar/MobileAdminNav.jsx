@@ -58,6 +58,10 @@ const MobileAdminNav = () => {
                 <MenuItemSelected></MenuItemSelected>
               )} */}
             </div>
+
+            <div className="logout">
+              <a href="/">(Logout)</a>
+            </div>
           </div>
         </div>
       </Nav>
@@ -104,6 +108,13 @@ const Nav = styled.nav`
       font-weight: 500;
       line-height: 24px; /* 200% */
       letter-spacing: 0.012px;
+    }
+
+    .logout {
+      a {
+        color: #721f4b;
+        font-weight: 700;
+      }
     }
   }
 `;

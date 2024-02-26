@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   LoginPageStyle,
@@ -12,6 +12,9 @@ import {
 } from "./SignInStyles";
 
 import Navbar from "../../components/navbar/Navbar";
+
+import { useDispatch, useSelector } from "react-redux";
+import { updateAuthUserData } from "../../features/units/authUserSlice";
 
 import InputCommon from "../../components/inputField/InputCommon";
 import InputCommonWithIcon from "../../components/inputField/InputCommonWithIcon";
@@ -45,6 +48,7 @@ const SignIn = () => {
   const [isLoadingOtp, setIsLoadingOtp] = useState(false);
   const [isLogginIn, setIsLoggingIn] = useState(false);
 
+  const { name } = useSelector((state) => state.authUserData);
   const navigate = useNavigate();
 
   const handleSendCode = () => {
@@ -93,9 +97,27 @@ const SignIn = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        setIsLoggingIn(false);
+        setIsError(true);
+        setErrorMessage(
+          error?.response?.data?.message ? error.response.data.message : "Error"
+        );
+        setTimeout(() => {
+          setIsError(false);
+        }, 7000);
+
+        if (error?.response?.status === 400) {
+          setErrorMessage(error?.response?.data[0].errors?.issues[0].message);
+        }
       });
   };
+
+  useEffect(() => {
+    const user = env?.getUser();
+    if (user) {
+      env.logOut();
+    }
+  }, []);
 
   return (
     <>
@@ -116,7 +138,9 @@ const SignIn = () => {
           </HouseImagesContainer>
 
           <div className="images-container-text">
-            <h3>Your Personal Property Hub</h3>
+            <h3 onClick={() => console.log(name)}>
+              Your Personal Property Hub
+            </h3>
             <p>
               Manage your properties, track your payments, and connect with your
               property managers - all in one place
@@ -158,7 +182,13 @@ const SignIn = () => {
               )}
 
               <ButtonCommon
-                content={isLogginIn ? <img src={SpinnerWhite} /> : "Log In"}
+                content={
+                  isLogginIn ? (
+                    <img src={SpinnerWhite} style={{ marginTop: "7px" }} />
+                  ) : (
+                    "Log In"
+                  )
+                }
                 backgroundColor="#721F4B;"
                 onClick={handleUserLogin}
                 disabled={!codeSent}

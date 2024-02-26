@@ -298,8 +298,13 @@ const Description = styled.div`
 `;
 
 const Grid = styled.div`
-  display: flex;
-  gap: 100px;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 12px;
+
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const OverviewContainer = styled.div``;
@@ -333,7 +338,7 @@ const Overview = styled.div`
 `;
 
 const PropertyManager = styled.div`
-  width: 700px;
+  /* width: 700px; */
   padding: 16px;
   border-radius: 13px;
   background: #fff;

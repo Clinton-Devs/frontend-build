@@ -36,4 +36,12 @@ const Container = styled.div`
       letter-spacing: 0.018px;
     }
   }
+
+  @media only screen and (max-width: 768px) {
+    padding: 0px 20px;
+
+    .title-container {
+      margin-bottom: 0px;
+    }
+  }
 `;

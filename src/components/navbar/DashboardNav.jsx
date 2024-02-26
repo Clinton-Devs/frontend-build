@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Logo from "../../assets/common/clinton_logo_original.svg";
 import debitCard from "../../assets/dashboard/debit-card-icon.svg";
-import messageIcon from "../../assets/dashboard/message-icon-message.svg";
+import messageIcon from "../../assets/dashboard/message-icon.svg";
 import houseIcon from "../../assets/dashboard/house-icon.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import env from "../../env";
@@ -16,14 +16,19 @@ const DashboardNav = () => {
     navigate(`/${option}`);
   };
 
+  const handleLogout = () => {
+    console.log("clear local storage");
+  };
+
   return (
     <>
       <Nav>
         <div
           onClick={() => selectActiveMenu("user-dashboard")}
           style={{ cursor: "pointer" }}
+          className="logo-wrapper"
         >
-          <img src={Logo} alt="" style={{ width: "130px" }} />
+          <img src={Logo} alt="" />
         </div>
 
         <div className="dashboard-menu-tray">
@@ -44,8 +49,7 @@ const DashboardNav = () => {
               )} */}
             </div>
             <div
-              className="menu-item"
-              style={{ marginRight: "32px" }}
+              className="menu-item last"
               onClick={() => selectActiveMenu("messages")}
             >
               <img src={messageIcon} alt="" />
@@ -54,7 +58,13 @@ const DashboardNav = () => {
               )}
             </div>
           </div>
-          <p>{`${user?.firstName} ${user?.lastName}`}</p>
+
+          <div className="logout">
+            <p>{`${user?.firstName} ${user?.lastName}`}</p>
+            <a href="/" onClick={() => handleLogout}>
+              (Logout)
+            </a>
+          </div>
         </div>
       </Nav>
     </>
@@ -68,14 +78,16 @@ const Nav = styled.nav`
   box-shadow: 0px 4px 6px -2px #f1f2f4, 0px 12px 16px -4px #f1f2f4;
   padding: 20px 32px;
   display: flex;
+  gap: 6px;
   justify-content: space-between;
   align-items: center;
   position: relative;
   margin-bottom: 64px;
 
-  @media only screen and (max-width: 768px) {
-    padding: 0;
-    margin-bottom: 20px;
+  .logo-wrapper {
+    img {
+      width: 130px;
+    }
   }
 
   .dashboard-menu-tray {
@@ -88,6 +100,20 @@ const Nav = styled.nav`
       display: flex;
       gap: 24px;
       cursor: pointer;
+
+      .last {
+        margin-right: 32px;
+      }
+    }
+
+    .logout {
+      display: flex;
+      gap: 8px;
+
+      a {
+        color: #721f4b;
+        font-weight: 700;
+      }
     }
 
     p {
@@ -96,9 +122,38 @@ const Nav = styled.nav`
       font-weight: 500;
       line-height: 24px; /* 200% */
       letter-spacing: 0.012px;
+    }
+  }
 
-      @media only screen and (max-width: 768px) {
-        display: none;
+  @media only screen and (max-width: 768px) {
+    padding: 10px;
+    margin-bottom: 20px;
+
+    .logo-wrapper {
+      img {
+        width: 70px;
+      }
+    }
+
+    .dashboard-menu-tray {
+      gap: 12px;
+      .menu-list {
+        gap: 12px;
+
+        .last {
+          margin-right: 4px;
+        }
+      }
+
+      .logout {
+        a {
+        }
+      }
+
+      p {
+        @media only screen and (max-width: 768px) {
+          display: none;
+        }
       }
     }
   }

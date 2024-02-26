@@ -32,6 +32,19 @@ body {
   background-color: #fafafa;
 }
 
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 60px;
+  justify-items: center;
+}
+
+@media only screen and (max-width: 1500px) {
+  .two-col-grid {
+    grid-template-columns: 1fr;
+    row-gap: 60px;
+  }
+}
 /* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

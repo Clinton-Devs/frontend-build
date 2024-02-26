@@ -4,20 +4,22 @@ import styled from "styled-components";
 import InfoCard from "../../components/dashboard/InfoCard";
 import InfoContainer from "../../components/InfoContainer";
 import DataTable from "react-data-table-component";
+import { TableContainer } from "../adminPages/dashboard/AdminDashboardStyles";
 import bed from "../../assets/dashboard/bed-icon.svg";
 import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
 import { CardsWrapper } from "./dashboardStyles";
 import env from "../../env";
 import { dashboardTableSyles } from "../../utils/styles/tableStyles";
 import moment from "moment";
+import MobileTransactionsTable from "../../components/dashboard/TableMobile/MobileTransactionsTable";
 import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 import useGetUserOwnedUnit from "../../app/services/units/useGetUserOwnedUnit";
 import useGetUserTransactions from "../../app/services/Transactions/useGetUserTransactions";
 
 //move to services where you will feetch it from
 
-const user = env?.getUser();
 const UserDashboard = () => {
+  const user = env?.getUser();
   const { unitsLoading, ownedUnits } = useGetUserOwnedUnit();
   const { transactionLoading, userTransactionList } = useGetUserTransactions();
   const { loading, projectList } = useGetAllProjects();
@@ -96,7 +98,7 @@ const UserDashboard = () => {
       </InfoContainer>
 
       <InfoContainer title="Recent Transactions">
-        <div style={{ padding: "16px", backgroundColor: "#fafafa" }}>
+        <TableContainer style={{ padding: "16px", backgroundColor: "#fafafa" }}>
           <DataTable
             data={userTransactionList}
             columns={columns}
@@ -107,8 +109,12 @@ const UserDashboard = () => {
             }
             progressComponent={<Spinner />}
           />
-        </div>
+        </TableContainer>
       </InfoContainer>
+
+      {transactionLoading ? null : (
+        <MobileTransactionsTable list={userTransactionList} />
+      )}
 
       <InfoContainer title="Ongoing Projects">
         <CardsWrapper>
