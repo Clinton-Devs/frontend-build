@@ -8,7 +8,10 @@ import linkedin_icon from "../assets/home/linkedin_icon.svg";
 import twitter_icon from "../assets/home/twitter_icon.svg";
 import Background from "./websiste/Background";
 
+import { useNavigate } from "react-router-dom";
+
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <FooterStyle>
       <Background />
@@ -36,18 +39,24 @@ const Footer = () => {
           </p>
         </div>
         <div className="about">
-          <h5 className="footer-subtitle">About</h5>
+          <h5 className="footer-subtitle" onClick={() => navigate("/about-us")}>
+            About
+          </h5>
           <p className="footer-text">Who we are</p>
           <p className="footer-text">Privacy policy</p>
           <p className="footer-text">Terms of use</p>
         </div>
         <div className="gallery">
-          <h5 className="footer-subtitle">Gallery</h5>
+          <h5 className="footer-subtitle" onClick={() => navigate("/gallery")}>
+            Gallery
+          </h5>
           <p className="footer-text">Project View</p>
           <p className="footer-text">Unit View</p>
         </div>
         <div className="offers">
-          <h5 className="footer-subtitle">Offers</h5>
+          <h5 className="footer-subtitle" onClick={() => navigate("/offers")}>
+            Offers
+          </h5>
           <p className="footer-text">All Projects</p>
           <p className="footer-text">Ongoing Projects</p>
           <p className="footer-text">Completed Projects</p>

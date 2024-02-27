@@ -111,7 +111,7 @@ const AboutUs = () => {
               Our portfolio showcases a range of projects that mirror our
               versatility and expertise.
             </p>
-            <ButtonWebsite text="View Projects in Offers" />
+            <ButtonWebsite text="View Projects in Offers" path="/offers" />
           </div>
 
           <div className="projects-gallery">

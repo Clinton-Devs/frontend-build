@@ -26,7 +26,7 @@ const Home = () => {
             craft environments that enhance lifestyles. Discover how we make
             your property dreams come true.
           </p>
-          <ButtonWebsite text="View our projects" />
+          <ButtonWebsite text="View our projects" path="/offers" />
         </div>
 
         <div className="success-stats">
@@ -75,7 +75,7 @@ const Home = () => {
             </ul>
           </div>
 
-          <ButtonWebsite text="Learn more" />
+          <ButtonWebsite text="Learn more" path="/about-us" />
         </div>
         <div>
           <img src={pic} alt="" />
@@ -99,7 +99,7 @@ const Home = () => {
               spaces, we have something that aligns with your choice.
             </p>
 
-            <ButtonWebsite text="View offers" />
+            <ButtonWebsite text="View offers" path="/offers" />
           </div>
           <div className="ongoing-projects-image">
             <img src={project_card} alt="project_image" />

@@ -30,7 +30,7 @@ const GallerySection = () => {
         <p className="text">
           Your Dream, Our Design - Find Inspiration in Our Gallery
         </p>
-        <ButtonWebsite text="See more" />
+        <ButtonWebsite text="See more" path="/gallery" />
       </div>
 
       <div className="image-showcase" ref={scrollContainerRef}>
