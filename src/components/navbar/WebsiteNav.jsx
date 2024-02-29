@@ -36,7 +36,7 @@ const WebsiteNav = ({ activePage }) => {
             Gallery
           </div>
           <div
-            className={`menu-item ${activePage === "offers" && "active"}`}
+            className={`menu-item ${activePage.includes("offers") && "active"}`}
             onClick={() => goToPage("/offers")}
           >
             Offers

@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import WebsiteNav from "../../components/navbar/WebsiteNav";
 import styled from "styled-components";
-
+import Background from "../../components/websiste/Background";
 import helmet_pic from "../../assets/about_us/about_us_helmet.png";
 import setsquare_pic from "../../assets/about_us/about_us_sets_square.png";
 import hands_pic from "../../assets/about_us/about_us_hands.png";
@@ -17,12 +17,17 @@ import projects_image_5 from "../../assets/about_us/about_us_pic_5.png";
 import projects_image_6 from "../../assets/about_us/about_us_pic_6.png";
 
 const AboutUs = () => {
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <AboutUsStyle>
       <WebsiteNav activePage="about-us" />
 
       <div className="about-us-container">
         <section id="section-1" className="section-1">
+          <Background />
           <h3>About Us</h3>
           <p className="paragraph">
             Our journey began with a vision to transform skylines and create not
@@ -144,7 +149,9 @@ const AboutUs = () => {
 export default AboutUs;
 
 const AboutUsStyle = styled.div`
+  width: 100%;
   .about-us-container {
+    width: 100%;
     padding: 120px 0px;
     h3 {
       font-weight: 500;
@@ -158,6 +165,8 @@ const AboutUsStyle = styled.div`
       font-size: 24px;
       letter-spacing: 0.001em;
       margin-bottom: 40px;
+      line-height: 40px;
+      color: #192861;
     }
 
     .section-1 {
@@ -180,19 +189,22 @@ const AboutUsStyle = styled.div`
     .section-2,
     .section-3,
     .section-4 {
+      width: 100%;
       padding: 0px 112px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
       gap: 66px;
       text-align: justify;
+      width: 100%;
       margin-bottom: 215px;
 
       .section-text {
-        width: 100%;
+        width: 50%;
       }
 
       .section-images {
-        width: 100%;
+        width: 50%;
         img {
           width: 100%;
           object-fit: cover;
@@ -219,6 +231,8 @@ const AboutUsStyle = styled.div`
           font-size: 20px;
           letter-spacing: 0.001em;
           margin-bottom: 56px;
+          line-height: 40px;
+          color: #192861;
         }
       }
 
@@ -242,7 +256,7 @@ const AboutUsStyle = styled.div`
     }
   }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1100px) {
     .about-us-container {
       padding: 10px;
       h3 {
@@ -258,12 +272,26 @@ const AboutUsStyle = styled.div`
       .section-2,
       .section-3,
       .section-4 {
-        display: flex;
-        /* align-items: center; */
-        flex-direction: column;
+        flex-wrap: wrap;
         text-align: center;
         margin-bottom: 115px;
         padding: 0px;
+      }
+
+      .section-2,
+      .section-3,
+      .section-4 {
+        .section-text {
+          width: 100%;
+        }
+
+        .section-images {
+          width: 100%;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
       }
       .section-3 {
         flex-direction: column-reverse;
@@ -277,6 +305,7 @@ const AboutUsStyle = styled.div`
           .text {
             font-weight: 400;
             font-size: 16px;
+            text-align: center;
           }
         }
 

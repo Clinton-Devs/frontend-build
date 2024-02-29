@@ -19,7 +19,7 @@ const Footer = () => {
         <div className="logo">
           <img src={Logo} alt="" />
         </div>
-        <div className="top">
+        <div className="top" onClick={() => window.scrollTo(0, 0)}>
           <p>Top</p>
           <img src={top_icon} alt="" />
         </div>
@@ -145,6 +145,7 @@ const FooterStyle = styled.footer`
       letter-spacing: 0.001em;
       color: #192861;
       margin-bottom: 24px;
+      cursor: pointer;
     }
     .footer-text {
       font-weight: 400;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import WebsiteNav from "../../components/navbar/WebsiteNav";
 import QnA from "../../components/websiste/QnA";
@@ -12,6 +12,10 @@ import Background from "../../components/websiste/Background";
 import project_card from "../../assets/home/projec_card.svg";
 
 const Home = () => {
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <HomeStyle>
       <WebsiteNav activePage="home" />
@@ -77,19 +81,13 @@ const Home = () => {
 
           <ButtonWebsite text="Learn more" path="/about-us" />
         </div>
-        <div>
+        <div className="what-you-should-know-img">
           <img src={pic} alt="" />
         </div>
       </div>
       <GallerySection />
       <div className="ongoing-projects">
-        <div className="ongoing-projects-background">
-          <div className="one"></div>
-          <div className="two"></div>
-          <div className="three"></div>
-          <div className="four"></div>
-        </div>
-        <div className="two-col-grid">
+        <div className="ongoing-projects-container">
           <div className="ongoing-projects-text">
             <h3>Ongoing Projects - Explore Our Projects In Details</h3>
             <p className="ongoing-projects-text-p">
@@ -175,23 +173,29 @@ const HomeStyle = styled.div`
         font-weight: 400;
         font-size: 20px;
         letter-spacing: 0.001em;
+        line-height: 40px;
         width: 60%;
         margin: 0px auto;
         margin-bottom: 90px;
+        color: #192861;
       }
     }
   }
 
   .what-you-should-know {
     padding: 90px 112px;
-    display: grid;
+    /* display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 66px;
-    height: min-content;
+    column-gap: 66px; */
+    display: flex;
+    gap: 67px;
+    justify-content: space-between;
+    width: 100%;
     align-items: center;
     margin-bottom: 140px;
 
     .what-you-should-know-text {
+      width: 50%;
       h3 {
         font-weight: 500;
         font-size: 48px;
@@ -204,10 +208,20 @@ const HomeStyle = styled.div`
         font-size: 20px;
         letter-spacing: 0.001em;
         margin-bottom: 56px;
+        line-height: 40px;
+        color: #192861;
 
         ul {
           margin-left: 35px;
         }
+      }
+    }
+    .what-you-should-know-img {
+      width: 50%;
+
+      img {
+        width: 100%;
+        object-fit: cover;
       }
     }
   }
@@ -222,43 +236,20 @@ const HomeStyle = styled.div`
     /* padding-left: 112px;
     padding-right: 112px; */
 
-    .ongoing-projects-background {
-      position: absolute;
-      z-index: -1;
-      top: 0;
+    .ongoing-projects-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 67px;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-
-      .one {
-        width: 100%;
-        height: 100%;
-        background-color: inherit;
-      }
-      .two {
-        width: 100%;
-        height: 100%;
-        background-color: inherit;
-      }
-      .three {
-        width: 100%;
-        height: 100%;
-        background-color: inherit;
-      }
-      .four {
-        width: 100%;
-        height: 100%;
-        background-color: #eaecf0;
-      }
     }
 
     .ongoing-projects-text {
       display: flex;
       flex-direction: column;
       height: 100%;
+      line-height: 40px;
       padding-left: 112px;
+      width: 50%;
 
       h3 {
         font-weight: 500;
@@ -266,25 +257,28 @@ const HomeStyle = styled.div`
         letter-spacing: 0.001em;
         color: #192861;
         margin-bottom: 42px;
+        line-height: 60px;
       }
       .ongoing-projects-text-p {
         font-weight: 400;
         font-size: 20px;
         letter-spacing: 0.001em;
         margin-bottom: 56px;
+        color: #192861;
       }
     }
 
     .ongoing-projects-image {
       display: flex;
       justify-content: center;
-      width: 100%;
+      width: 50%;
       height: 100%;
       padding-right: 112px;
       /* display: none; */
       img {
         width: 100%;
         height: 100%;
+        object-fit: cover;
       }
     }
   }
@@ -328,22 +322,14 @@ const HomeStyle = styled.div`
 
     .what-you-should-know {
       padding: 20px;
-      /* overflow: hidden; */
-      grid-template-columns: 1fr;
-      row-gap: 66px;
-      height: min-content;
-      align-items: center;
-      margin-bottom: 140px;
+      flex-wrap: wrap;
 
       img {
         display: none;
       }
 
       .what-you-should-know-text {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        width: 100%;
         h3 {
           font-size: 30px;
           letter-spacing: 0.001em;
@@ -360,6 +346,9 @@ const HomeStyle = styled.div`
           }
         }
       }
+      .what-you-should-know-img {
+        width: 100%;
+      }
     }
 
     .ongoing-projects {
@@ -367,35 +356,34 @@ const HomeStyle = styled.div`
       margin-bottom: 20px;
       padding-left: 20px;
       padding-right: 20px;
-      .ongoing-projects-background {
-        /* display: none; */
-        grid-template-columns: 1fr;
-        width: fit-content;
-      }
-
-      .ongoing-projects-text {
+      .ongoing-projects-container {
+        flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
-        text-align: center;
+        .ongoing-projects-text {
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          padding: 20px;
 
-        padding: 20px;
-
-        h3 {
-          font-size: 30px;
-          letter-spacing: 0.001em;
-          color: #192861;
-          margin-bottom: 42px;
+          h3 {
+            font-size: 30px;
+            letter-spacing: 0.001em;
+            color: #192861;
+            margin-bottom: 42px;
+          }
+          .ongoing-projects-text-p {
+            font-weight: 400;
+            font-size: 16px;
+            letter-spacing: 0.001em;
+            margin-bottom: 56px;
+          }
         }
-        .ongoing-projects-text-p {
-          font-weight: 400;
-          font-size: 16px;
-          letter-spacing: 0.001em;
-          margin-bottom: 56px;
-        }
-      }
 
-      .ongoing-projects-image {
-        padding: 20px;
+        .ongoing-projects-image {
+          padding: 20px;
+          width: 100%;
+        }
       }
     }
   }

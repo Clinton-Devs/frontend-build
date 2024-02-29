@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import ActionButton from "./button/ActionButton";
 
-const InfoContainer = ({ children, title, action }) => {
+const InfoContainer = ({ children, title, action, style }) => {
   return (
-    <Container>
+    <Container style={style}>
       <div className="title-container">
         <h3>{title}</h3>
         {action && (

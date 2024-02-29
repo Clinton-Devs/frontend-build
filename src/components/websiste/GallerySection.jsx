@@ -34,7 +34,10 @@ const GallerySection = () => {
       </div>
 
       <div className="image-showcase" ref={scrollContainerRef}>
-        <div className="gallery-arrow" onClick={() => scrollToRight()}>
+        <div className="gallery-arrow-right" onClick={() => scrollToRight()}>
+          <img src={gallery_arrow} alt="" />
+        </div>
+        <div className="gallery-arrow-left" onClick={() => scrollToLeft()}>
           <img src={gallery_arrow} alt="" />
         </div>
         <div className="img-container">
@@ -52,9 +55,7 @@ const GallerySection = () => {
         <div className="img-container">
           <img src={pic3} alt="" />
         </div>
-        <div className="gallery-arrow" onClick={() => scrollToRight()}>
-          <img src={gallery_arrow} alt="" />
-        </div>
+
         <div className="img-container">
           <img src={pic2} alt="" />
         </div>
@@ -70,9 +71,7 @@ const GallerySection = () => {
         <div className="img-container">
           <img src={pic3} alt="" />
         </div>
-        <div className="gallery-arrow" onClick={() => scrollToRight()}>
-          <img src={gallery_arrow} alt="" />
-        </div>
+
         <div className="img-container">
           <img src={pic2} alt="" />
         </div>
@@ -116,6 +115,7 @@ const GalleryStyle = styled.div`
       font-size: 20px;
       letter-spacing: 0.001em;
       margin-bottom: 56px;
+      color: #192861;
     }
   }
 
@@ -131,11 +131,18 @@ const GalleryStyle = styled.div`
     scroll-snap-type: x mandatory; /* Enable horizontal scrolling with mandatory snap points */
     -webkit-overflow-scrolling: touch;
 
-    .gallery-arrow {
+    .gallery-arrow-right {
       position: absolute;
       bottom: 3%;
       right: 5%;
       cursor: pointer;
+    }
+    .gallery-arrow-left {
+      position: absolute;
+      bottom: 3%;
+      left: 5%;
+      cursor: pointer;
+      /* transform: scale(-1); */
     }
 
     .img-container {

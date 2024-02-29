@@ -167,6 +167,7 @@ const QnaStyle = styled.div`
       padding: 10px 0px;
       font-weight: 400;
       font-size: 18px;
+      color: #192861;
     }
     .trigger-wrapper {
       display: flex;

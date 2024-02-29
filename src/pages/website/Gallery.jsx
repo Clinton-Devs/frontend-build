@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import WebsiteNav from "../../components/navbar/WebsiteNav";
 
 import styled from "styled-components";
-
+import Background from "../../components/websiste/Background";
 import Footer from "../../components/Footer";
 
 import gallery_main from "../../assets/gallery/gallery_main_image.png";
@@ -20,11 +20,16 @@ import image_11 from "../../assets/gallery/gallery_image_11.png";
 import image_12 from "../../assets/gallery/gallery_image_12.png";
 
 const Gallery = () => {
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <GalleryStyle>
       <WebsiteNav activePage="gallery" />
       <div className="gallery-container">
         <section id="section-1" className="section-1">
+          <Background />
           <h3>Our Gallery</h3>
           <p className="paragraph">
             Step into our Gallery to witness the embodiment of our vision and
@@ -111,6 +116,8 @@ const GalleryStyle = styled.div`
       font-size: 24px;
       letter-spacing: 0.001em;
       margin-bottom: 40px;
+      color: #192861;
+      line-height: 40px;
     }
 
     .section-1 {
@@ -149,6 +156,8 @@ const GalleryStyle = styled.div`
           font-size: 20px;
           letter-spacing: 0.001em;
           margin-bottom: 56px;
+          color: #192861;
+          line-height: 40px;
         }
       }
 
