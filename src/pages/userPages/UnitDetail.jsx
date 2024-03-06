@@ -1,12 +1,13 @@
 import React, { useRef } from "react";
+import env from "../../env";
 import DashboardNav from "../../components/navbar/DashboardNav";
+import WebsiteNav from "../../components/navbar/WebsiteNav";
 import styled from "styled-components";
 import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import InfoContainer from "../../components/InfoContainer";
 import PlayButton from "../../assets/common/play-button.svg";
 import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
-
 import PayButton from "../../assets/dashboard/payElectricityButton.svg";
 import messageButton from "../../assets/dashboard/message-cta.svg";
 import useGetOneUnit from "../../app/services/units/useGetOneUnit";
@@ -14,6 +15,7 @@ import { CardsWrapper } from "./dashboardStyles";
 import { formatNumber } from "../../utils/styles/formatNumber";
 
 const UnitDetail = () => {
+  const user = env?.getUser();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { unitId } = useParams();
@@ -47,7 +49,7 @@ const UnitDetail = () => {
 
   return (
     <>
-      <DashboardNav />
+      {user ? <DashboardNav /> : <WebsiteNav activePage="offers" />}
 
       <InfoContainer
         title={
@@ -119,12 +121,14 @@ const UnitDetail = () => {
                 <PropertyManager>
                   <div className="title">
                     <h4>Property Manager</h4>
-                    <img
-                      src={messageButton}
-                      alt=""
-                      onClick={() => goToMessage()}
-                      style={{ cursor: "pointer" }}
-                    />
+                    {user && (
+                      <img
+                        src={messageButton}
+                        alt=""
+                        onClick={() => goToMessage()}
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
                   </div>
                   <div className="detail">
                     {/* <div className="img-thumbnail">
@@ -151,16 +155,18 @@ const UnitDetail = () => {
           <>
             {unitDetail[0]?.paymentPlan}
 
-            <div
-              style={{ marginTop: "72px", cursor: "pointer" }}
-              onClick={() =>
-                navigate("/pay-electricity-bill", {
-                  state: { unitId: state.unitId },
-                })
-              }
-            >
-              <img src={PayButton} alt="" />
-            </div>
+            {user && (
+              <div
+                style={{ marginTop: "72px", cursor: "pointer" }}
+                onClick={() =>
+                  navigate("/pay-electricity-bill", {
+                    state: { unitId: state.unitId },
+                  })
+                }
+              >
+                <img src={PayButton} alt="" />
+              </div>
+            )}
           </>
         )}
       </InfoContainer>
@@ -300,7 +306,7 @@ const Description = styled.div`
 const Grid = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
-  gap: 12px;
+  gap: 32px;
 
   @media only screen and (max-width: 768px) {
     grid-template-columns: 1fr;

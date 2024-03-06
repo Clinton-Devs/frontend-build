@@ -78,6 +78,7 @@ const UserDashboard = () => {
                   ownedUnitId={unit._id}
                   name={unit.unitId.name}
                   imgSrc={unit.unitId.image}
+                  price={unit.unitId.price}
                   tagInfo={
                     <Tag>
                       <img src={bed} alt="" />

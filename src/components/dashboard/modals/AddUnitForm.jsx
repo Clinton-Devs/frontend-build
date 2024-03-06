@@ -78,7 +78,7 @@ const AddUnitForm = ({ projectId, triggerReload }) => {
       .then((response) => {
         toast.success("Unit Successfully Created");
         // console.log(response.data.data._id);
-        setUnitId(response.data.data._id);
+        setUnitId(response?.data?.data?._id);
         clearFields();
         triggerReload();
         setAddingUnit(false);
@@ -86,7 +86,7 @@ const AddUnitForm = ({ projectId, triggerReload }) => {
       .catch((error) => {
         setAddingUnit(false);
         console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
+        toast.error(error?.response?.data?.message || "An Error Occured");
       });
   };
 

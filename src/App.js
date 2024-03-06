@@ -7,7 +7,8 @@ import Home from "./pages/website/Home";
 import AboutUs from "./pages/website/AboutUs";
 import Gallery from "./pages/website/Gallery";
 import Offers from "./pages/website/Offers";
-import OfferDetail from "./pages/website/OfferDetail";
+import ProjectDetail from "./pages/userPages/ProjectDetail";
+import UnitDetail from "./pages/userPages/UnitDetail";
 import SignIn from "./pages/signIn/SignIn";
 import PrivateRoutes from "./routes/PrivateRoutes";
 
@@ -18,9 +19,10 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/about-us" element={<AboutUs />} />
       <Route path="/gallery" element={<Gallery />} />
-      <Route path="/offers/:offerId" element={<OfferDetail />} />
       <Route path="/offers" element={<Offers />} />
       <Route path="/sign-in" element={<SignIn />} />
+      <Route path="/projects/:projectId" element={<ProjectDetail />} />
+      <Route path="/projects/units/:unitId" element={<UnitDetail />} />
 
       {/* private routes routes */}
       <Route path="/*" element={<PrivateRoutes />} />

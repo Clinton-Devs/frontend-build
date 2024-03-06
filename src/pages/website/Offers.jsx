@@ -3,27 +3,20 @@ import WebsiteNav from "../../components/navbar/WebsiteNav";
 import styled from "styled-components";
 import Background from "../../components/websiste/Background";
 import InfoCard from "../../components/dashboard/InfoCard";
-import project_card_1 from "../../assets/offers/project_card_1.png";
-import project_card_2 from "../../assets/offers/project_card_2.png";
-import project_card_3 from "../../assets/offers/project_card_3.png";
-import project_card_4 from "../../assets/offers/project_card_4.png";
-import project_card_5 from "../../assets/offers/project_card_5.png";
-import project_card_6 from "../../assets/offers/project_card_6.png";
-import project_card_7 from "../../assets/offers/project_card_7.png";
-import project_card_8 from "../../assets/offers/project_card_8.png";
-import project_card_9 from "../../assets/offers/project_card_9.png";
-import project_card_10 from "../../assets/offers/project_card_10.png";
-import project_card_11 from "../../assets/offers/project_card_11.png";
-import project_card_12 from "../../assets/offers/project_card_12.png";
-import project_card_13 from "../../assets/offers/project_card_13.png";
-import project_card_14 from "../../assets/offers/project_card_14.png";
-import project_card_15 from "../../assets/offers/project_card_15.png";
+
+import useGetAllProjects from "../../app/services/projects/useGetAllProjects";
 
 import Footer from "../../components/Footer";
 
 const Offers = () => {
+  const { loading, projectList } = useGetAllProjects();
+
+  const completedProjects = projectList.filter(
+    (project) => project.status === "completed"
+  );
+
+  //scroll to top of screen
   useEffect(() => {
-    // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
   }, []);
   return (
@@ -46,71 +39,29 @@ const Offers = () => {
             <p className="text">We have got lots of offers for you</p>
           </div>
 
-          <OffersWrapper>
-            <InfoCard
-              name="Project A"
-              imgSrc={project_card_1}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project B"
-              imgSrc={project_card_2}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project C"
-              imgSrc={project_card_3}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project D"
-              imgSrc={project_card_4}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project E"
-              imgSrc={project_card_5}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project F"
-              imgSrc={project_card_6}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project G"
-              imgSrc={project_card_7}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project H"
-              imgSrc={project_card_8}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project I"
-              imgSrc={project_card_9}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-          </OffersWrapper>
+          {loading ? (
+            <h3 className="loading-text">Loading...</h3>
+          ) : (
+            <OffersWrapper>
+              {projectList.map((project) => {
+                if (project.status === "ongoing") {
+                  return (
+                    <InfoCard
+                      name={project.name}
+                      imgSrc={project.image}
+                      tagInfo={
+                        project["unit count"].length === 0
+                          ? "0 Units"
+                          : `${project["unit count"][0].count} units`
+                      }
+                      location={project.location}
+                      link={`/projects/${project._id}`}
+                    />
+                  );
+                }
+              })}
+            </OffersWrapper>
+          )}
         </section>
 
         <section className="section-2">
@@ -119,50 +70,29 @@ const Offers = () => {
             <p className="text">We have got lots of offers for you</p>
           </div>
 
-          <OffersWrapper>
-            <InfoCard
-              name="Project A"
-              imgSrc={project_card_10}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project B"
-              imgSrc={project_card_11}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project C"
-              imgSrc={project_card_12}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project D"
-              imgSrc={project_card_13}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project E"
-              imgSrc={project_card_14}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-            <InfoCard
-              name="Project F"
-              imgSrc={project_card_15}
-              tagInfo="10 Units"
-              location="Lagos, Nigeria"
-              link={`/offers/offer-detail`}
-            />
-          </OffersWrapper>
+          {loading ? (
+            <h3 className="loading-text">Loading...</h3>
+          ) : completedProjects.length === 0 ? (
+            <h3 className="loading-text">No projects found</h3>
+          ) : (
+            <OffersWrapper>
+              {completedProjects.map((project) => {
+                return (
+                  <InfoCard
+                    name={project.name}
+                    imgSrc={project.image}
+                    tagInfo={
+                      project["unit count"].length === 0
+                        ? "0 Units"
+                        : `${project["unit count"][0].count} units`
+                    }
+                    location={project.location}
+                    link={`/projects/${project._id}`}
+                  />
+                );
+              })}
+            </OffersWrapper>
+          )}
         </section>
       </div>
 
@@ -174,6 +104,10 @@ const Offers = () => {
 export default Offers;
 
 const OffersStyle = styled.div`
+  .loading-text {
+    color: #e8e8e8;
+    font-size: 12px;
+  }
   .section-1 {
     position: relative;
     margin-bottom: 150px;
@@ -186,6 +120,7 @@ const OffersStyle = styled.div`
       color: #192861;
       margin-bottom: 40px;
     }
+
     .paragraph {
       font-weight: 400;
       font-size: 24px;
@@ -228,6 +163,12 @@ const OffersStyle = styled.div`
     .section-2 {
       padding: 0px 112px;
       margin-bottom: 150px;
+
+      .loading-text {
+        color: #e8e8e8;
+        font-size: 32px;
+        text-align: center;
+      }
       .offers-header {
         display: flex;
         flex-direction: column;

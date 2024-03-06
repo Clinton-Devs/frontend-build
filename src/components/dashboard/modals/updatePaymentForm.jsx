@@ -39,7 +39,7 @@ const UpdatePaymentForm = ({ ownedUnitId, triggerReload, handleClose }) => {
       })
       .catch((error) => {
         // console.log(error.response.data.message);
-        toast.error(error.response.data.message || "An Error Occured");
+        toast.error(error?.response?.data?.message || "An Error Occured");
         setUpdatingPayment(false);
       });
   };

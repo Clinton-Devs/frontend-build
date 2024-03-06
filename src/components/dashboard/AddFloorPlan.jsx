@@ -35,7 +35,7 @@ const AddFloorPlan = ({ unitId, reloadData }) => {
           formdata
         )
         .then((response) => {
-          console.log(response.data.url);
+          // console.log(response?.data?.url);
           toast.success("Images uploaded");
           setUploadedFloorPlanUrl((prevImagesUrl) => [
             ...prevImagesUrl,
@@ -43,7 +43,7 @@ const AddFloorPlan = ({ unitId, reloadData }) => {
           ]);
         })
         .catch((error) =>
-          toast.error(error.response.data.message || "Image upload error")
+          toast.error(error?.response?.data?.message || "Image upload error")
         );
     });
 
@@ -63,13 +63,13 @@ const AddFloorPlan = ({ unitId, reloadData }) => {
       )
       .then((response) => {
         toast.success("Floor Plan Images Added");
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
         setAddingFloorPlan(false);
         reloadData();
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
+        toast.error(error?.response?.data?.message || "An Error Occured");
         setAddingFloorPlan(false);
       });
   };

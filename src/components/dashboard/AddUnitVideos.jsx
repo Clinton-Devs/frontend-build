@@ -47,7 +47,7 @@ const AddUnitVideos = ({ unitId, reloadData }) => {
           formdata
         )
         .then((response) => {
-          console.log(response.data.url);
+          // console.log(response?.data?.url);
           toast.success("Videos uploaded");
           setUploadedVideosUrl((prevVideosUrl) => [
             ...prevVideosUrl,
@@ -60,7 +60,7 @@ const AddUnitVideos = ({ unitId, reloadData }) => {
           setUploadingVideo(false);
         })
         .catch((error) => {
-          toast.error(error.response.data.message || "Image upload error");
+          toast.error(error?.response?.data?.message || "Image upload error");
           setUploadingVideo(false);
         });
     });
@@ -84,13 +84,13 @@ const AddUnitVideos = ({ unitId, reloadData }) => {
       )
       .then((response) => {
         toast.success("New Videos Added");
-        console.log(response.data.data);
+        // console.log(response?.data?.data);
         setAddingVideo(false);
         reloadData();
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
+        toast.error(error?.response?.data?.message || "An Error Occured");
       });
   };
 

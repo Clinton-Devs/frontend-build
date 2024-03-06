@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { http } from "../../app/services/axios-https";
 import toast from "react-hot-toast";
 import Notification from "../Notification";
+import { formatNumber } from "../../utils/styles/formatNumber";
 
 const InfoCard = ({
   imgSrc,
@@ -52,7 +53,7 @@ const InfoCard = ({
 
       <div className="name-and-price" onClick={() => navigate(link)}>
         <h5>{name}</h5>
-        <p>{price || "1.2m"}</p>
+        <p>{formatNumber.formatZeroes(price)}</p>
       </div>
 
       <p className="location">
@@ -150,6 +151,7 @@ const CardContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
+    cursor: pointer;
 
     p {
       color: #192861;

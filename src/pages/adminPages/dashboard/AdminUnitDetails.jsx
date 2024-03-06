@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import env from "../../../env";
 import styled from "styled-components";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
@@ -56,12 +56,14 @@ const AdminUnitDetails = () => {
     reloadCount
   );
 
+  const { transactionLoading, unitTransactionList } = useGetUnitTransactions(
+    unitId,
+    reloadCount
+  );
+
   const triggerReload = () => {
     setReloadCount((prevKey) => prevKey + 1);
   };
-
-  const { transactionLoading, unitTransactionList } =
-    useGetUnitTransactions(unitId);
 
   const [readOnly, setReadOnly] = useState(true);
   const [coverImage, setCoverImage] = useState(null);
@@ -194,6 +196,14 @@ const AdminUnitDetails = () => {
       grow: 0.5,
     },
   ];
+
+  useEffect(() => {
+    if (!readOnly) {
+      toast("Unit can now be edited!", {
+        icon: "🖊️",
+      });
+    }
+  }, [readOnly]);
 
   return (
     <>

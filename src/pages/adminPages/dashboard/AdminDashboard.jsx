@@ -7,16 +7,20 @@ import MobileAdminNav from "../../../components/navbar/MobileAdminNav";
 import Modal from "../../../components/dashboard/Modal";
 import useGetAllUsers from "../../../app/services/users/useGetAllUsers";
 import AddUserForm from "../../../components/dashboard/modals/AddUserForm";
+import EditUserForm from "../../../components/dashboard/modals/EditUserForm";
 import { DashboardContainer } from "./AdminDashboardStyles";
 import { dashboardTableSyles } from "../../../utils/styles/tableStyles";
 import editButton from "../../../assets/dashboard/EditButton.svg";
 import ActionButton from "../../../components/button/ActionButton";
 import TableMobile from "../../../components/dashboard/TableMobile";
 import ToggleUserType from "../../../components/dashboard/ToggleUserType";
+import moment from "moment";
 
 const Dashboard = () => {
   const [openAddUserForm, setOpenAddUserForm] = useState(false);
+  const [openEditUserForm, setOpenEditUserForm] = useState(false);
 
+  const [userId, setUserId] = useState("");
   const [showUserOption, setShowUserOption] = useState(false);
   const [userType, setUserType] = useState("user");
   const toggleUser = () =>
@@ -45,11 +49,17 @@ const Dashboard = () => {
   const handleCloseAddUserForm = () => {
     setOpenAddUserForm(false);
   };
+  const handleOpenEditUserForm = () => {
+    setOpenEditUserForm(true);
+  };
+  const handleCloseEditUserForm = () => {
+    setOpenEditUserForm(false);
+  };
 
   const columns = [
     {
       name: "ID",
-      selector: (row) => row.id,
+      selector: (row) => row.id.substring(0, 5),
       grow: 0.2,
     },
     {
@@ -61,19 +71,25 @@ const Dashboard = () => {
       selector: (row) => row.email,
     },
 
-    {
-      name: "Assigned Property",
-      selector: (row) => "Placeholder Estate",
-    },
+    // {
+    //   name: "Assigned Property",
+    //   selector: (row) => "Placeholder Estate",
+    // },
     {
       name: "Created",
-      selector: (row) => "12/12/2023",
+      selector: (row) => moment(row.created).format("DD/MM/YYYY"),
     },
 
     {
       name: "",
-      cell: () => (
-        <div>
+      cell: (row) => (
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            setUserId(row.id);
+            handleOpenEditUserForm();
+          }}
+        >
           <img src={editButton} alt="edit" />
         </div>
       ),
@@ -90,7 +106,20 @@ const Dashboard = () => {
         maxWidth="sm"
         handleClose={handleCloseAddUserForm}
       >
-        <AddUserForm />
+        <AddUserForm triggerReload={() => reloadData()} />
+      </Modal>
+      <Modal
+        modalOpenCondition={openEditUserForm}
+        headerPrimaryText="Edit User"
+        isFullWidth={true}
+        maxWidth="sm"
+        handleClose={handleCloseEditUserForm}
+      >
+        <EditUserForm
+          userId={userId}
+          triggerReload={() => reloadData()}
+          handleClose={handleCloseEditUserForm}
+        />
       </Modal>
       <DashboardContainer>
         <Sidebar />

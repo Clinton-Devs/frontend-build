@@ -54,7 +54,7 @@ const AddProjectVideos = ({ projectId, reloadData }) => {
           ]);
           setUploadedVideosPreviewUrl((prevVideosPreviewUrl) => [
             ...prevVideosPreviewUrl,
-            response.data.secure_url,
+            response?.data?.secure_url,
           ]);
           setUploadingVideo(false);
         })
@@ -83,13 +83,13 @@ const AddProjectVideos = ({ projectId, reloadData }) => {
       )
       .then((response) => {
         toast.success("New Videos Added");
-        console.log(response.data.data);
+        // console.log(response?.data?.data);
         setAddingVideo(false);
         reloadData();
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
+        toast.error(error?.response?.data?.message || "An Error Occured");
       });
   };
 

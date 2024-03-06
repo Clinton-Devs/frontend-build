@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { http } from "../../../app/services/axios-https";
 import env from "../../../env";
 import InputCommon from "../../inputField/InputCommon";
-import SelectCommon from "../../inputField/SelectCommon";
 import ButtonCommon from "../../button/ButtonCommon";
+import SelectCommon from "../../inputField/SelectCommon";
 import Notification from "../../Notification";
 import spinner from "../../../assets/common/spinner.svg";
 import toast from "react-hot-toast";
 
-const AddUserForm = ({ triggerReload }) => {
+const EditUserForm = ({ userId, triggerReload, handleClose }) => {
   const [userType, setUserType] = useState("user");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -24,32 +24,39 @@ const AddUserForm = ({ triggerReload }) => {
     phoneNumber("");
   };
 
-  const addUser = () => {
+  const editUser = () => {
     setAddingUser(true);
     const formdata = {
       firstName,
       lastName,
       phoneNumber,
-      email,
+      email: email.trim(""),
     };
 
     http
-      .post(`${env.clinton_homes_base_url}/admin/create-user`, formdata)
+      .put(`${env.clinton_homes_base_url}/admin/edit-user/${userId}`, formdata)
       .then((response) => {
         // console.log(response);
-        toast.success("User Added");
+        toast.success("User Edited");
+        triggerReload();
+        handleClose();
         clearFields();
         setAddingUser(false);
       })
       .catch((error) => {
-        // console.log(error.response.data.message);
-        toast.error(error?.response?.data?.message || "An Error Occured");
+        // console.log(error);
+        setAddingUser(false);
+        toast.error(
+          error?.response?.data?.message ||
+            error?.response?.data[0]?.errors?.issues[0]?.message ||
+            "An Error Occured"
+        );
       });
 
     // console.log(formdata);
   };
 
-  const makeAdmin = () => {
+  const editAdmin = () => {
     setAddingUser(true);
     const formdata = {
       firstName,
@@ -60,11 +67,13 @@ const AddUserForm = ({ triggerReload }) => {
     };
 
     http
-      .post(`${env.clinton_homes_base_url}/admin/create-user`, formdata)
+      .post(`${env.clinton_homes_base_url}/admin/edit-user/${userId}`, formdata)
       .then((response) => {
         // console.log(response);
         toast.success("Admin Created");
+        handleClose();
         clearFields();
+        triggerReload();
         setAddingUser(false);
       })
       .catch((error) => {
@@ -74,11 +83,11 @@ const AddUserForm = ({ triggerReload }) => {
       });
   };
 
-  const handleAddUser = () => {
+  const handleEditUser = () => {
     if (userType === "user") {
-      addUser();
+      editUser();
     } else {
-      makeAdmin();
+      editAdmin();
     }
   };
 
@@ -110,7 +119,6 @@ const AddUserForm = ({ triggerReload }) => {
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      {/* <InputCommon placeholder="Type:" marginBottom="24px" /> */}
       <SelectCommon
         marginBottom="24px"
         value={userType}
@@ -122,10 +130,11 @@ const AddUserForm = ({ triggerReload }) => {
         backgroundColor="#F8F4F6"
         textColor="#721F4B"
         marginTop="16px"
-        onClick={handleAddUser}
+        // onClick={editUser}
+        onClick={() => handleEditUser()}
       />
     </div>
   );
 };
 
-export default AddUserForm;
+export default EditUserForm;

@@ -142,7 +142,7 @@ const GalleryStyle = styled.div`
       bottom: 3%;
       left: 5%;
       cursor: pointer;
-      /* transform: scale(-1); */
+      transform: scale(-1);
     }
 
     .img-container {

@@ -20,9 +20,10 @@ const useGetAllUsers = (type, reloadProp) => {
         const users = response?.data?.data;
         const usersData = users?.map((user) => {
           return {
-            id: user?._id.substring(0, 5),
+            id: user?._id,
             name: `${user?.firstName} ${user?.lastName}`,
             email: user?.email,
+            created: user?.createdAt,
           };
         });
         setUserList([...usersData]);

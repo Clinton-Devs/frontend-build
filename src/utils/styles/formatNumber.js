@@ -33,7 +33,28 @@ export const formatTime = (seconds) => {
   return `${formattedMinutes}:${formattedSeconds}`;
 };
 
+function formatZeroes(numberString) {
+  const number = parseFloat(numberString);
+
+  if (isNaN(number)) {
+    // Return the original string if it's not a valid number
+    return numberString;
+  }
+
+  if (number >= 1e6) {
+    // If the number is in millions, format it with "m"
+    return (number / 1e6).toFixed(1) + "m";
+  } else if (number >= 1e3) {
+    // If the number is in thousands, format it with "k"
+    return (number / 1e3).toFixed(1) + "k";
+  }
+
+  // Return the original number if it's less than 1000
+  return number.toString();
+}
+
 export const formatNumber = {
   formatCurrency,
   formatTime,
+  formatZeroes,
 };

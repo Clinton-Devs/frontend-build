@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 
+import env from "../../env";
 import WebsiteNav from "../../components/navbar/WebsiteNav";
 import QnA from "../../components/websiste/QnA";
 import Footer from "../../components/Footer";
@@ -16,6 +17,7 @@ const Home = () => {
     // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <HomeStyle>
       <WebsiteNav activePage="home" />
@@ -283,7 +285,7 @@ const HomeStyle = styled.div`
     }
   }
 
-  @media only screen and (max-width: 1500px) {
+  @media only screen and (max-width: 1100px) {
     .home-header {
       .success-stats {
         gap: 30px;

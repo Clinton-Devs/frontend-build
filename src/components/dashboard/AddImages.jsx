@@ -36,15 +36,15 @@ const AddImages = ({ projectId, reloadData }) => {
           formdata
         )
         .then((response) => {
-          console.log(response.data.url);
+          // console.log(response?.data?.url);
           toast.success("Images uploaded");
           setUploadedImagesUrl((prevImagesUrl) => [
             ...prevImagesUrl,
-            response.data.url,
+            response?.data?.url,
           ]);
         })
         .catch((error) =>
-          toast.error(error.response.data.message || "Image upload error")
+          toast.error(error?.response?.data?.message || "Image upload error")
         );
     });
 
@@ -67,13 +67,13 @@ const AddImages = ({ projectId, reloadData }) => {
       )
       .then((response) => {
         toast.success("New Images Added");
-        console.log(response.data.data);
+        // console.log(response?.data?.data);
         setAddingImage(false);
         reloadData();
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
+        toast.error(error?.response?.data?.message || "An Error Occured");
       });
   };
 

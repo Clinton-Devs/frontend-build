@@ -13,7 +13,7 @@ const useGetUserBillPayments = (unitId) => {
       .get(`${env.clinton_homes_base_url}/user/get-bill-payments/${unitId}`)
       .then((response) => {
         // console.log(response.data.data);
-        setUserPaymentsList([...response.data.data]);
+        setUserPaymentsList([...response?.data?.data]);
         setGettingPayments(false);
       })
       .catch((error) => {

@@ -8,7 +8,7 @@ import linkedin_icon from "../assets/home/linkedin_icon.svg";
 import twitter_icon from "../assets/home/twitter_icon.svg";
 import Background from "./websiste/Background";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -42,7 +42,9 @@ const Footer = () => {
           <h5 className="footer-subtitle" onClick={() => navigate("/about-us")}>
             About
           </h5>
-          <p className="footer-text">Who we are</p>
+          <p className="footer-text" onClick={() => navigate("/about-us")}>
+            Who we are
+          </p>
           <p className="footer-text">Privacy policy</p>
           <p className="footer-text">Terms of use</p>
         </div>
@@ -50,34 +52,42 @@ const Footer = () => {
           <h5 className="footer-subtitle" onClick={() => navigate("/gallery")}>
             Gallery
           </h5>
-          <p className="footer-text">Project View</p>
+          <p className="footer-text" onClick={() => navigate("/offers")}>
+            Project View
+          </p>
           <p className="footer-text">Unit View</p>
         </div>
         <div className="offers">
           <h5 className="footer-subtitle" onClick={() => navigate("/offers")}>
             Offers
           </h5>
-          <p className="footer-text">All Projects</p>
-          <p className="footer-text">Ongoing Projects</p>
-          <p className="footer-text">Completed Projects</p>
+          <p className="footer-text" onClick={() => navigate("/offers")}>
+            All Projects
+          </p>
+          <p className="footer-text" onClick={() => navigate("/offers")}>
+            Ongoing Projects
+          </p>
+          <p className="footer-text" onClick={() => navigate("/offers")}>
+            Completed Projects
+          </p>
         </div>
       </div>
       <div className="layer-3">
         <p>Clinton’s Developers Limited &copy; 2024. All Rights Reserved.</p>
 
         <div className="socials">
-          <div>
+          <Link className="social-link" to="https://www.instagram.com">
             <img src={instagram_icon} alt="" />
-          </div>
-          <div>
+          </Link>
+          <Link className="social-link" to="https://www.twitter.com">
             <img src={twitter_icon} alt="" />
-          </div>
-          <div>
+          </Link>
+          <Link className="social-link" to="https://www.facebook.com">
             <img src={facbook_icon} alt="" />
-          </div>
-          <div>
+          </Link>
+          <Link className="social-link" to="https://www.linkedin.com">
             <img src={linkedin_icon} alt="" />
-          </div>
+          </Link>
         </div>
       </div>
     </FooterStyle>
@@ -149,7 +159,7 @@ const FooterStyle = styled.footer`
     }
     .footer-text {
       font-weight: 400;
-
+      cursor: pointer;
       line-height: 19px;
       letter-spacing: 0.001em;
       color: #192861;
@@ -204,6 +214,10 @@ const FooterStyle = styled.footer`
     .socials {
       display: flex;
       gap: 15px;
+
+      .social-link {
+        cursor: pointer;
+      }
     }
   }
 `;

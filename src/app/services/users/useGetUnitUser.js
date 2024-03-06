@@ -14,7 +14,7 @@ const useGetUnitUser = (unitId, reloadProp) => {
       .get(`${env.clinton_homes_base_url}/admin/unit-owner-details/${unitId}`)
       .then((response) => {
         // console.log(response.data.data[0]._id);
-        setUserDetail([...response.data.data]);
+        setUserDetail([...response?.data?.data]);
         setOwnedUnitId(response?.data?.data[0]?._id);
         setUserLoading(false);
       })

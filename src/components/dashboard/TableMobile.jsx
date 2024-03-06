@@ -18,11 +18,11 @@ const TableMobileItem = ({ id, name, email, assignedProperty }) => {
           <b>Email:</b> {email}
         </p>
       </div>
-      <div>
+      {/* <div>
         <p>
           <b>Assigned Property:</b> {assignedProperty}
         </p>
-      </div>
+      </div> */}
       <div>
         <p>
           <b>Date:</b> 12/12/24
@@ -55,7 +55,7 @@ const TableMobile = ({ list }) => {
                   id={item.id}
                   name={item.name}
                   email={item.email}
-                  assignedProperty="Placeholder Estate"
+                  // assignedProperty="Placeholder Estate"
                 />
               </div>
             </div>

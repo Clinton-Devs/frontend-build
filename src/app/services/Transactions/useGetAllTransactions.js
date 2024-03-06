@@ -13,7 +13,7 @@ const useGetAllTransactions = () => {
       .get(`${env.clinton_homes_base_url}/admin/all-transactions`)
       .then((response) => {
         // console.log(response.data.data);
-        setTransactionList([...response.data.data]);
+        setTransactionList([...response?.data?.data]);
         setLoading(false);
       })
       .catch((error) => {

@@ -61,7 +61,7 @@ const DashboardNav = () => {
 
           <div className="logout">
             <p>{`${user?.firstName} ${user?.lastName}`}</p>
-            <a href="/" onClick={() => handleLogout}>
+            <a href="/sign-in" onClick={() => handleLogout}>
               (Logout)
             </a>
           </div>

@@ -43,7 +43,6 @@ const AdminProjectDetail = () => {
 
   const triggerReload = () => {
     // Update refreshKey to trigger a re-render
-    console.log("triggered");
     setReloadCount((prevKey) => prevKey + 1);
   };
 

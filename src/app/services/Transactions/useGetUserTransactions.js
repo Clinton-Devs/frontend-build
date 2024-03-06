@@ -13,7 +13,7 @@ const useGetUserTransactions = (unitId) => {
       .get(`${env.clinton_homes_base_url}/user/user-transactions`)
       .then((response) => {
         // console.log(response.data.data);
-        setUserTransactionList([...response.data.data]);
+        setUserTransactionList([...response?.data?.data]);
         setTransactionLoading(false);
       })
       .catch((error) => {

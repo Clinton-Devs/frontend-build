@@ -63,16 +63,16 @@ const AssignUserForm = ({ unitId, triggerReload, handleClose }) => {
         handleClose();
       })
       .catch((error) => {
-        console.log(error.response.status);
+        console.log(error?.response?.status);
         // console.log(error.response.data[0].errors.issues[0].message);
 
-        if (error.response.status === 400) {
+        if (error?.response?.status === 400) {
           toast.error(
-            error.response.data[0].errors.issues[0].message ||
+            error?.response?.data[0]?.errors?.issues[0]?.message ||
               "An Error Occured"
           );
         } else {
-          toast.error(error.response.data.message || "An Error Occured");
+          toast.error(error?.response?.data?.message || "An Error Occured");
         }
 
         setAddingUser(false);

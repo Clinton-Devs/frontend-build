@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
+import env from "../../env";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardNav from "../../components/navbar/DashboardNav";
+import WebsiteNav from "../../components/navbar/WebsiteNav";
 import styled from "styled-components";
 import { ReactComponent as Spinner } from "../../assets/common/spinner-large.svg";
 import InfoContainer from "../../components/InfoContainer";
@@ -11,7 +13,9 @@ import useGetOneProject from "../../app/services/projects/useGetOneProject";
 
 import { CardsWrapper } from "./dashboardStyles";
 import { ImageContainer } from "../adminPages/dashboard/AdminDashboardStyles";
+
 const ProjectDetail = () => {
+  const user = env?.getUser();
   const navigate = useNavigate();
   const { projectId } = useParams();
   const {
@@ -51,7 +55,7 @@ const ProjectDetail = () => {
 
   return (
     <>
-      <DashboardNav />
+      {user ? <DashboardNav /> : <WebsiteNav activePage="offers" />}
 
       <InfoContainer
         title={
@@ -160,7 +164,7 @@ const ProjectDetail = () => {
                       <img
                         src={image.url}
                         alt=""
-                        style={{ maxWidth: "100%" }}
+                        style={{ maxWidth: "100%", height: "100%" }}
                       />
                     </div>
                   );

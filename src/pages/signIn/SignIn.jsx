@@ -32,10 +32,6 @@ import House_3 from "../../assets/login/house_img_3.png";
 import axios from "axios";
 import env from "../../env";
 
-// interface LoginProps {
-//   onLoginSuccess: (user: User) => void;
-// }
-
 const SignIn = () => {
   // const dispatch = useDispatch<AppDispatch>();
   // const { user } = useSelector((state: RootState) => state.authData);
@@ -112,6 +108,7 @@ const SignIn = () => {
       });
   };
 
+  //log out unauthorized user
   useEffect(() => {
     const user = env?.getUser();
     if (user) {

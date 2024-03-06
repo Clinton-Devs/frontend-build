@@ -2,13 +2,6 @@ import styled from "styled-components";
 import { devices } from "../../utils/styles/breakpoints";
 
 const NavbarStyle = styled.nav`
-  /* background-color: rgb(1, 1, 1, 0);
-  height: 90px;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center; */
-
   display: flex;
   height: 90px;
   justify-content: space-between;
@@ -25,6 +18,7 @@ const NavbarStyle = styled.nav`
     justify-content: start;
     align-items: center;
     padding-left: 10%;
+    cursor: pointer;
 
     ${`@media only screen and ${devices.lg}`} {
       background-color: #f8f4f6;

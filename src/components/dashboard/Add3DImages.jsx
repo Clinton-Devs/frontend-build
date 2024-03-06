@@ -36,7 +36,7 @@ const Add3DImages = ({ projectId, reloadData }) => {
           formdata
         )
         .then((response) => {
-          console.log(response.data.url);
+          // console.log(response?.data?.url);
           toast.success("Images uploaded");
           setUploaded3DImagesUrl((prevImagesUrl) => [
             ...prevImagesUrl,
@@ -44,7 +44,7 @@ const Add3DImages = ({ projectId, reloadData }) => {
           ]);
         })
         .catch((error) =>
-          toast.error(error.response.data.message || "Image upload error")
+          toast.error(error?.response?.data?.message || "Image upload error")
         );
     });
 
@@ -64,13 +64,13 @@ const Add3DImages = ({ projectId, reloadData }) => {
       )
       .then((response) => {
         toast.success("New 3D Images Added");
-        console.log(response.data.data);
+        // console.log(response?.data?.data);
         setAdding3DImage(false);
         reloadData();
       })
       .catch((error) => {
-        console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
+        // console.log(error);
+        toast.error(error?.response?.data?.message || "An Error Occured");
       });
   };
 

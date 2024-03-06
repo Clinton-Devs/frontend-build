@@ -74,11 +74,10 @@ const AddProjects = () => {
         setCreatingProject(false);
       })
       .catch((error) => {
+        setCreatingProject(false);
         console.log(error);
         toast.error(error.response.data.message || "An Error Occured");
       });
-
-    // console.log(formdata);
   };
 
   return (
