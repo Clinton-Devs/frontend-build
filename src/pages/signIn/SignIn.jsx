@@ -111,8 +111,14 @@ const SignIn = () => {
   //log out unauthorized user
   useEffect(() => {
     const user = env?.getUser();
-    if (user) {
-      env.logOut();
+    if (user && user.userType === "user") {
+      navigate("/user-dashboard");
+      // env.logOut();
+    } else if (
+      (user && user.userType === "superAdmin") ||
+      (user && user.userType === "admin")
+    ) {
+      navigate("/admin-dashboard");
     }
   }, []);
 

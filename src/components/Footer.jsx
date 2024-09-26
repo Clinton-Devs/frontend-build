@@ -9,6 +9,7 @@ import twitter_icon from "../assets/home/twitter_icon.svg";
 import Background from "./websiste/Background";
 
 import { Link, useNavigate } from "react-router-dom";
+import { WhatsApp } from "@mui/icons-material";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -26,16 +27,20 @@ const Footer = () => {
       </div>
       <div className="layer-2">
         <div className="vision ">
-          <h5 className="footer-subtitle">The vision</h5>
+          {/* <h5 className="footer-subtitle">The vision</h5> */}
           <p className="footer-text">
-            <b>Address:</b> Lorem ipsum dolor sit amet consectetur, adipisicing
-            elit. Esse, natus!
+            <b>Address:</b> Westlink clinton's court, 8, Palm groove close,
+            Iyaganku GRA Ibadan, Oyo.
           </p>
           <p className="footer-text">
-            <b>Mobile:</b> Lorem ipsum
+            <b>Mobile:</b> +234 813 487 7860
           </p>
           <p className="footer-text">
-            <b>Mail:</b> info@clintondevelopers.com
+            <b>Mail:</b> info@clintonsdevelopers.com
+          </p>
+          <p className="footer-text">
+            <WhatsApp color="green" fontSize="45" />
+            <Link to={"https://wa.me/+2348134877860"}> Chat Us </Link>
           </p>
         </div>
         <div className="about">
@@ -45,8 +50,8 @@ const Footer = () => {
           <p className="footer-text" onClick={() => navigate("/about-us")}>
             Who we are
           </p>
-          <p className="footer-text">Privacy policy</p>
-          <p className="footer-text">Terms of use</p>
+          {/* <p className="footer-text">Privacy policy</p>
+          <p className="footer-text">Terms of use</p> */}
         </div>
         <div className="gallery">
           <h5 className="footer-subtitle" onClick={() => navigate("/gallery")}>
@@ -55,7 +60,7 @@ const Footer = () => {
           <p className="footer-text" onClick={() => navigate("/offers")}>
             Project View
           </p>
-          <p className="footer-text">Unit View</p>
+          {/* <p className="footer-text">Unit View</p> */}
         </div>
         <div className="offers">
           <h5 className="footer-subtitle" onClick={() => navigate("/offers")}>
@@ -178,6 +183,7 @@ const FooterStyle = styled.footer`
     }
 
     .layer-2 {
+      gap: 10px;
       .vision {
         .footer-text {
         }

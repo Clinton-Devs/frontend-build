@@ -31,7 +31,7 @@ const AddProjects = () => {
   const [coverImageUrl, setCoverImageUrl] = useState("");
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
+    // console.log(acceptedFiles);
     setCoverImage(acceptedFiles[0]);
 
     const formdata = new FormData();
@@ -69,8 +69,8 @@ const AddProjects = () => {
       .post(`${env.clinton_homes_base_url}/admin/project`, formdata)
       .then((response) => {
         toast.success("Project Successfully Created");
-        console.log(response.data.data._id);
-        setProjectId(response.data.data._id);
+        // console.log(response.data?.data._id);
+        setProjectId(response.data?.data._id);
         setCreatingProject(false);
       })
       .catch((error) => {

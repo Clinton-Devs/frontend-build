@@ -122,29 +122,36 @@ const AdminUnitDetails = () => {
     }
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-    setCoverImage(acceptedFiles[0]);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (readOnly == true) {
+        // console.log("readOnly", readOnly);
+        return toast.error("click on edit to upload");
+      }
+      console.log(acceptedFiles);
+      setCoverImage(acceptedFiles[0]);
 
-    const formdata = new FormData();
-    formdata.append("file", acceptedFiles[0]);
-    formdata.append("upload_preset", env.cloudinary_upload_preset);
-    formdata.append("cloud_name", env.cloudinary_cloud_name);
-    formdata.append("folder", "Cloudinary-ClintonDevs");
+      const formdata = new FormData();
+      formdata.append("file", acceptedFiles[0]);
+      formdata.append("upload_preset", env.cloudinary_upload_preset);
+      formdata.append("cloud_name", env.cloudinary_cloud_name);
+      formdata.append("folder", "Cloudinary-ClintonDevs");
 
-    httpCloudinary
-      .post(
-        `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
-        formdata
-      )
-      .then((response) => {
-        setCoverImageUrl(response.data.url);
-        toast.success("Image uploaded");
-      })
-      .catch((error) =>
-        toast.error(error.response.data.message || "Image upload error")
-      );
-  }, []);
+      httpCloudinary
+        .post(
+          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+          formdata
+        )
+        .then((response) => {
+          setCoverImageUrl(response?.data?.url);
+          toast.success("Image uploaded");
+        })
+        .catch((error) =>
+          toast.error(error.response?.data?.message || "Image upload error")
+        );
+    },
+    [readOnly]
+  );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const updateUnit = () => {
@@ -168,8 +175,8 @@ const AdminUnitDetails = () => {
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message || "An Error Occured");
         setUpdatingUnit(false);
+        toast.error(error.response?.data?.message || "An Error Occured");
       });
   };
 
@@ -202,6 +209,12 @@ const AdminUnitDetails = () => {
       toast("Unit can now be edited!", {
         icon: "🖊️",
       });
+      setCoverImageUrl(unitDetail[0]?.image);
+      setNewUnitName(unitDetail[0]?.name);
+      setNewNoOfRooms(unitDetail[0]?.numberOfRooms);
+      setNewNoOfBathRooms(unitDetail[0]?.numberOfBathRooms);
+      setNewPrice(unitDetail[0]?.price);
+      setNewPaymentPlan(unitDetail[0]?.paymentPlan);
     }
   }, [readOnly]);
 
@@ -327,6 +340,7 @@ const AdminUnitDetails = () => {
               onChange={(e) => setNewPrice(e.target.value)}
               disabled={readOnly}
             />
+
             <InputCommon
               placeholder={`Payment Plan: ${
                 loading ? "fetching..." : unitDetail[0]?.paymentPlan

@@ -11,7 +11,7 @@ const useSendCode = () => {
     axios
       .post(`${env.clinton_homes_base_url}/public/get-code`, { email })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setLoading(false);
         // setCodeSent(true);
       })

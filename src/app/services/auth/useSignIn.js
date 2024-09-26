@@ -16,7 +16,7 @@ const useSignIn = () => {
         otp: otp.trim(),
       })
       .then((response) => {
-        console.log(response.data.data);
+        // console.log(response.data.data);
         env.storeUser(response.data.data.token, response.data.data.user);
         setLoading(false);
 

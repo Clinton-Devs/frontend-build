@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import env from "../../../env";
 import { http } from "../axios-https";
+import { toast } from "react-hot-toast";
 
 const useGetChatRooms = () => {
   const [roomsLoading, setRoomsLoading] = useState(false);
@@ -19,7 +20,9 @@ const useGetChatRooms = () => {
         setRoomsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error);
+
+        // console.log(error);
       });
   };
 

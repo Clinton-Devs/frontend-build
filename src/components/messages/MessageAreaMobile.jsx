@@ -25,9 +25,9 @@ const MessageAreaMobile = ({
 
   const user = env?.getUser();
 
-  useEffect(() => {
-    console.log(user?.userType);
-  }, []);
+  // useEffect(() => {
+  //   console.log(user?.userType);
+  // }, []);
 
   return (
     <>

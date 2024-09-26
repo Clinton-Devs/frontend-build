@@ -24,6 +24,10 @@ const useGetAllUsers = (type, reloadProp) => {
             name: `${user?.firstName} ${user?.lastName}`,
             email: user?.email,
             created: user?.createdAt,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+            phoneNumber: user?.phoneNumber,
+            userType: user?.userType,
           };
         });
         setUserList([...usersData]);

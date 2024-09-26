@@ -7,6 +7,7 @@ import messageIcon from "../../assets/dashboard/bubble-chat.png";
 
 import houseIcon from "../../assets/dashboard/house-icon.svg";
 import { useNavigate, useLocation } from "react-router-dom";
+import env from "../../env";
 
 const MobileAdminNav = () => {
   const navigate = useNavigate();
@@ -15,7 +16,10 @@ const MobileAdminNav = () => {
   const selectActiveMenu = (option) => {
     navigate(`/${option}`);
   };
-
+  const handleLogout = () => {
+    env.logOut();
+    navigate("/sign-in");
+  };
   return (
     <>
       <Nav>
@@ -58,9 +62,10 @@ const MobileAdminNav = () => {
                 <MenuItemSelected></MenuItemSelected>
               )} */}
             </div>
-
             <div className="logout">
-              <a href="/">(Logout)</a>
+              <h4 style={{ cursor: "pointer" }} onClick={handleLogout}>
+                (Logout)
+              </h4>
             </div>
           </div>
         </div>

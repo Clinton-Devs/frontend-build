@@ -6,11 +6,15 @@ import projectsIcon from "../../assets/dashboard/house-01.svg";
 import messageIcon from "../../assets/dashboard/bubble-chat.png";
 import logout_button from "../../assets/dashboard/logout.svg";
 import { useLocation, useNavigate } from "react-router-dom";
+import env from "../../env";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const handleLogout = () => {
+    env.logOut();
+    navigate("/sign-in");
+  };
   return (
     <SidebarStyle>
       <div className="sidebar-container">
@@ -59,7 +63,8 @@ const Sidebar = () => {
             </li>
           </ul>
 
-          <div className="log-out" onClick={() => navigate("/")}>
+          {/* <div className="log-out" onClick={() => navigate("/")}> */}
+          <div className="log-out" onClick={handleLogout}>
             <img src={logout_button} alt="" />
           </div>
         </div>

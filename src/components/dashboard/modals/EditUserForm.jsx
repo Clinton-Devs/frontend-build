@@ -8,22 +8,28 @@ import SelectCommon from "../../inputField/SelectCommon";
 import Notification from "../../Notification";
 import spinner from "../../../assets/common/spinner.svg";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
-const EditUserForm = ({ userId, triggerReload, handleClose }) => {
+const EditUserForm = ({ userId, triggerReload, handleClose, user }) => {
   const [userType, setUserType] = useState("user");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [addingUser, setAddingUser] = useState(false);
-
+  console.log("user", user);
   const clearFields = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
-    phoneNumber("");
+    setPhoneNumber("");
   };
-
+  useEffect(() => {
+    setFirstName(user?.firstName);
+    setLastName(user?.lastName);
+    setEmail(user?.email);
+    setPhoneNumber(user?.phoneNumber);
+  }, []);
   const editUser = () => {
     setAddingUser(true);
     const formdata = {

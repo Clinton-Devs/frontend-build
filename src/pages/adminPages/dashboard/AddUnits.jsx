@@ -32,7 +32,7 @@ const AddUnits = () => {
   const [unitId, setUnitId] = useState("");
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
+    // console.log(acceptedFiles);
     setCoverImage(acceptedFiles[0]);
 
     const formdata = new FormData();

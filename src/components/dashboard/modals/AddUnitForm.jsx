@@ -123,14 +123,35 @@ const AddUnitForm = ({ projectId, triggerReload }) => {
         value={price}
         onChange={(e) => dispatch(updateAddUnitData({ price: e.target.value }))}
       />
-      <InputCommon
+      <select
+        name=""
+        id=""
+        required
+        value={paymentPlan}
+        style={{
+          width: "100%",
+          height: "40px",
+          borderRadius: "10px",
+          paddingLeft: "10px",
+          border: "none",
+          background: "white",
+        }}
+        onChange={(e) =>
+          dispatch(updateAddUnitData({ paymentPlan: e.target.value }))
+        }
+      >
+        <option>Select plan</option>
+        <option value="installmental">installmental</option>
+        <option value="full">full</option>
+      </select>
+      {/* <InputCommon
         placeholder="Payment plan:"
         marginBottom="24px"
         value={paymentPlan}
         onChange={(e) =>
           dispatch(updateAddUnitData({ paymentPlan: e.target.value }))
         }
-      />
+      /> */}
 
       <div {...getRootProps()}>
         <input {...getInputProps()} />

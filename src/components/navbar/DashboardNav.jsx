@@ -4,8 +4,10 @@ import Logo from "../../assets/common/clinton_logo_original.svg";
 import debitCard from "../../assets/dashboard/debit-card-icon.svg";
 import messageIcon from "../../assets/dashboard/message-icon.svg";
 import houseIcon from "../../assets/dashboard/house-icon.svg";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import env from "../../env";
+import { toast } from "react-hot-toast";
+import Notification from "../Notification";
 
 const DashboardNav = () => {
   const navigate = useNavigate();
@@ -17,12 +19,19 @@ const DashboardNav = () => {
   };
 
   const handleLogout = () => {
-    console.log("clear local storage");
+    env.logOut();
+    navigate("/sign-in");
   };
-
+  const handlePayBill = () => {
+    toast.success(
+      "go to My Properties click on a Property, click Pay Electricity Bill",
+      { duration: 10000 }
+    );
+  };
   return (
     <>
       <Nav>
+        <Notification />
         <div
           onClick={() => selectActiveMenu("user-dashboard")}
           style={{ cursor: "pointer" }}
@@ -42,12 +51,13 @@ const DashboardNav = () => {
                 <MenuItemSelected></MenuItemSelected>
               )}
             </div>
-            <div className="menu-item">
+            <MenuItemWrapper onClick={handlePayBill}>
               <img src={debitCard} alt="" />
-              {/* {location.pathname === "/projects" && (
+              <HoverText>Pay electricity bill</HoverText>
+              {location.pathname === "/pay-electricity-bill" && (
                 <MenuItemSelected></MenuItemSelected>
-              )} */}
-            </div>
+              )}
+            </MenuItemWrapper>
             <div
               className="menu-item last"
               onClick={() => selectActiveMenu("messages")}
@@ -61,9 +71,9 @@ const DashboardNav = () => {
 
           <div className="logout">
             <p>{`${user?.firstName} ${user?.lastName}`}</p>
-            <a href="/sign-in" onClick={() => handleLogout}>
+            <h4 style={{ cursor: "pointer" }} onClick={handleLogout}>
               (Logout)
-            </a>
+            </h4>
           </div>
         </div>
       </Nav>
@@ -165,4 +175,30 @@ const MenuItemSelected = styled.div`
   position: absolute;
   bottom: 0;
   margin-left: 8px;
+`;
+const MenuItemWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const HoverText = styled.span`
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  ${MenuItemWrapper}:hover & {
+    visibility: visible;
+    opacity: 1;
+  }
 `;

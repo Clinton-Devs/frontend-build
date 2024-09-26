@@ -53,7 +53,7 @@ export default function ConfirmationModalWithInput({
     http
       .post(`${env.clinton_homes_base_url}/admin/create-user`, formdata)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setUserAdded(true);
         setTimeout(() => {
           setUserAdded(false);

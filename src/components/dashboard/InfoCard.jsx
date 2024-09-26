@@ -47,7 +47,18 @@ const InfoCard = ({
     <CardContainer>
       <Notification />
       <div className="main-image" onClick={() => navigate(link, stateObj)}>
-        <img src={imgSrc} alt="house" style={{ height: "250px" }} />
+        <img
+          src={imgSrc}
+          alt="house"
+          height="200"
+          style={{
+            maxHeight: "150px",
+            objectFit: "cover",
+            width: "100%",
+            height: "250px",
+            aspectRatio: "Square",
+          }}
+        />
         <div className="info-tag">{tagInfo}</div>
       </div>
 

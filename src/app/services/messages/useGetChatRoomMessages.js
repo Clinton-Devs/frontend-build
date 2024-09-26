@@ -4,6 +4,7 @@ import useGetChatRooms from "./useGetChatRooms";
 
 import env from "../../../env";
 import { http } from "../axios-https";
+import { toast } from "react-hot-toast";
 
 const useGetChatRoomMessages = (chatRoomId, reloadProp) => {
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -20,7 +21,8 @@ const useGetChatRoomMessages = (chatRoomId, reloadProp) => {
           setMessagesLoading(false);
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
+          toast.error(error);
         });
     }
   };

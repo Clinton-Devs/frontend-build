@@ -47,6 +47,7 @@ const AdminProjectDetail = () => {
   };
 
   const [readOnly, setReadOnly] = useState(true);
+
   const [coverImage, setCoverImage] = useState(null);
   const [coverImageUrl, setCoverImageUrl] = useState("");
 
@@ -64,40 +65,49 @@ const AdminProjectDetail = () => {
     setOpenAddUnitForm(false);
   };
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-    setCoverImage(acceptedFiles[0]);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (readOnly == true) {
+        console.log("readOnly", readOnly);
+        return toast.error("click on edit to upload");
+      }
+      console.log(acceptedFiles);
+      setCoverImage(acceptedFiles[0]);
 
-    const formdata = new FormData();
-    formdata.append("file", acceptedFiles[0]);
-    formdata.append("upload_preset", env.cloudinary_upload_preset);
-    formdata.append("cloud_name", env.cloudinary_cloud_name);
-    formdata.append("folder", "Cloudinary-ClintonDevs");
+      const formdata = new FormData();
+      formdata.append("file", acceptedFiles[0]);
+      formdata.append("upload_preset", env.cloudinary_upload_preset);
+      formdata.append("cloud_name", env.cloudinary_cloud_name);
+      formdata.append("folder", "Cloudinary-ClintonDevs");
 
-    httpCloudinary
-      .post(
-        `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
-        formdata
-      )
-      .then((response) => {
-        setCoverImageUrl(response.data.url);
-        toast.success("Image uploaded");
-      })
-      .catch((error) =>
-        toast.error(error.response.data.message || "Image upload error")
-      );
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+      httpCloudinary
+        .post(
+          `https://api.cloudinary.com/v1_1/${env.cloudinary_cloud_name}/image/upload`,
+          formdata
+        )
+        .then((response) => {
+          setCoverImageUrl(response.data.url);
+          toast.success("Image uploaded");
+        })
+        .catch((error) =>
+          toast.error(error.response.data.message || "Image upload error")
+        );
+    },
+    [readOnly]
+  );
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+  });
 
   const updateProject = () => {
     setUpdatingProject(true);
     const formdata = {
+      ...projectDetail[0],
       name: newProjectName,
       description: newDescription,
       image: coverImageUrl,
       location: newLocation,
       address: newAddress,
-      status: "ongoing",
     };
     http
       .put(
@@ -113,6 +123,32 @@ const AdminProjectDetail = () => {
         toast.error(error.response.data.message || "An Error Occured");
         setUpdatingProject(false);
       });
+  };
+  const HandleComplete = () => {
+    // console.log("projectDetail", projectDetail);
+    // setReadOnly(false);
+    // if (!readOnly) {
+    setUpdatingProject(true);
+    const formdata = {
+      ...projectDetail[0],
+      status: "completed",
+    };
+    http
+      .put(
+        `${env.clinton_homes_base_url}/admin/update-project/${projectId}`,
+        formdata
+      )
+      .then((response) => {
+        toast.success("Project marked Completed");
+        setUpdatingProject(false);
+        triggerReload();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data.message || "An Error Occured");
+        setUpdatingProject(false);
+      });
+    // }
   };
 
   const columns = [
@@ -153,6 +189,11 @@ const AdminProjectDetail = () => {
       toast("Project can now be edited!", {
         icon: "🖊️",
       });
+      setNewProjectName(projectDetail[0].name);
+      setNewAddress(projectDetail[0].address);
+      setNewDescription(projectDetail[0].description);
+      setNewLocation(projectDetail[0].location);
+      setCoverImageUrl(projectDetail[0].image);
     }
   }, [readOnly]);
 
@@ -199,10 +240,31 @@ const AdminProjectDetail = () => {
 
             {projectId && (
               <div
-                onClick={() => setReadOnly(false)}
-                style={{ cursor: "pointer" }}
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
-                <img src={editButton} alt="" />
+                {projectDetail[0]?.status === "completed" ? (
+                  <div style={{ color: "#721F4B" }}>Completed</div>
+                ) : (
+                  <div
+                    onClick={HandleComplete}
+                    style={{
+                      background: "green",
+                      padding: "7px",
+                      borderRadius: "5px",
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Mark Completed
+                  </div>
+                )}
+
+                <div
+                  onClick={() => setReadOnly(false)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <img src={editButton} alt="" />
+                </div>
               </div>
             )}
           </div>
@@ -259,12 +321,21 @@ const AdminProjectDetail = () => {
             </div>
             <div style={{ textAlign: "end" }}>
               <ButtonCommon
-                content={updatingProject ? <img src={Spinner} /> : "Save"}
+                content={
+                  readOnly ? (
+                    "UnEditable"
+                  ) : updatingProject ? (
+                    <img src={Spinner} />
+                  ) : (
+                    "Save"
+                  )
+                }
                 backgroundColor="#F8F4F6"
                 textColor="#721F4B"
                 marginTop="16px"
                 onClick={updateProject}
                 width="20%"
+                disabled={readOnly}
               />
             </div>
           </FormContainer>

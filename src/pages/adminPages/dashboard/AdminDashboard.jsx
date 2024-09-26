@@ -21,6 +21,8 @@ const Dashboard = () => {
   const [openEditUserForm, setOpenEditUserForm] = useState(false);
 
   const [userId, setUserId] = useState("");
+  const [user, setUser] = useState(null);
+
   const [showUserOption, setShowUserOption] = useState(false);
   const [userType, setUserType] = useState("user");
   const toggleUser = () =>
@@ -32,7 +34,7 @@ const Dashboard = () => {
   };
 
   const { userList, loading } = useGetAllUsers(userType, reloadCount);
-
+  console.log("userList", userList);
   const handleSelectUser = (userType) => {
     if (userType === "user") {
       setUserType("user");
@@ -87,6 +89,7 @@ const Dashboard = () => {
           style={{ cursor: "pointer" }}
           onClick={() => {
             setUserId(row.id);
+            setUser(row);
             handleOpenEditUserForm();
           }}
         >
@@ -117,6 +120,7 @@ const Dashboard = () => {
       >
         <EditUserForm
           userId={userId}
+          user={user}
           triggerReload={() => reloadData()}
           handleClose={handleCloseEditUserForm}
         />

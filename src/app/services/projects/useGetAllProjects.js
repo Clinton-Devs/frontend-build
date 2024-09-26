@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import env from "../../../env";
 import { http } from "../axios-https";
+import { toast } from "react-hot-toast";
 
 const useGetAllProjects = () => {
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,8 @@ const useGetAllProjects = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
+        toast.error(error);
       });
   };
 
